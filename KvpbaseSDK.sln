@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KvpbaseSDK", "KvpbaseSDK\KvpbaseSDK.csproj", "{45D56760-1EFE-4751-8612-7E54C52FCBBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KvpbaseSDKTest", "KvpbaseSDKTest\KvpbaseSDKTest.csproj", "{B8774713-F402-4292-B5A1-6C2439B87294}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45D56760-1EFE-4751-8612-7E54C52FCBBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D56760-1EFE-4751-8612-7E54C52FCBBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D56760-1EFE-4751-8612-7E54C52FCBBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D56760-1EFE-4751-8612-7E54C52FCBBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8774713-F402-4292-B5A1-6C2439B87294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8774713-F402-4292-B5A1-6C2439B87294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8774713-F402-4292-B5A1-6C2439B87294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8774713-F402-4292-B5A1-6C2439B87294}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

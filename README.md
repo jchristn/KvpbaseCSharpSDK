@@ -18,7 +18,7 @@ using KvpbaseSDK;
 Client kvp = new Client("default", "default", "http://localhost:8080"); 
 ```
 
-Create an object
+### Create an object
 ```
 if (!kvp.CreateObjectWithoutName(
    "/path/to/container", 
@@ -40,7 +40,7 @@ else
 { Console.WriteLine("Stored at: " + url); }
 ```
 
-Retrieve an object
+### Retrieve an object
 ```
 if (!kvp.GetObject(
    "/path/to/container/hello.txt",
@@ -50,13 +50,13 @@ else
 { Console.WriteLine("Data: " + Encoding.UTF8.GetString(data)); }
 ```
 
-Verify object existence
+### Verify object existence
 ```
 if (!kvp.ObjectExists("/path/to/container/hello.txt")) Console.WriteLine("Does not exist");
 else Console.WriteLine("Exists!");
 ```
 
-Move or rename an object
+### Move or rename an object
 ```
 if (!kvp.MoveObject(
    "/path/to/container", 
@@ -76,13 +76,13 @@ else
 { Console.WriteLine("Success"); }
 ```
 
-Delete an object
+### Delete an object
 ```
 if (!kvp.DeleteObject("/path/to/container/hello.txt")) Console.WriteLine("Failed");
 else Console.WriteLine("Deleted!");
 ```
 
-Create a container
+### Create a container
 ```
 if (!kvp.CreateContainer(
    "/path/to/container", 
@@ -99,13 +99,13 @@ else
 { Console.WriteLine("Container contents: " + Encoding.UTF8.GetString(data)); }
 ```
 
-Verify container existence
+### Verify container existence
 ```
 if (!kvp.ContainerExists("/path/to/container")) Console.WriteLine("Does not exist");
 else Console.WriteLine("Exists!");
 ```
 
-Move or rename a container
+### Move or rename a container
 ```
 if (!kvp.MoveContainer(
    "/path/to/container", 
@@ -125,7 +125,7 @@ else
 { Console.WriteLine("Success"); }
 ```
 
-Delete a container
+### Delete a container
 ```
 if (!kvp.DeleteContainer("/path/to/newcontainer/container1", false)) Console.WriteLine("Failed");
 else Console.WriteLine("Deleted!");

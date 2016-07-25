@@ -4,34 +4,30 @@ kvpbase is a RESTful object storage platform.  This SDK is intended to help appl
 ## help or feedback
 first things first - do you need help or have feedback?  Contact me at joel at maraudersoftware.com dot com or file an issue here!
 
+## install with NuGet
+```
+PM> Install-Package kvpbase-sdk-csharp
+```
+
 ## simple example
+Initialize the SDK and define commonly-used variables
 ```
 using KvpbaseSDK;
-...
-//
-// Start the client
+
 // User GUID, API Key, Endpoint
-//
 Client kvp = new Client("default", "default", "http://localhost:8080"); 
+```
 
-//
-// Perform object operations
-//
-string url = "";
-byte data[];
-
+Create an object
+```
 if (!kvp.CreateObjectWithoutName(
    "/path/to/container", 
    "text/plain", 
    Encoding.UTF8.GetBytes("Hello!"), 
    out url)) 
-{
-   // handle errors  
-}
-else
-{
-   Console.WriteLine("Stored at: " + url);
-}
+{ // handle errors }
+else 
+{ Console.WriteLine("Stored at: " + url); }
 
 if (!kvp.CreateObject(
    "/path/to/container",
@@ -39,112 +35,98 @@ if (!kvp.CreateObject(
    "text/plain",
    Encoding.UTF8.GetBytes("Hello!"),
    out url))
-{
-   // handle errors  
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Stored at: " + url);
-}
+{ Console.WriteLine("Stored at: " + url); }
+```
 
+Retrieve an object
+```
 if (!kvp.GetObject(
    "/path/to/container/hello.txt",
    out data))
-{
-   // handle errors
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Data: " + Encoding.UTF8.GetString(data));
-}
+{ Console.WriteLine("Data: " + Encoding.UTF8.GetString(data)); }
+```
 
+Verify object existence
+```
 if (!kvp.ObjectExists("/path/to/container/hello.txt")) Console.WriteLine("Does not exist");
 else Console.WriteLine("Exists!");
+```
 
+Move or rename an object
+```
 if (!kvp.MoveObject(
    "/path/to/container", 
    "hello.txt",
    "/path/to/newcontainer",
    "hello2.txt"))
-{
-   // handle errors
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Success");
-}
+{ Console.WriteLine("Success"); }
 
 if (!kvp.RenameObject(
    "/path/to/container",
    "hello2.txt",
    "hello.txt"))
-{
-   // handle errors
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Success");
-}
+{ Console.WriteLine("Success"); }
+```
 
+Delete an object
+```
 if (!kvp.DeleteObject("/path/to/container/hello.txt")) Console.WriteLine("Failed");
 else Console.WriteLine("Deleted!");
+```
 
-// 
-// Perform container operations
-//
-string url = "";
-byte data[];
-
+Create a container
+```
 if (!kvp.CreateContainer(
    "/path/to/container", 
    out url)) 
-{
-   // handle errors  
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Created at: " + url);
-}
+{ Console.WriteLine("Created at: " + url); }
 
 if (!kvp.GetObject(
    "/path/to/container",
    out data))
-{
-   // handle errors
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Container contents: " + Encoding.UTF8.GetString(data));
-}
+{ Console.WriteLine("Container contents: " + Encoding.UTF8.GetString(data)); }
+```
 
+Verify container existence
+```
 if (!kvp.ContainerExists("/path/to/container")) Console.WriteLine("Does not exist");
 else Console.WriteLine("Exists!");
+```
 
+Move or rename a container
+```
 if (!kvp.MoveContainer(
    "/path/to/container", 
    "container1",
    "/path/to/newcontainer",
    "container2"))
-{
-   // handle errors
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Success");
-}
+{ Console.WriteLine("Success"); }
 
 if (!kvp.RenameContainer(
    "/path/to/newcontainer",
    "container2",
    "container1"))
-{
-   // handle errors
-}
+{ // handle errors }
 else
-{
-   Console.WriteLine("Success");
-}
+{ Console.WriteLine("Success"); }
+```
 
+Delete a container
+```
 if (!kvp.DeleteContainer("/path/to/newcontainer/container1", false)) Console.WriteLine("Failed");
 else Console.WriteLine("Deleted!");
 ```

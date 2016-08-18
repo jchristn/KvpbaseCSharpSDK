@@ -484,70 +484,71 @@ namespace KvpbaseSDK
 			return false;
 		}
 
-		#endregion
+        #endregion
 
-		#region Private-Members
+        #endregion
 
-		private string UserGuid;
-		private string ApiKey;
-		private string EndpointUrl;
+        #region Private-Members
 
-		#endregion
+        private string UserGuid;
+        private string ApiKey;
+        private string EndpointUrl;
 
-		#region Private-Methods
+        #endregion
 
-		private Dictionary<string, string> AuthHeaders()
-		{
-			Dictionary<string, string> ret = new Dictionary<string, string>();
-			ret.Add("x-api-key", ApiKey);
-			return ret;
-		}
-				
-		private string AppendSlash(
-			string s)
-		{
-			if (String.IsNullOrEmpty(s)) return "/";
-			if (s.EndsWith("/", StringComparison.InvariantCulture)) return s;
-			return s + "/";
-		}
+        #region Private-Methods
 
-		private bool SubmitRestRequest(
-			string verb, 
-			string url, 
-			string contentType,
-			Dictionary<string, string> headers, 
-			byte[] data,
-			out byte[] responseData)
-		{
-			responseData = null;
-			if (String.IsNullOrEmpty(verb)) throw new ArgumentNullException(nameof(verb));
-			if (String.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
+        private Dictionary<string, string> AuthHeaders()
+        {
+            Dictionary<string, string> ret = new Dictionary<string, string>();
+            ret.Add("x-api-key", ApiKey);
+            return ret;
+        }
 
-			RestResponse resp = RestRequest.SendRequestSafe(
-				url,
-				contentType,
-				verb,
-				null, null, false, headers,
-				data);
+        private string AppendSlash(
+            string s)
+        {
+            if (String.IsNullOrEmpty(s)) return "/";
+            if (s.EndsWith("/", StringComparison.InvariantCulture)) return s;
+            return s + "/";
+        }
 
-			if (resp == null) return false;
-			if (resp.StatusCode != 200 && resp.StatusCode != 201) return false;
-			responseData = resp.Data;
-			return true;
-		}
+        private bool SubmitRestRequest(
+            string verb,
+            string url,
+            string contentType,
+            Dictionary<string, string> headers,
+            byte[] data,
+            out byte[] responseData)
+        {
+            responseData = null;
+            if (String.IsNullOrEmpty(verb)) throw new ArgumentNullException(nameof(verb));
+            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
 
-		private string SerializeJson(
-			object obj)
-		{
-			JavaScriptSerializer s = new JavaScriptSerializer();
-			s.MaxJsonLength = Int32.MaxValue;
-			string json = s.Serialize(obj);
-			return json;
-		}
+            RestResponse resp = RestRequest.SendRequestSafe(
+                url,
+                contentType,
+                verb,
+                null, null, false, headers,
+                data);
 
-		#endregion
+            if (resp == null) return false;
+            if (resp.StatusCode != 200 && resp.StatusCode != 201) return false;
+            responseData = resp.Data;
+            return true;
+        }
 
-		#endregion
-	}
+        private string SerializeJson(
+            object obj)
+        {
+            JavaScriptSerializer s = new JavaScriptSerializer();
+            s.MaxJsonLength = Int32.MaxValue;
+            string json = s.Serialize(obj);
+            return json;
+        }
+
+        #endregion
+
+    }
 }
 

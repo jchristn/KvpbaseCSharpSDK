@@ -197,10 +197,10 @@ namespace KvpbaseSDK
 
 			var body = new
 			{
-				from_container = fromContainers,
-				to_container = toContainers,
-				move_from = fromObjectName,
-				move_to = toObjectName
+				FromContainer = fromContainers,
+				ToContainer = toContainers,
+				MoveFrom = fromObjectName,
+				MoveTo = toObjectName
 			};
 
 			byte[] data;
@@ -239,9 +239,9 @@ namespace KvpbaseSDK
 
 			var body = new
 			{
-				container_path = containers,
-				rename_from = fromObjectName,
-				rename_to = toObjectName
+				ContainerPath = containers,
+				RenameFrom = fromObjectName,
+				RenameTo = toObjectName
 			};
 
 			byte[] data;
@@ -397,10 +397,10 @@ namespace KvpbaseSDK
 
 			var body = new
 			{
-				from_container = fromContainers,
-				to_container = toContainers,
-				move_from = fromContainerName,
-				move_to = toContainerName
+				FromContainer = fromContainers,
+				ToContainer = toContainers,
+				MoveFrom = fromContainerName,
+				MoveTo = toContainerName
 			};
 
 			byte[] data;
@@ -439,9 +439,9 @@ namespace KvpbaseSDK
 
 			var body = new
 			{
-				container_path = containers,
-				rename_from = fromContainerName,
-				rename_to = toContainerName
+				ContainerPath = containers,
+				RenameFrom = fromContainerName,
+				RenameTo = toContainerName
 			};
 
 			byte[] data;

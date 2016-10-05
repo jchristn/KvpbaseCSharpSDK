@@ -1,3 +1,3 @@
-D:\code\KVPbase\kvpbase-sdk-csharp\KvpbaseSDK\bin\Release\KvpbaseSDK.dll
-D:\code\KVPbase\kvpbase-sdk-csharp\KvpbaseSDK\obj\Release\KvpbaseSDK.csprojResolveAssemblyReference.cache
-D:\code\KVPbase\kvpbase-sdk-csharp\KvpbaseSDK\obj\Release\KvpbaseSDK.dll
+D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDK\bin\Release\KvpbaseSDK.dll
+D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDK\obj\Release\KvpbaseSDK.csprojResolveAssemblyReference.cache
+D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDK\obj\Release\KvpbaseSDK.dll

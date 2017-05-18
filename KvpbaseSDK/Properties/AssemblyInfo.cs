@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marauder Software Inc")]
 [assembly: AssemblyProduct("kvpbase")]
-[assembly: AssemblyCopyright("(c)2016 Marauder Software Inc")]
+[assembly: AssemblyCopyright("(c)2017 Marauder Software Inc")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,8 +18,8 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("2.0.1.0")]
-[assembly: AssemblyFileVersion("2.0.1.0")]
+[assembly: AssemblyVersion("2.0.2.0")]
+[assembly: AssemblyFileVersion("2.0.2.0")]
 [assembly: Guid("ffd3de1b-0f55-4ec1-a27d-e82977892796")]
 
 // The following attributes are used to specify the signing key for the assembly, 

@@ -5,3 +5,10 @@ D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDKTest\bin\Debug\KvpbaseSDK.pdb
 D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDKTest\obj\Debug\KvpbaseSDKTest.csprojResolveAssemblyReference.cache
 D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDKTest\obj\Debug\kvpcli.exe
 D:\code\kvpbase\kvpbase-sdk-csharp\KvpbaseSDKTest\obj\Debug\kvpcli.pdb
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\bin\Debug\kvpcli.exe
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\bin\Debug\kvpcli.pdb
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\bin\Debug\KvpbaseSDK.dll
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\bin\Debug\KvpbaseSDK.pdb
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\obj\Debug\KvpbaseSDKTest.csprojResolveAssemblyReference.cache
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\obj\Debug\kvpcli.exe
+D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDKTest\obj\Debug\kvpcli.pdb

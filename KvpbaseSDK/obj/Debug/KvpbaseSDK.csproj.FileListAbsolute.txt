@@ -7,3 +7,4 @@ D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDK\bin\Debug\KvpbaseSDK.pdb
 D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csprojResolveAssemblyReference.cache
 D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.dll
 D:\code\KVPbase\kvpbase-sdk-csharp-2.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.pdb
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csproj.CoreCompileInputs.cache

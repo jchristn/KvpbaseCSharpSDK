@@ -505,8 +505,7 @@ namespace KvpbaseSDK
             return ret;
         }
 
-        private string AppendSlash(
-            string s)
+        private string AppendSlash(string s)
         {
             if (String.IsNullOrEmpty(s)) return "/";
             if (s.EndsWith("/", StringComparison.InvariantCulture)) return s;

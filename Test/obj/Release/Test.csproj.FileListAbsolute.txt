@@ -1,0 +1,6 @@
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\bin\Release\kvpcli.exe
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\bin\Release\KvpbaseSDK.dll
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\Test.csprojResolveAssemblyReference.cache
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\Test.csproj.CoreCompileInputs.cache
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\Test.csproj.CopyComplete
+D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\kvpcli.exe

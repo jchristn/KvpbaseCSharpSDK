@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using KvpbaseSDK;
 
-namespace KvpbaseSDKTest
+namespace Test
 {
 	public class MainClass
 	{
@@ -15,9 +15,9 @@ namespace KvpbaseSDKTest
 		{
 			#region Initialize
 
-			endpoint = UserInputString("Endpoint", "http://localhost:8080", false);
-			userGuid = UserInputString("GUID", "default", false);
-			apiKey = UserInputString("API Key", "default", false);
+			endpoint = InputString("Endpoint", "http://localhost:8080", false);
+			userGuid = InputString("GUID", "default", false);
+			apiKey = InputString("API Key", "default", false);
 			Client kvp = new Client(userGuid, apiKey, endpoint);
 
 			#endregion
@@ -57,10 +57,10 @@ namespace KvpbaseSDKTest
 
 					case "ocreate":
 						if (kvp.CreateObjectWithName(
-							UserInputString("Container path", null, true),
-							UserInputString("Object name", null, false), 
-							UserInputString("Content type", "text/plain", true), 
-							Encoding.UTF8.GetBytes(UserInputString("Data", "Hello, world!", false)), 
+							InputString("Container path", null, true),
+							InputString("Object name", null, false), 
+							InputString("Content type", "text/plain", true), 
+							Encoding.UTF8.GetBytes(InputString("Data", "Hello, world!", false)), 
 							out url))
 						{
 							Console.WriteLine("Success: " + url);
@@ -73,9 +73,9 @@ namespace KvpbaseSDKTest
 
 					case "ocreatenoname":
 						if (kvp.CreateObjectWithoutName(
-							UserInputString("Container path", null, true),
-							UserInputString("Content type", "text/plain", true),
-							Encoding.UTF8.GetBytes(UserInputString("Data", "Hello, world!", false)),
+							InputString("Container path", null, true),
+							InputString("Content type", "text/plain", true),
+							Encoding.UTF8.GetBytes(InputString("Data", "Hello, world!", false)),
 							out url))
 						{
 							Console.WriteLine("Success: " + url);
@@ -88,7 +88,7 @@ namespace KvpbaseSDKTest
 						
 					case "oget":
 						if (kvp.GetObject(
-							UserInputString("Object path", null, true),
+							InputString("Object path", null, true),
 							out data))
 						{
 							Console.WriteLine("Success: " + Encoding.UTF8.GetString(data));
@@ -101,7 +101,7 @@ namespace KvpbaseSDKTest
 
 					case "odel":
 						if (kvp.DeleteObject(
-							UserInputString("Object path", null, true)))
+							InputString("Object path", null, true)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -113,7 +113,7 @@ namespace KvpbaseSDKTest
 
 					case "oexists":
 						if (kvp.ObjectExists(
-							UserInputString("Object path", null, true)))
+							InputString("Object path", null, true)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -125,9 +125,9 @@ namespace KvpbaseSDKTest
 						
 					case "orn":
 						if (kvp.RenameObject(
-							   UserInputString("Container path", null, true), 
-							   UserInputString("From object name", null, false),
-								UserInputString("To object name", null, false)))
+							   InputString("Container path", null, true), 
+							   InputString("From object name", null, false),
+								InputString("To object name", null, false)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -139,10 +139,10 @@ namespace KvpbaseSDKTest
 
 					case "omv":
 						if (kvp.MoveObject(
-							   UserInputString("From container path", null, true),
-							   UserInputString("From object name", null, false), 
-							   UserInputString("To container path", null, true),
-							   UserInputString("To object name", null, false)))
+							   InputString("From container path", null, true),
+							   InputString("From object name", null, false), 
+							   InputString("To container path", null, true),
+							   InputString("To object name", null, false)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -154,7 +154,7 @@ namespace KvpbaseSDKTest
 
 					case "ccreate":
 						if (kvp.CreateContainer(
-							UserInputString("Container path", null, true),
+							InputString("Container path", null, true),
 							out url))
 						{
 							Console.WriteLine("Success: " + url);
@@ -167,7 +167,7 @@ namespace KvpbaseSDKTest
 
 					case "cget":
 						if (kvp.GetContainer(
-							UserInputString("Container path", null, true),
+							InputString("Container path", null, true),
 							out data))
 						{
 							Console.WriteLine("Success: " + Encoding.UTF8.GetString(data));
@@ -180,8 +180,8 @@ namespace KvpbaseSDKTest
 
 					case "cdel":
 						if (kvp.DeleteContainer(
-						    UserInputString("Container path", null, true),
-						    UserInputBool("Recursive", true)))
+						    InputString("Container path", null, true),
+						    InputBoolean("Recursive", true)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -193,9 +193,9 @@ namespace KvpbaseSDKTest
 						
 					case "crn":
 						if (kvp.RenameContainer(
-							UserInputString("Container path", null, true),
-							UserInputString("From container name", null, false),
-							UserInputString("To container name", null, false)))
+							InputString("Container path", null, true),
+							InputString("From container name", null, false),
+							InputString("To container name", null, false)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -207,10 +207,10 @@ namespace KvpbaseSDKTest
 
 					case "cmv":
 						if (kvp.MoveContainer(
-							   UserInputString("From container path", null, true),
-							   UserInputString("From container name", null, false),
-							   UserInputString("To container path", null, true),
-							   UserInputString("To container name", null, false)))
+							   InputString("From container path", null, true),
+							   InputString("From container name", null, false),
+							   InputString("To container path", null, true),
+							   InputString("To container name", null, false)))
 						{
 							Console.WriteLine("Success");
 						}
@@ -304,7 +304,7 @@ namespace KvpbaseSDKTest
 			return;
 		}
 
-		private static bool UserInputBool(string question, bool def)
+		private static bool InputBoolean(string question, bool def)
 		{
 			while (true)
 			{
@@ -324,7 +324,7 @@ namespace KvpbaseSDKTest
 			}	
 		}
 
-	    private static string UserInputString(string question, string defaultAnswer, bool allowNull)
+	    private static string InputString(string question, string defaultAnswer, bool allowNull)
 		{
 			while (true)
 			{
@@ -350,7 +350,7 @@ namespace KvpbaseSDKTest
 			}
 		}
 
-		private static int UserInputInt(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
+		private static int InputInteger(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
 		{
 			while (true)
 			{

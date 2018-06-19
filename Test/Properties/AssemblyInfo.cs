@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("KvpbaseCLI")]
+[assembly: AssemblyTitle("Test")]
 [assembly: AssemblyDescription("C# SDK for kvpbase object storage platform (test application)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Marauder Software Inc")]
+[assembly: AssemblyCompany("Joel Christner")]
 [assembly: AssemblyProduct("kvpbase")]
-[assembly: AssemblyCopyright("(c) 2017 Marauder Software Inc")]
+[assembly: AssemblyCopyright("(c) 2018 Joel Christner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,8 +18,8 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("2.0.2.0")]
-[assembly: AssemblyFileVersion("2.0.2.0")]
+[assembly: AssemblyVersion("2.1.0.0")]
+[assembly: AssemblyFileVersion("2.1.0.0")]
 [assembly: Guid("dfb10bda-2aaf-4997-b970-dcbf1ea96999")]
 
 // The following attributes are used to specify the signing key for the assembly, 

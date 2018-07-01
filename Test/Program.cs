@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using KvpbaseSDK;
@@ -7,27 +8,24 @@ namespace Test
 {
 	public class MainClass
 	{
-		static string endpoint = "";
-		static string userGuid = "";
-		static string apiKey = "";
+		private static string _Endpoint = ""; 
+		private static string _ApiKey = "";
+        private static KvpbaseClient _Kvpbase;
 
 		public static void Main(string[] args)
 		{
 			#region Initialize
 
-			endpoint = InputString("Endpoint", "http://localhost:8080", false);
-			userGuid = InputString("GUID", "default", false);
-			apiKey = InputString("API Key", "default", false);
-			Client kvp = new Client(userGuid, apiKey, endpoint);
+			_Endpoint = KvpbaseCommon.InputString("Endpoint:", "http://localhost:8080", false); 
+			_ApiKey = KvpbaseCommon.InputString("API Key:", "default", false);
+            _Kvpbase = new KvpbaseClient(_ApiKey, _Endpoint);
 
 			#endregion
 
 			#region Variables
 
 			bool runForever = true;
-			string userInput = "";
-			string url = "";
-			byte[] data;
+			string userInput = "";  
 
 			#endregion
 
@@ -55,172 +53,79 @@ namespace Test
 						runForever = false;
 						break;
 
-					case "ocreate":
-						if (kvp.CreateObjectWithName(
-							InputString("Container path", null, true),
-							InputString("Object name", null, false), 
-							InputString("Content type", "text/plain", true), 
-							Encoding.UTF8.GetBytes(InputString("Data", "Hello, world!", false)), 
-							out url))
-						{
-							Console.WriteLine("Success: " + url);
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "test":
+                        TestConnectivity();
+                        break;
 
-					case "ocreatenoname":
-						if (kvp.CreateObjectWithoutName(
-							InputString("Container path", null, true),
-							InputString("Content type", "text/plain", true),
-							Encoding.UTF8.GetBytes(InputString("Data", "Hello, world!", false)),
-							out url))
-						{
-							Console.WriteLine("Success: " + url);
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
-						
-					case "oget":
-						if (kvp.GetObject(
-							InputString("Object path", null, true),
-							out data))
-						{
-							Console.WriteLine("Success: " + Encoding.UTF8.GetString(data));
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "login":
+                        Login();
+                        break;
+                         
+                    #region Object-Commands
 
-					case "odel":
-						if (kvp.DeleteObject(
-							InputString("Object path", null, true)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "object write":
+                        ObjectWrite();
+                        break;
 
-					case "oexists":
-						if (kvp.ObjectExists(
-							InputString("Object path", null, true)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
-						
-					case "orn":
-						if (kvp.RenameObject(
-							   InputString("Container path", null, true), 
-							   InputString("From object name", null, false),
-								InputString("To object name", null, false)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "object write range":
+                        ObjectWriteRange();
+                        break;
 
-					case "omv":
-						if (kvp.MoveObject(
-							   InputString("From container path", null, true),
-							   InputString("From object name", null, false), 
-							   InputString("To container path", null, true),
-							   InputString("To object name", null, false)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "object read":
+                        ObjectRead();
+                        break;
 
-					case "ccreate":
-						if (kvp.CreateContainer(
-							InputString("Container path", null, true),
-							out url))
-						{
-							Console.WriteLine("Success: " + url);
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "object read range":
+                        ObjectReadRange();
+                        break;
 
-					case "cget":
-						if (kvp.GetContainer(
-							InputString("Container path", null, true),
-							out data))
-						{
-							Console.WriteLine("Success: " + Encoding.UTF8.GetString(data));
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "object rename":
+                        ObjectRename();
+                        break;
 
-					case "cdel":
-						if (kvp.DeleteContainer(
-						    InputString("Container path", null, true),
-						    InputBoolean("Recursive", true)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
-						
-					case "crn":
-						if (kvp.RenameContainer(
-							InputString("Container path", null, true),
-							InputString("From container name", null, false),
-							InputString("To container name", null, false)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
+                    case "object delete":
+                        ObjectDelete();
+                        break;
 
-					case "cmv":
-						if (kvp.MoveContainer(
-							   InputString("From container path", null, true),
-							   InputString("From container name", null, false),
-							   InputString("To container path", null, true),
-							   InputString("To container name", null, false)))
-						{
-							Console.WriteLine("Success");
-						}
-						else
-						{
-							Console.WriteLine("Failed");
-						}
-						break;
-						
-					default:
+                    case "object exists":
+                        ObjectExists();
+                        break;
+
+                    #endregion
+
+                    #region Container-Commands
+
+                    case "container list":
+                        ContainerList();
+                        break;
+
+                    case "container create":
+                        ContainerCreate();
+                        break;
+
+                    case "container get settings":
+                        ContainerGetSettings();
+                        break;
+
+                    case "container update":
+                        ContainerUpdate();
+                        break;
+
+                    case "container enumerate":
+                        ContainerEnumerate();
+                        break;
+
+                    case "container delete":
+                        ContainerDelete();
+                        break;
+
+                    case "container exists":
+                        ContainerExists();
+                        break;
+
+                    #endregion 
+
+                    default:
 						break;
 				}
 			}
@@ -235,161 +140,338 @@ namespace Test
 		 // Console.WriteLine("12345678901234567890123456789012345678901234567890123456789012345678901234567890");
 			Console.WriteLine("---");
 			Console.WriteLine("General commands:");
-			Console.WriteLine(" q               Quit");
-			Console.WriteLine(" cls             Clear the screen");
-			Console.WriteLine(" ?               Help (this menu)");
+			Console.WriteLine("  q                   Quit");
+			Console.WriteLine("  cls                 Clear the screen");
+			Console.WriteLine("  ?                   Help (this menu)");
+            Console.WriteLine("  test                Test connectivity to the endpoint");
+            Console.WriteLine("  login               Test login to the endpoint"); 
 			Console.WriteLine("");
 			Console.WriteLine("Object commands:");
-			Console.WriteLine(" ocreate         Create an object");
-			Console.WriteLine(" ocreatenoname   Create an object (system-supplied name)");
-			Console.WriteLine(" oget            Get an object");
-			Console.WriteLine(" odel            Delete an object");
-			Console.WriteLine(" oexists         Check if an object exists");
-			Console.WriteLine(" orn             Rename an object");
-			Console.WriteLine(" omv             Move an object");
+            Console.WriteLine("  object <cmd> where <cmd> is one of the following:");
+            Console.WriteLine("    write             Write an object");
+            Console.WriteLine("    write range       Write a range of bytes to an existing object");
+            Console.WriteLine("    read              Read an object");
+            Console.WriteLine("    read range        Read a range of bytes from an existing object");
+            Console.WriteLine("    rename            Rename an object");
+            Console.WriteLine("    delete            Delete an object");
+            Console.WriteLine("    exists            Check if an object exists");
 			Console.WriteLine("");
 			Console.WriteLine("Container commands:");
-			Console.WriteLine(" ccreate         Create a container");
-			Console.WriteLine(" cget            Get a container");
-			Console.WriteLine(" cdel            Delete a container");
-			Console.WriteLine(" cexists         Check if a container exists");
-			Console.WriteLine(" crn             Rename a container");
-			Console.WriteLine(" cmv             Move a container");
+            Console.WriteLine("  container <cmd> where <cmd> is one of the following:");
+            Console.WriteLine("    list              List available containers");
+            Console.WriteLine("    create            Create a container");
+            Console.WriteLine("    get settings      Retrieve container settings");
+            Console.WriteLine("    update            Update container settings");
+            Console.WriteLine("    enumerate         Enumerate container contents");
+            Console.WriteLine("    delete            Delete a container");
+            Console.WriteLine("    exists            Check if a container exists");
 			Console.WriteLine("");
 		}
 
-		private static string StackToString()
-		{
-			string ret = "";
+        #region Private-General-Methods
+         
+        private static ReplicationMode GetReplicationMode()
+        {
+            while (true)
+            {
+                Console.Write("Replication Mode: [none|sync|async] ");
+                string input = Console.ReadLine();
+                if (String.IsNullOrEmpty(input)) continue;
 
-			StackTrace t = new StackTrace();
-			for (int i = 0; i < t.FrameCount; i++)
-			{
-				if (i == 0)
-				{
-					ret += t.GetFrame(i).GetMethod().Name;
-				}
-				else
-				{
-					ret += " <= " + t.GetFrame(i).GetMethod().Name;
-				}
-			}
+                if (input.ToLower().Equals("none")) return ReplicationMode.None;
+                if (input.ToLower().Equals("sync")) return ReplicationMode.Sync;
+                if (input.ToLower().Equals("async")) return ReplicationMode.Async;
+            }
+        }
 
-			return ret;
-		}
+        private static void TestConnectivity()
+        {
+            if (!_Kvpbase.VerifyConnectivity())
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-		private static void ExceptionConsole(string method, string text, Exception e)
-		{
-			var st = new StackTrace(e, true);
-			var frame = st.GetFrame(0);
-			int line = frame.GetFileLineNumber();
-			string filename = frame.GetFileName();
+        private static void Login()
+        {
+            if (!_Kvpbase.Authenticate())
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-			Console.WriteLine("---");
-			Console.WriteLine("An exception was encountered which triggered this message.");
-			Console.WriteLine("  Method: " + method);
-			Console.WriteLine("  Text: " + text);
-			Console.WriteLine("  Type: " + e.GetType().ToString());
-			Console.WriteLine("  Data: " + e.Data);
-			Console.WriteLine("  Inner: " + e.InnerException);
-			Console.WriteLine("  Message: " + e.Message);
-			Console.WriteLine("  Source: " + e.Source);
-			Console.WriteLine("  StackTrace: " + e.StackTrace);
-			Console.WriteLine("  Stack: " + StackToString());
-			Console.WriteLine("  Line: " + line);
-			Console.WriteLine("  File: " + filename);
-			Console.WriteLine("  ToString: " + e.ToString());
-			Console.WriteLine("---");
+        #endregion
 
-			return;
-		}
+        #region Private-Object-Methods
 
-		private static bool InputBoolean(string question, bool def)
-		{
-			while (true)
-			{
-				Console.Write(question);
-				if (def) Console.Write(" [true]");
-				else Console.Write(" [false]");
-				Console.Write(" ");
+        private static void ObjectWrite()
+        {
+            if (!_Kvpbase.WriteObject(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
+                KvpbaseCommon.InputString("Content Type:", "text/plain", false),
+                Encoding.UTF8.GetBytes(KvpbaseCommon.InputString("Data:", "Hello world!", false))))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-				bool ret = false;
-				string userInput = Console.ReadLine();
-				if (String.IsNullOrEmpty(userInput)) return def;
+        private static void ObjectWriteRange()
+        {
+            if (!_Kvpbase.WriteObjectRange(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
+                KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
+                Encoding.UTF8.GetBytes(KvpbaseCommon.InputString("Data:", "Hello world!", false))))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-				if (Boolean.TryParse(userInput, out ret))
-				{
-					return ret;
-				}
-			}	
-		}
+        private static void ObjectRead()
+        {
+            byte[] data = null;
 
-	    private static string InputString(string question, string defaultAnswer, bool allowNull)
-		{
-			while (true)
-			{
-				Console.Write(question);
+            if (!_Kvpbase.ReadObject(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
+                out data))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                if (data != null && data.Length > 0)
+                {
+                    Console.WriteLine(Encoding.UTF8.GetString(data));
+                }
+            }
+        }
 
-				if (!String.IsNullOrEmpty(defaultAnswer))
-				{
-					Console.Write(" [" + defaultAnswer + "]");
-				}
+        private static void ObjectReadRange()
+        {
+            byte[] data = null;
 
-				Console.Write(" ");
+            if (!_Kvpbase.ReadObjectRange(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
+                KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
+                KvpbaseCommon.InputInteger("Count:", 10, true, false),
+                out data))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                if (data != null && data.Length > 0)
+                {
+                    Console.WriteLine(Encoding.UTF8.GetString(data));
+                }
+            }
+        }
 
-				string userInput = Console.ReadLine();
+        private static void ObjectRename()
+        { 
+            if (!_Kvpbase.RenameObject(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Original Object Key:", "hello.txt", false),
+                KvpbaseCommon.InputString("New Object Key:", "renamed.txt", false)))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success"); 
+            }
+        }
 
-				if (String.IsNullOrEmpty(userInput))
-				{
-					if (!String.IsNullOrEmpty(defaultAnswer)) return defaultAnswer;
-					if (allowNull) return null;
-					else continue;
-				}
+        private static void ObjectDelete()
+        {
+            if (!_Kvpbase.DeleteObject(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false)))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-				return userInput;
-			}
-		}
+        private static void ObjectExists()
+        {
+            if (!_Kvpbase.ObjectExists(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false)))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-		private static int InputInteger(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
-		{
-			while (true)
-			{
-				Console.Write(question);
-				Console.Write(" [" + defaultAnswer + "] ");
+        #endregion
 
-				string userInput = Console.ReadLine();
+        #region Private-Container-Methods
 
-				if (String.IsNullOrEmpty(userInput))
-				{
-					return defaultAnswer;
-				}
+        private static void ContainerList()
+        {
+            List<ContainerSettings> settings = null;
 
-				int ret = 0;
-				if (!Int32.TryParse(userInput, out ret))
-				{
-					Console.WriteLine("Please enter a valid integer.");
-					continue;
-				}
+            if (!_Kvpbase.ListContainers(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                out settings))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                Console.WriteLine(KvpbaseCommon.SerializeJson(settings, true));
+            }
+        }
 
-				if (ret == 0)
-				{
-					if (allowZero)
-					{
-						return 0;
-					}
-				}
+        private static void ContainerCreate()
+        {
+            if (!_Kvpbase.CreateContainer(
+                KvpbaseCommon.InputString("User GUID:", "default", false), 
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputBoolean("Public Read:", true),
+                KvpbaseCommon.InputBoolean("Public Write:", false), 
+                KvpbaseCommon.InputBoolean("Audit Logging:", true),
+                GetReplicationMode()))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
 
-				if (ret < 0)
-				{
-					if (positiveOnly)
-					{
-						Console.WriteLine("Please enter a value greater than zero.");
-						continue;
-					}
-				}
+        private static void ContainerGetSettings()
+        {
+            ContainerSettings settings = null;
 
-				return ret;
-			}
-		}
-	}
+            if (!_Kvpbase.GetContainerSettings(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                out settings))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                Console.WriteLine(KvpbaseCommon.SerializeJson(settings, true));
+            }
+        }
+
+        private static void ContainerUpdate()
+        { 
+            ContainerSettings settings = null;
+
+            if (!_Kvpbase.GetContainerSettings(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                out settings))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                settings.IsPublicRead = KvpbaseCommon.InputBoolean("Public Read:", true);
+                settings.IsPublicWrite = KvpbaseCommon.InputBoolean("Public Write:", false);
+                settings.EnableAuditLogging = KvpbaseCommon.InputBoolean("Audit Logging:", true);
+                settings.Replication = GetReplicationMode();
+
+                if (!_Kvpbase.UpdateContainer(settings))
+                {
+                    Console.WriteLine("Failed");
+                }
+                else
+                {
+                    Console.WriteLine("Success");
+                }
+            }
+        }
+
+        private static void ContainerEnumerate()
+        {
+            ContainerMetadata metadata = null;
+
+            if (!_Kvpbase.EnumerateContainer(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
+                KvpbaseCommon.InputInteger("Count:", 10, true, false),
+                out metadata))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                Console.WriteLine(KvpbaseCommon.SerializeJson(metadata, true));
+            } 
+        }
+
+        private static void ContainerDelete()
+        {
+            if (!_Kvpbase.DeleteContainer(
+                   KvpbaseCommon.InputString("User GUID:", "default", false),
+                   KvpbaseCommon.InputString("Container:", "default", false)))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        }
+
+        private static void ContainerExists()
+        {
+            if (!_Kvpbase.ContainerExists(
+                   KvpbaseCommon.InputString("User GUID:", "default", false),
+                   KvpbaseCommon.InputString("Container:", "default", false)))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+            }
+        } 
+
+        #endregion
+    }
 }

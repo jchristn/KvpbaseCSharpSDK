@@ -4,3 +4,14 @@ D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\Test.csprojResolveAssemb
 D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\Test.csproj.CoreCompileInputs.cache
 D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\Test.csproj.CopyComplete
 D:\code\kvpbase\kvpbase-sdk-csharp-2.0\Test\obj\Release\kvpcli.exe
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\obj\Release\Test.csprojResolveAssemblyReference.cache
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\obj\Release\Test.csproj.CoreCompileInputs.cache
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\Test.exe.config
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\Test.exe
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\KvpbaseSDK.dll
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\Newtonsoft.Json.dll
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\RestWrapper.dll
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\Newtonsoft.Json.xml
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\bin\Release\RestWrapper.pdb
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\obj\Release\Test.csproj.CopyComplete
+D:\Code\KVPbase\kvpbase-sdk-csharp-3.0\Test\obj\Release\Test.exe

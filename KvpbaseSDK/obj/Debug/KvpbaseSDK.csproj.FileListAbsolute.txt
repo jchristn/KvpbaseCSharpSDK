@@ -30,3 +30,14 @@ D:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csproj.CoreCompil
 D:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csproj.CopyComplete
 D:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.dll
 D:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\Newtonsoft.Json.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\RestWrapper.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\Newtonsoft.Json.xml
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\RestWrapper.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.csproj.CopyComplete
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\KvpbaseSDK.pdb

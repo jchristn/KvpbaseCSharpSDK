@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joel Christner")]
 [assembly: AssemblyProduct("kvpbase")]
-[assembly: AssemblyCopyright("(c) 2018 Joel Christner")]
+[assembly: AssemblyCopyright("(c) 2019 Joel Christner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,8 +18,8 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("3.0.1.0")]
-[assembly: AssemblyFileVersion("3.0.1.0")]
+[assembly: AssemblyVersion("3.1.1.0")]
+[assembly: AssemblyFileVersion("3.1.1.0")]
 [assembly: Guid("dfb10bda-2aaf-4997-b970-dcbf1ea96999")]
 
 // The following attributes are used to specify the signing key for the assembly, 

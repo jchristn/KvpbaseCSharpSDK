@@ -35,3 +35,17 @@ D:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.csproj.CoreCompileInputs.cach
 D:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.csproj.CopyComplete
 D:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.exe
 D:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.pdb
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\Test.exe.config
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\Test.exe
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\Test.pdb
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\Newtonsoft.Json.dll
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\RestWrapper.dll
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\Newtonsoft.Json.xml
+C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Debug\RestWrapper.pdb
+C:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.csprojAssemblyReference.cache
+C:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
+C:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.csproj.CopyComplete
+C:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.exe
+C:\code\kvpbase\sdk-csharp-3.0\Test\obj\Debug\Test.pdb

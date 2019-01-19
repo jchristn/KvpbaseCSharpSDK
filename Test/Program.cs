@@ -91,6 +91,10 @@ namespace Test
                         ObjectExists();
                         break;
 
+                    case "object metadata":
+                        ObjectMetadata();
+                        break;
+
                     #endregion
 
                     #region Container-Commands
@@ -155,6 +159,7 @@ namespace Test
             Console.WriteLine("    rename            Rename an object");
             Console.WriteLine("    delete            Delete an object");
             Console.WriteLine("    exists            Check if an object exists");
+            Console.WriteLine("    metadata          Retrieve object metadata");
 			Console.WriteLine("");
 			Console.WriteLine("Container commands:");
             Console.WriteLine("  container <cmd> where <cmd> is one of the following:");
@@ -335,6 +340,24 @@ namespace Test
             else
             {
                 Console.WriteLine("Success");
+            }
+        }
+
+        private static void ObjectMetadata()
+        {
+            ObjectMetadata metadata = null;
+            if (!_Kvpbase.GetObjectMetadata(
+                KvpbaseCommon.InputString("User GUID:", "default", false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
+                out metadata))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                Console.WriteLine(KvpbaseCommon.SerializeJson(metadata, true));
             }
         }
 

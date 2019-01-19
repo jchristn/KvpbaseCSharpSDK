@@ -15,7 +15,14 @@ namespace KvpbaseSDK
     {
         #region Public-Members
 
+        /// <summary>
+        /// Specify whether or not to ignore SSL certificate errors (default is true).
+        /// </summary>
         public bool IgnoreCertificateErrors { get; set; }
+
+        /// <summary>
+        /// Specify the maximum transfer size in bytes (default is 536870912).
+        /// </summary>
         public long MaxTransferSize { get; set; }
 
         #endregion
@@ -85,6 +92,10 @@ namespace KvpbaseSDK
 
         #region General
 
+        /// <summary>
+        /// Verify connectivity to Kvpbase.
+        /// </summary>
+        /// <returns>True if connectivity exists.</returns>
         public bool VerifyConnectivity()
         {
             RestResponse resp = RestRequest.SendRequestSafe(
@@ -101,6 +112,10 @@ namespace KvpbaseSDK
             return false;
         }
 
+        /// <summary>
+        /// Authenticate to Kvpbase.
+        /// </summary>
+        /// <returns>True if able to successfully authenticate.</returns>
         public bool Authenticate()
         {
             RestResponse resp = RestRequest.SendRequestSafe(
@@ -125,6 +140,15 @@ namespace KvpbaseSDK
 
         #region Objects
 
+        /// <summary>
+        /// Write an object.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="contentType">The content type for the object.</param>
+        /// <param name="data">The data to write.</param>
+        /// <returns>True if successful.</returns>
         public bool WriteObject(string userGuid, string container, string objectKey, string contentType, byte[] data)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -147,6 +171,15 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Write a range of bytes to an existing object.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="startIndex">The byte position at which to write the data.</param>
+        /// <param name="data">The data to write.</param>
+        /// <returns>True if successful.</returns>
         public bool WriteObjectRange(string userGuid, string container, string objectKey, long startIndex, byte[] data)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -170,6 +203,14 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Read an object.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="data">Data from the object.</param>
+        /// <returns>True if successful.</returns>
         public bool ReadObject(string userGuid, string container, string objectKey, out byte[] data)
         {
             data = null;
@@ -200,6 +241,16 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Read a range of bytes from an object.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="startIndex">The byte position from which to read the data.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <param name="data">Data from the object.</param>
+        /// <returns>True if successful.</returns>
         public bool ReadObjectRange(string userGuid, string container, string objectKey, long startIndex, long count, out byte[] data)
         {
             data = null;
@@ -232,6 +283,14 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Rename an object.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="originalObjectKey">The original object key.</param>
+        /// <param name="newObjectKey">The desired object key.</param>
+        /// <returns>True if successful.</returns>
         public bool RenameObject(string userGuid, string container, string originalObjectKey, string newObjectKey)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -255,6 +314,13 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Delete an object.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <returns>True if successful.</returns>
         public bool DeleteObject(string userGuid, string container, string objectKey)
         { 
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -277,6 +343,13 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Check if an object exists.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <returns>True if the object exists.</returns>
         public bool ObjectExists(string userGuid, string container, string objectKey)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -299,10 +372,49 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Retrieve an object's metadata.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="metadata">The object's metadata.</param>
+        /// <returns>True if successful.</returns>
+        public bool GetObjectMetadata(string userGuid, string container, string objectKey, out ObjectMetadata metadata)
+        {
+            metadata = null;
+
+            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey + "?_metadata=true";
+
+            RestResponse resp = RestRequest.SendRequestSafe(
+                url,
+                null,
+                "GET",
+                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+
+            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            {
+                return false;
+            }
+
+            metadata = KvpbaseCommon.DeserializeJson<ObjectMetadata>(resp.Data);
+            return true;
+        }
+
         #endregion
 
         #region Containers
 
+        /// <summary>
+        /// List the names of the existing containers.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="settings">List of container settings.</param>
+        /// <returns>True if successful.</returns>
         public bool ListContainers(string userGuid, out List<ContainerSettings> settings)
         {
             settings = new List<ContainerSettings>();
@@ -326,6 +438,16 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Create a container.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="publicRead">True if available for read by unauthenticated users.</param>
+        /// <param name="publicWrite">True if available for write by unauthenticated users.</param>
+        /// <param name="auditLogging">True if audit logging should be enabled.</param>
+        /// <param name="replication">Replication mode for the container.</param>
+        /// <returns>True if successful.</returns>
         public bool CreateContainer(string userGuid, string container, bool publicRead, bool publicWrite, bool auditLogging, ReplicationMode replication)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -356,6 +478,13 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Retrieve a container's settings.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="settings">Settings for the container.</param>
+        /// <returns>True if successful.</returns>
         public bool GetContainerSettings(string userGuid, string container, out ContainerSettings settings)
         {
             settings = null;
@@ -380,6 +509,11 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Update a container's settings.
+        /// </summary>
+        /// <param name="settings">Settings for the container.</param>
+        /// <returns>True if successful.</returns>
         public bool UpdateContainer(ContainerSettings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
@@ -401,6 +535,15 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Enumerate container statistics and objects within the container.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="startIndex">Begin object enumeration from this position.</param>
+        /// <param name="maxResults">Maximum number of objects to return.</param>
+        /// <param name="metadata">The container's metadata.</param>
+        /// <returns>True if successful.</returns>
         public bool EnumerateContainer(string userGuid, string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
         {
             metadata = null;
@@ -427,6 +570,12 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Delete a container.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <returns>True if successful.</returns>
         public bool DeleteContainer(string userGuid, string container)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
@@ -448,6 +597,12 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Check if a container exists.
+        /// </summary>
+        /// <param name="userGuid">The user GUID.</param>
+        /// <param name="container">The container.</param>
+        /// <returns>True if the container exists.</returns>
         public bool ContainerExists(string userGuid, string container)
         {
             if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));

@@ -25,6 +25,24 @@ namespace KvpbaseSDK
         /// </summary>
         public long MaxTransferSize { get; set; }
 
+        /// <summary>
+        /// Retrieve the user GUID for the client.
+        /// </summary>
+        public string UserGuid
+        {
+            get { return _UserGuid; }
+            private set { _UserGuid = value; }
+        }
+
+        /// <summary>
+        /// Retrieve the endpoint for the client.
+        /// </summary>
+        public string Endpoint
+        {
+            get { return _Endpoint; }
+            private set { _Endpoint = value; }
+        }
+
         #endregion
 
         #region Private-Members

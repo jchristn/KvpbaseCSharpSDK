@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("C# SDK for kvpbase object storage platform")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joel Christner")]
-[assembly: AssemblyProduct("kvpbase")]
+[assembly: AssemblyProduct("Kvpbase")]
 [assembly: AssemblyCopyright("(c) 2019 Joel Christner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -18,8 +18,8 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("3.1.1.0")]
-[assembly: AssemblyFileVersion("3.1.1.0")]
+[assembly: AssemblyVersion("3.1.2.0")]
+[assembly: AssemblyFileVersion("3.1.2.0")]
 [assembly: Guid("ffd3de1b-0f55-4ec1-a27d-e82977892796")]
 
 // The following attributes are used to specify the signing key for the assembly, 

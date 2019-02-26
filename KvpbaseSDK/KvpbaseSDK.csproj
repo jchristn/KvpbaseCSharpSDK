@@ -46,6 +46,7 @@
     <Compile Include="Classes\DiskInfo.cs" />
     <Compile Include="Classes\EnumerationFilter.cs" />
     <Compile Include="Classes\ErrorResponse.cs" />
+    <Compile Include="KvpbaseStream.cs" />
     <Compile Include="Classes\Node.cs" />
     <Compile Include="Classes\ObjectHandlerType.cs" />
     <Compile Include="Classes\ObjectMetadata.cs" />

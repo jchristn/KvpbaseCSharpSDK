@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using RestWrapper;
 using Newtonsoft.Json;
@@ -24,6 +25,16 @@ namespace KvpbaseSDK
         /// Specify the maximum transfer size in bytes (default is 536870912).
         /// </summary>
         public long MaxTransferSize { get; set; }
+
+        /// <summary>
+        /// Buffer size to use when uploading files for file APIs or using stream, default 1MB.
+        /// </summary>
+        public int UploadStreamBufferSize { get; set; }
+
+        /// <summary>
+        /// Buffer size to use when downloading files for file APIs or using stream, default 1MB.
+        /// </summary>
+        public int DownloadStreamBufferSize { get; set; }
 
         /// <summary>
         /// Retrieve the user GUID for the client.
@@ -64,26 +75,6 @@ namespace KvpbaseSDK
         /// Initializes a new instance of the Kvpbase client.
         /// </summary>
         /// <param name="userGuid">The GUID of the user.</param>
-        /// <param name="apiKey">The API key of the user.</param>
-        /// <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
-        public KvpbaseClient(string apiKey, string endpointUrl)
-		{ 
-			if (String.IsNullOrEmpty(apiKey)) throw new ArgumentNullException(nameof(apiKey));
-			if (String.IsNullOrEmpty(endpointUrl)) throw new ArgumentNullException(nameof(endpointUrl));
-             
-			_ApiKey = apiKey;
-			_Endpoint = AppendSlash(endpointUrl);
-
-            IgnoreCertificateErrors = true;
-            MaxTransferSize = 536870912;
-
-            SetAuthHeaders();
-		}
-
-        /// <summary>
-        /// Initializes a new instance of the Kvpbase client.
-        /// </summary>
-        /// <param name="userGuid">The GUID of the user.</param>
         /// <param name="password">The password of the user.</param>
         /// <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
         public KvpbaseClient(string userGuid, string email, string password, string endpointUrl)
@@ -100,10 +91,36 @@ namespace KvpbaseSDK
 
             IgnoreCertificateErrors = true;
             MaxTransferSize = 536870912;
+            UploadStreamBufferSize = 1048576;
+            DownloadStreamBufferSize = 1048576;
 
             SetAuthHeaders();
         }
-         
+
+        /// <summary>
+        /// Initializes a new instance of the Kvpbase client.
+        /// </summary>
+        /// <param name="userGuid">The GUID of the user.</param>
+        /// <param name="apiKey">The API key of the user.</param>
+        /// <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
+        public KvpbaseClient(string userGuid, string apiKey, string endpointUrl)
+        {
+            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+            if (String.IsNullOrEmpty(apiKey)) throw new ArgumentNullException(nameof(apiKey));
+            if (String.IsNullOrEmpty(endpointUrl)) throw new ArgumentNullException(nameof(endpointUrl));
+
+            _UserGuid = userGuid;
+            _ApiKey = apiKey;
+            _Endpoint = AppendSlash(endpointUrl);
+
+            IgnoreCertificateErrors = true;
+            MaxTransferSize = 536870912;
+            UploadStreamBufferSize = 1048576;
+            DownloadStreamBufferSize = 1048576;
+
+            SetAuthHeaders();
+        }
+
         #endregion
 
         #region Public-Methods
@@ -161,19 +178,17 @@ namespace KvpbaseSDK
         /// <summary>
         /// Write an object.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <param name="contentType">The content type for the object.</param>
         /// <param name="data">The data to write.</param>
         /// <returns>True if successful.</returns>
-        public bool WriteObject(string userGuid, string container, string objectKey, string contentType, byte[] data)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool WriteObject(string container, string objectKey, string contentType, byte[] data)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -192,20 +207,18 @@ namespace KvpbaseSDK
         /// <summary>
         /// Write a range of bytes to an existing object.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <param name="startIndex">The byte position at which to write the data.</param>
         /// <param name="data">The data to write.</param>
         /// <returns>True if successful.</returns>
-        public bool WriteObjectRange(string userGuid, string container, string objectKey, long startIndex, byte[] data)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool WriteObjectRange(string container, string objectKey, long startIndex, byte[] data)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -224,20 +237,18 @@ namespace KvpbaseSDK
         /// <summary>
         /// Read an object.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <param name="data">Data from the object.</param>
         /// <returns>True if successful.</returns>
-        public bool ReadObject(string userGuid, string container, string objectKey, out byte[] data)
+        public bool ReadObject(string container, string objectKey, out byte[] data)
         {
             data = null;
-
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -262,24 +273,22 @@ namespace KvpbaseSDK
         /// <summary>
         /// Read a range of bytes from an object.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <param name="startIndex">The byte position from which to read the data.</param>
         /// <param name="count">The number of bytes to read.</param>
         /// <param name="data">Data from the object.</param>
         /// <returns>True if successful.</returns>
-        public bool ReadObjectRange(string userGuid, string container, string objectKey, long startIndex, long count, out byte[] data)
+        public bool ReadObjectRange(string container, string objectKey, long startIndex, long count, out byte[] data)
         {
             data = null;
-
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
             if (count <= 0) throw new ArgumentException("Invalid value for count.");
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex + "&_count=" + count;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex + "&_count=" + count;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -304,19 +313,17 @@ namespace KvpbaseSDK
         /// <summary>
         /// Rename an object.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="originalObjectKey">The original object key.</param>
         /// <param name="newObjectKey">The desired object key.</param>
         /// <returns>True if successful.</returns>
-        public bool RenameObject(string userGuid, string container, string originalObjectKey, string newObjectKey)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool RenameObject(string container, string originalObjectKey, string newObjectKey)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(originalObjectKey)) throw new ArgumentNullException(nameof(originalObjectKey));
             if (String.IsNullOrEmpty(newObjectKey)) throw new ArgumentNullException(nameof(newObjectKey));
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + originalObjectKey + "?_rename=" + newObjectKey;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + originalObjectKey + "?_rename=" + newObjectKey;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -335,17 +342,15 @@ namespace KvpbaseSDK
         /// <summary>
         /// Delete an object.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <returns>True if successful.</returns>
-        public bool DeleteObject(string userGuid, string container, string objectKey)
-        { 
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool DeleteObject(string container, string objectKey)
+        {  
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -364,17 +369,15 @@ namespace KvpbaseSDK
         /// <summary>
         /// Check if an object exists.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <returns>True if the object exists.</returns>
-        public bool ObjectExists(string userGuid, string container, string objectKey)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool ObjectExists(string container, string objectKey)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -393,20 +396,18 @@ namespace KvpbaseSDK
         /// <summary>
         /// Retrieve an object's metadata.
         /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
         /// <param name="metadata">The object's metadata.</param>
         /// <returns>True if successful.</returns>
-        public bool GetObjectMetadata(string userGuid, string container, string objectKey, out ObjectMetadata metadata)
+        public bool GetObjectMetadata(string container, string objectKey, out ObjectMetadata metadata)
         {
             metadata = null;
-
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + userGuid + "/" + container + "/" + objectKey + "?_metadata=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_metadata=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -423,23 +424,237 @@ namespace KvpbaseSDK
             return true;
         }
 
+        /// <summary>
+        /// Upload from a file to an object.
+        /// </summary>
+        /// <param name="filename">The filename of the file to upload.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="contentType">The content type.</param>
+        /// <param name="metadata">The object's metadata.</param>
+        /// <returns>True if successful.</returns>
+        public bool UploadFile(string filename, string container, string objectKey, string contentType, out ObjectMetadata metadata)
+        {
+            metadata = null;
+
+            if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            if (!File.Exists(filename)) throw new IOException("File specified does not exist.");
+            if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
+
+            long position = 0;
+            byte[] buffer = new byte[UploadStreamBufferSize];
+            int read = 0; 
+
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            {
+                while ((read = fs.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    if (read != buffer.Length)
+                    {
+                        // rewrite the buffer into an array of the correct size
+                        byte[] tempBuffer = new byte[read];
+                        Buffer.BlockCopy(buffer, 0, tempBuffer, 0, read);
+                        buffer = new byte[read];
+                        Buffer.BlockCopy(tempBuffer, 0, buffer, 0, read);
+                    }
+
+                    if (position == 0)
+                    {
+                        if (!WriteObject(container, objectKey, contentType, buffer))
+                            throw new IOException("Unable to write initial position for object.");
+                    }
+                    else
+                    {
+                        if (!WriteObjectRange(container, objectKey, position, buffer))
+                            throw new IOException("Unable to write to position " + position + " in object.");
+                    }
+
+                    position += read;
+                } 
+            }
+
+            return GetObjectMetadata(container, objectKey, out metadata);
+        }
+
+        /// <summary>
+        /// Upload from a stream to an object.
+        /// </summary>
+        /// <param name="stream">The input stream from which to read.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="contentType">The content type.</param>
+        /// <param name="metadata">The object's metadata.</param>
+        /// <returns>True if successful.</returns>
+        public bool UploadFromStream(Stream stream, string container, string objectKey, string contentType, out ObjectMetadata metadata)
+        {
+            metadata = null;
+
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (!stream.CanRead) throw new ArgumentException("Stream cannot be read.");
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+             
+            if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
+
+            long position = 0;
+            byte[] buffer = new byte[UploadStreamBufferSize];
+            int read = 0; 
+
+            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                if (position == 0)
+                {
+                    if (!WriteObject(container, objectKey, contentType, buffer))
+                        throw new IOException("Unable to write initial position for object.");
+                }
+                else
+                {
+                    if (!WriteObjectRange(container, objectKey, position, buffer))
+                        throw new IOException("Unable to write to position " + position + " in object.");
+                }
+
+                position += read;
+            } 
+
+            return GetObjectMetadata(container, objectKey, out metadata);
+        }
+
+        /// <summary>
+        /// Download an object to a file.
+        /// </summary>
+        /// <param name="filename">The filename of the file to upload.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <returns>True if successful.</returns>
+        public bool DownloadFile(string filename, string container, string objectKey)
+        {
+            if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            if (File.Exists(filename)) throw new IOException("File specified already exists.");
+            if (!ObjectExists(container, objectKey)) throw new IOException("Object specified does not exist.");
+
+            ObjectMetadata metadata = null;
+            if (!GetObjectMetadata(container, objectKey, out metadata)) throw new IOException("Unable to retrieve object metadata.");
+
+            long position = 0;
+            long remaining = Convert.ToInt64(metadata.ContentLength);
+            byte[] buffer = new byte[DownloadStreamBufferSize];
+            bool writing = true;
+
+            using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+            {
+                while (writing)
+                {
+                    if (remaining > DownloadStreamBufferSize)
+                    {
+                        buffer = new byte[DownloadStreamBufferSize];
+
+                        if (!ReadObjectRange(container, objectKey, position, DownloadStreamBufferSize, out buffer))
+                            throw new IOException("Unable to read from position " + position + " from object.");
+
+                        fs.Write(buffer, 0, buffer.Length);
+
+                        remaining -= DownloadStreamBufferSize;
+                        position += DownloadStreamBufferSize;
+                    }
+                    else
+                    {
+                        // final block
+                        buffer = new byte[remaining];
+
+                        if (!ReadObjectRange(container, objectKey, position, remaining, out buffer))
+                            throw new IOException("Unable to read final block from position " + position + " from object.");
+
+                        fs.Write(buffer, 0, buffer.Length);
+
+                        remaining -= DownloadStreamBufferSize;
+                        position += DownloadStreamBufferSize;
+
+                        writing = false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Download an object to a stream.
+        /// </summary>
+        /// <param name="stream">The output stream into which data read will be written.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <returns>True if successful.</returns>
+        public bool DownloadToStream(Stream stream, string container, string objectKey)
+        {
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (!stream.CanWrite) throw new ArgumentException("Stream cannot be written.");             
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+             
+            if (!ObjectExists(container, objectKey)) throw new IOException("Object specified does not exist.");
+
+            ObjectMetadata metadata = null;
+            if (!GetObjectMetadata(container, objectKey, out metadata)) throw new IOException("Unable to retrieve object metadata.");
+
+            long position = 0;
+            long remaining = Convert.ToInt64(metadata.ContentLength);
+            byte[] buffer = new byte[DownloadStreamBufferSize];
+            bool writing = true;
+            
+            while (writing)
+            {
+                if (remaining > DownloadStreamBufferSize)
+                {
+                    buffer = new byte[DownloadStreamBufferSize];
+
+                    if (!ReadObjectRange(container, objectKey, position, DownloadStreamBufferSize, out buffer))
+                        throw new IOException("Unable to read from position " + position + " from object.");
+
+                    stream.Write(buffer, 0, buffer.Length);
+
+                    remaining -= DownloadStreamBufferSize;
+                    position += DownloadStreamBufferSize;
+                }
+                else
+                {
+                    // final block
+                    buffer = new byte[remaining];
+
+                    if (!ReadObjectRange(container, objectKey, position, remaining, out buffer))
+                        throw new IOException("Unable to read final block from position " + position + " from object.");
+
+                    stream.Write(buffer, 0, buffer.Length);
+
+                    remaining -= DownloadStreamBufferSize;
+                    position += DownloadStreamBufferSize;
+
+                    writing = false;
+                }
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Containers
 
         /// <summary>
         /// List the names of the existing containers.
-        /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
+        /// </summary> 
         /// <param name="settings">List of container settings.</param>
         /// <returns>True if successful.</returns>
-        public bool ListContainers(string userGuid, out List<ContainerSettings> settings)
+        public bool ListContainers(out List<ContainerSettings> settings)
         {
             settings = new List<ContainerSettings>();
-
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
-
-            string url = _Endpoint + userGuid + "?_container=true&_stats=true";
+             
+            string url = _Endpoint + _UserGuid + "?_container=true&_stats=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -458,28 +673,26 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// Create a container.
-        /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
+        /// </summary> 
         /// <param name="container">The container.</param>
         /// <param name="publicRead">True if available for read by unauthenticated users.</param>
         /// <param name="publicWrite">True if available for write by unauthenticated users.</param>
         /// <param name="auditLogging">True if audit logging should be enabled.</param>
         /// <param name="replication">Replication mode for the container.</param>
         /// <returns>True if successful.</returns>
-        public bool CreateContainer(string userGuid, string container, bool publicRead, bool publicWrite, bool auditLogging, ReplicationMode replication)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool CreateContainer(string container, bool publicRead, bool publicWrite, bool auditLogging, ReplicationMode replication)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
             ContainerSettings settings = new ContainerSettings();
-            settings.User = userGuid;
+            settings.User = _UserGuid;
             settings.Name = container;
             settings.IsPublicRead = publicRead;
             settings.IsPublicWrite = publicWrite;
             settings.EnableAuditLogging = auditLogging;
             settings.Replication = replication;
 
-            string url = _Endpoint + userGuid + "/" + container + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -498,19 +711,17 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// Retrieve a container's settings.
-        /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
+        /// </summary> 
         /// <param name="container">The container.</param>
         /// <param name="settings">Settings for the container.</param>
         /// <returns>True if successful.</returns>
-        public bool GetContainerSettings(string userGuid, string container, out ContainerSettings settings)
+        public bool GetContainerSettings(string container, out ContainerSettings settings)
         {
             settings = null;
-
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
              
-            string url = _Endpoint + userGuid + "/" + container + "?_container=true&_config=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true&_config=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -536,7 +747,7 @@ namespace KvpbaseSDK
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
-            string url = _Endpoint + settings.User + "/" + settings.Name + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + settings.Name + "?_container=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -555,21 +766,19 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// Enumerate container statistics and objects within the container.
-        /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
+        /// </summary> 
         /// <param name="container">The container.</param>
         /// <param name="startIndex">Begin object enumeration from this position.</param>
         /// <param name="maxResults">Maximum number of objects to return.</param>
         /// <param name="metadata">The container's metadata.</param>
         /// <returns>True if successful.</returns>
-        public bool EnumerateContainer(string userGuid, string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
+        public bool EnumerateContainer(string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
         {
             metadata = null;
-
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + userGuid + "/" + container + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
             if (startIndex != null) url += "&_index=" + startIndex;
             if (maxResults != null) url += "&_count=" + maxResults;
 
@@ -590,16 +799,14 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// Delete a container.
-        /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
+        /// </summary> 
         /// <param name="container">The container.</param>
         /// <returns>True if successful.</returns>
-        public bool DeleteContainer(string userGuid, string container)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool DeleteContainer(string container)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + userGuid + "/" + container + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,
@@ -617,16 +824,14 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// Check if a container exists.
-        /// </summary>
-        /// <param name="userGuid">The user GUID.</param>
+        /// </summary> 
         /// <param name="container">The container.</param>
         /// <returns>True if the container exists.</returns>
-        public bool ContainerExists(string userGuid, string container)
-        {
-            if (String.IsNullOrEmpty(userGuid)) throw new ArgumentNullException(nameof(userGuid));
+        public bool ContainerExists(string container)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             
-            string url = _Endpoint + userGuid + "/" + container + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
 
             RestResponse resp = RestRequest.SendRequestSafe(
                 url,

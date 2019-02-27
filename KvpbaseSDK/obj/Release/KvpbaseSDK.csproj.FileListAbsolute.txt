@@ -31,3 +31,4 @@ C:\code\KVPbase\sdk-csharp-3.0\KvpbaseSDK\bin\Release\RestWrapper.pdb
 C:\code\KVPbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\KvpbaseSDK.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\KvpbaseSDK.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\KvpbaseSDK.dll
+C:\code\KVPbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\KvpbaseSDK.csprojAssemblyReference.cache

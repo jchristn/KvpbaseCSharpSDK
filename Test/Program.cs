@@ -8,17 +8,23 @@ namespace Test
 {
 	public class MainClass
 	{
+        private static string _UserGuid = "";
 		private static string _Endpoint = ""; 
 		private static string _ApiKey = "";
+        private static string _Email = "";
+        private static string _Password = "";
         private static KvpbaseClient _Kvpbase;
 
 		public static void Main(string[] args)
 		{
-			#region Initialize
+            #region Initialize
 
-			_Endpoint = KvpbaseCommon.InputString("Endpoint:", "http://localhost:8080", false); 
-			_ApiKey = KvpbaseCommon.InputString("API Key:", "default", false);
-            _Kvpbase = new KvpbaseClient(_ApiKey, _Endpoint);
+            _UserGuid = KvpbaseCommon.InputString("User GUID:", "default", false);
+            _Endpoint = KvpbaseCommon.InputString("Endpoint:", "http://localhost:8080", false);
+            _ApiKey = KvpbaseCommon.InputString("API Key:", "default", false);
+            _Email = KvpbaseCommon.InputString("Email:", "default@default.com", false);
+            _Password = KvpbaseCommon.InputString("Password:", "default", false);
+            _Kvpbase = new KvpbaseClient(_UserGuid, _Email, _Password, _Endpoint);
 
 			#endregion
 
@@ -220,7 +226,6 @@ namespace Test
         private static void ObjectWrite()
         {
             if (!_Kvpbase.WriteObject(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
                 KvpbaseCommon.InputString("Content Type:", "text/plain", false),
@@ -237,7 +242,6 @@ namespace Test
         private static void ObjectWriteRange()
         {
             if (!_Kvpbase.WriteObjectRange(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
                 KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
@@ -256,7 +260,6 @@ namespace Test
             byte[] data = null;
 
             if (!_Kvpbase.ReadObject(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
                 out data))
@@ -278,7 +281,6 @@ namespace Test
             byte[] data = null;
 
             if (!_Kvpbase.ReadObjectRange(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
                 KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
@@ -300,7 +302,6 @@ namespace Test
         private static void ObjectRename()
         { 
             if (!_Kvpbase.RenameObject(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Original Object Key:", "hello.txt", false),
                 KvpbaseCommon.InputString("New Object Key:", "renamed.txt", false)))
@@ -316,7 +317,6 @@ namespace Test
         private static void ObjectDelete()
         {
             if (!_Kvpbase.DeleteObject(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false)))
             {
@@ -331,7 +331,6 @@ namespace Test
         private static void ObjectExists()
         {
             if (!_Kvpbase.ObjectExists(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false)))
             {
@@ -347,7 +346,6 @@ namespace Test
         {
             ObjectMetadata metadata = null;
             if (!_Kvpbase.GetObjectMetadata(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
                 out metadata))
@@ -369,9 +367,7 @@ namespace Test
         {
             List<ContainerSettings> settings = null;
 
-            if (!_Kvpbase.ListContainers(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
-                out settings))
+            if (!_Kvpbase.ListContainers(out settings))
             {
                 Console.WriteLine("Failed");
             }
@@ -385,7 +381,6 @@ namespace Test
         private static void ContainerCreate()
         {
             if (!_Kvpbase.CreateContainer(
-                KvpbaseCommon.InputString("User GUID:", "default", false), 
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputBoolean("Public Read:", true),
                 KvpbaseCommon.InputBoolean("Public Write:", false), 
@@ -404,8 +399,7 @@ namespace Test
         {
             ContainerSettings settings = null;
 
-            if (!_Kvpbase.GetContainerSettings(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
+            if (!_Kvpbase.GetContainerSettings( 
                 KvpbaseCommon.InputString("Container:", "default", false),
                 out settings))
             {
@@ -423,7 +417,6 @@ namespace Test
             ContainerSettings settings = null;
 
             if (!_Kvpbase.GetContainerSettings(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 out settings))
             {
@@ -452,7 +445,6 @@ namespace Test
             ContainerMetadata metadata = null;
 
             if (!_Kvpbase.EnumerateContainer(
-                KvpbaseCommon.InputString("User GUID:", "default", false),
                 KvpbaseCommon.InputString("Container:", "default", false),
                 KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
                 KvpbaseCommon.InputInteger("Count:", 10, true, false),
@@ -470,7 +462,6 @@ namespace Test
         private static void ContainerDelete()
         {
             if (!_Kvpbase.DeleteContainer(
-                   KvpbaseCommon.InputString("User GUID:", "default", false),
                    KvpbaseCommon.InputString("Container:", "default", false)))
             {
                 Console.WriteLine("Failed");
@@ -484,7 +475,6 @@ namespace Test
         private static void ContainerExists()
         {
             if (!_Kvpbase.ContainerExists(
-                   KvpbaseCommon.InputString("User GUID:", "default", false),
                    KvpbaseCommon.InputString("Container:", "default", false)))
             {
                 Console.WriteLine("Failed");

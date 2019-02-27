@@ -68,9 +68,9 @@ namespace KvpbaseSDK
             _Container = container;
             _ObjectKey = objectKey;
 
-            if (!_Kvpbase.ObjectExists(_UserGuid, _Container, _ObjectKey))
+            if (!_Kvpbase.ObjectExists(_Container, _ObjectKey))
             {
-                if (!_Kvpbase.WriteObject(_UserGuid, _Container, _ObjectKey, "application/octet-stream", null))
+                if (!_Kvpbase.WriteObject(_Container, _ObjectKey, "application/octet-stream", null))
                 {
                     throw new IOException("Unable to create object.");
                 }
@@ -96,7 +96,7 @@ namespace KvpbaseSDK
 
         private bool GetObjectMetadata()
         {
-            bool success = _Kvpbase.GetObjectMetadata(_UserGuid, _Container, _ObjectKey, out _ObjectMetadata);
+            bool success = _Kvpbase.GetObjectMetadata(_Container, _ObjectKey, out _ObjectMetadata);
             if (success)
             {
                 _Length = Convert.ToInt64(_ObjectMetadata.ContentLength);
@@ -299,7 +299,7 @@ namespace KvpbaseSDK
 
             byte[] readData = new byte[count];
 
-            if (!_Kvpbase.ReadObjectRange(_UserGuid, _Container, _ObjectKey, _Position, count, out readData))
+            if (!_Kvpbase.ReadObjectRange(_Container, _ObjectKey, _Position, count, out readData))
             {
                 throw new IOException("Unable to read data.");
             }
@@ -327,7 +327,7 @@ namespace KvpbaseSDK
             {
                 byte[] readData = new byte[count];
 
-                if (!_Kvpbase.ReadObjectRange(_UserGuid, _Container, _ObjectKey, _Position, count, out readData))
+                if (!_Kvpbase.ReadObjectRange(_Container, _ObjectKey, _Position, count, out readData))
                 {
                     throw new IOException("Unable to read data.");
                 }
@@ -346,7 +346,7 @@ namespace KvpbaseSDK
         public override int ReadByte()
         {
             byte[] data = null;
-            if (!_Kvpbase.ReadObjectRange(_UserGuid, _Container, _ObjectKey, _Position, 1, out data))
+            if (!_Kvpbase.ReadObjectRange(_Container, _ObjectKey, _Position, 1, out data))
             {
                 throw new IOException("Unable to read data.");
             }
@@ -419,7 +419,7 @@ namespace KvpbaseSDK
                 Buffer.BlockCopy(temp, 0, buffer, 0, count);
             }
 
-            if (!_Kvpbase.WriteObjectRange(_UserGuid, _Container, _ObjectKey, _Position, buffer))
+            if (!_Kvpbase.WriteObjectRange(_Container, _ObjectKey, _Position, buffer))
             {
                 throw new IOException("Unable to write data.");
             }
@@ -457,7 +457,7 @@ namespace KvpbaseSDK
                     Buffer.BlockCopy(temp, 0, buffer, 0, count);
                 }
 
-                if (!_Kvpbase.WriteObjectRange(_UserGuid, _Container, _ObjectKey, _Position, buffer))
+                if (!_Kvpbase.WriteObjectRange(_Container, _ObjectKey, _Position, buffer))
                 {
                     throw new IOException("Unable to write data.");
                 }
@@ -481,7 +481,7 @@ namespace KvpbaseSDK
             byte[] data = new byte[1];
             data[0] = value;
 
-            if (!_Kvpbase.WriteObjectRange(_UserGuid, _Container, _ObjectKey, _Position, data))
+            if (!_Kvpbase.WriteObjectRange(_Container, _ObjectKey, _Position, data))
             {
                 throw new IOException("Unable to write data.");
             }

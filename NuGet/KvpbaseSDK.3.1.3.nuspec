@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>KvpbaseSDK</id>
+    <version>3.1.3</version>
+    <title>KvpbaseSDK</title>
+    <authors>jchristn</authors>
+    <owners>jchristn</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/kvpbase/kvpbase-sdk-csharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/kvpbase/sdk-csharp/</projectUrl>
+    <description>C# SDK for Kvpbase object storage platform</description>
+    <summary>C# SDK for Kvpbase object storage platform</summary>
+    <releaseNotes>Added support for KvpbaseStream (opening streams over stored objects) along with Stream and File methods (upload and download)</releaseNotes>
+    <copyright>(c)2019 Joel Christner</copyright>
+    <tags>kvpbase rest restful object storage data amazon aws s3 azure blob cloud</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="11.0.0" />
+      <dependency id="RestWrapper" version="1.0.8" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="lib\KvpbaseSDK.dll" target="lib\KvpbaseSDK.dll" />
+  </files>
+</package>

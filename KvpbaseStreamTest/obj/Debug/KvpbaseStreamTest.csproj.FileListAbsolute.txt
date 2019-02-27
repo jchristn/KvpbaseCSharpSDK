@@ -1,0 +1,16 @@
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\KvpbaseStreamTest.exe.config
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\KvpbaseStreamTest.exe
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\KvpbaseStreamTest.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\KvpbaseSDK.dll
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\Newtonsoft.Json.dll
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\RestWrapper.dll
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\KvpbaseSDK.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\Newtonsoft.Json.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\Newtonsoft.Json.xml
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\bin\Debug\RestWrapper.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.csprojAssemblyReference.cache
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.exe.config
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.csproj.CoreCompileInputs.cache
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.csproj.CopyComplete
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.exe
+C:\Code\KVPbase\sdk-csharp-3.0\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.pdb

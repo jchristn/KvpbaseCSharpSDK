@@ -1,0 +1,16 @@
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\large.jpg
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\StreamTest.exe.config
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\StreamTest.exe
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\StreamTest.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\KvpbaseSDK.dll
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\Newtonsoft.Json.dll
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\RestWrapper.dll
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\Newtonsoft.Json.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\Newtonsoft.Json.xml
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\RestWrapper.pdb
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.csprojAssemblyReference.cache
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.exe.config
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.csproj.CoreCompileInputs.cache
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.csproj.CopyComplete
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.exe
+C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.pdb

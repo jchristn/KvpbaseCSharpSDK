@@ -68,6 +68,11 @@ namespace KvpbaseSDK
             _Container = container;
             _ObjectKey = objectKey;
 
+            if (!_Kvpbase.ContainerExists(_Container))
+            {
+                throw new IOException("Container does not exist.");
+            }
+
             if (!_Kvpbase.ObjectExists(_Container, _ObjectKey))
             {
                 if (!_Kvpbase.WriteObject(_Container, _ObjectKey, "application/octet-stream", null))

@@ -441,6 +441,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
+            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
             if (!File.Exists(filename)) throw new IOException("File specified does not exist.");
             if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
 
@@ -496,7 +497,8 @@ namespace KvpbaseSDK
             if (!stream.CanRead) throw new ArgumentException("Stream cannot be read.");
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-             
+
+            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
             if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
 
             long position = 0;
@@ -535,6 +537,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
+            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
             if (File.Exists(filename)) throw new IOException("File specified already exists.");
             if (!ObjectExists(container, objectKey)) throw new IOException("Object specified does not exist.");
 
@@ -596,7 +599,8 @@ namespace KvpbaseSDK
             if (!stream.CanWrite) throw new ArgumentException("Stream cannot be written.");             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-             
+
+            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
             if (!ObjectExists(container, objectKey)) throw new IOException("Object specified does not exist.");
 
             ObjectMetadata metadata = null;

@@ -7,10 +7,14 @@
 
 Kvpbase is a RESTful object storage platform.  This SDK is intended to help application developers integrate object storage using Kvpbase into their C# applications.
 
+As of v3.1.5, KvpbaseSDK now targets both .NET Core 2.0 and .NET Framework 4.6.1.
+
 ## Help or Feedback
+
 First things first - do you need help or have feedback?  Contact me at joel dot christner at gmail dot com or file an issue here!
 
 ## Classes
+
 Ensure you have a ```using``` statement for the SDK.
 ```
 using KvpbaseSDK;
@@ -50,5 +54,6 @@ PM> Install-Package KvpbaseSDK
 ```
 
 ## Full Example
+
 Refer to the ```Test``` project for a full example using the API primitives.  For stream examples, refer to ```KvpbaseStreamTest``` (using ```KvpbaseStream```) or ```StreamTest``` (for using files from your filesystem).
 

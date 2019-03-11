@@ -9,8 +9,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Script.Serialization; 
+using System.Threading.Tasks; 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -460,36 +459,7 @@ namespace KvpbaseSDK
 
             return json;
         }
-
-        public static T DeserializeJsonBuiltIn<T>(string json)
-        {
-            if (String.IsNullOrEmpty(json)) throw new ArgumentNullException(nameof(json));
-
-            try
-            {
-                JavaScriptSerializer ser = new JavaScriptSerializer();
-                ser.MaxJsonLength = Int32.MaxValue;
-                return ser.Deserialize<T>(json);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("");
-                Console.WriteLine("Exception while deserializing:");
-                Console.WriteLine(json);
-                Console.WriteLine("");
-                Console.WriteLine("Exception:");
-                Console.WriteLine(SerializeJson(e, true));
-                Console.WriteLine("");
-                throw e;
-            }
-        }
-
-        public static T DeserializeJsonBuiltIn<T>(byte[] data)
-        {
-            if (data == null || data.Length < 1) throw new ArgumentNullException(nameof(data));
-            return DeserializeJsonBuiltIn<T>(Encoding.UTF8.GetString(data));
-        }
-
+         
         public static T DeserializeJson<T>(string json)
         {
             if (String.IsNullOrEmpty(json)) throw new ArgumentNullException(nameof(json));

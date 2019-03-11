@@ -54,15 +54,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KvpbaseSDK\KvpbaseSDK.csproj">
-      <Project>{45d56760-1efe-4751-8612-7e54c52fcbbd}</Project>
-      <Name>KvpbaseSDK</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="large.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KvpbaseSDK\KvpbaseSDK.csproj">
+      <Project>{4603e3e8-e710-4219-b233-bdfcaf8a9987}</Project>
+      <Name>KvpbaseSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

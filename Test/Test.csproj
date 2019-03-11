@@ -35,13 +35,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KvpbaseSDK\KvpbaseSDK.csproj">
-      <Project>{45D56760-1EFE-4751-8612-7E54C52FCBBD}</Project>
-      <Name>KvpbaseSDK</Name>
-    </ProjectReference>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\KvpbaseSDK\KvpbaseSDK.csproj">
+      <Project>{4603e3e8-e710-4219-b233-bdfcaf8a9987}</Project>
+      <Name>KvpbaseSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

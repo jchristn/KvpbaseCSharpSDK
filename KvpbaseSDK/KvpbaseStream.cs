@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Remoting;
+using System.Linq; 
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks; 
@@ -217,16 +216,7 @@ namespace KvpbaseSDK
             // return base.CopyToAsync(destination, bufferSize, cancellationToken);
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Unsupported method.
-        /// </summary> 
-        public override ObjRef CreateObjRef(Type requestedType)
-        {
-            // return base.CreateObjRef(requestedType);
-            throw new NotImplementedException();
-        }
-
+         
         /// <summary>
         /// Unsupported method.
         /// </summary>

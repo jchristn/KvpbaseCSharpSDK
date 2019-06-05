@@ -77,12 +77,20 @@ namespace Test
                         ObjectWriteRange();
                         break;
 
+                    case "object upload":
+                        ObjectUpload();
+                        break;
+
                     case "object read":
                         ObjectRead();
                         break;
 
                     case "object read range":
                         ObjectReadRange();
+                        break;
+
+                    case "object download":
+                        ObjectDownload();
                         break;
 
                     case "object rename":
@@ -160,8 +168,10 @@ namespace Test
             Console.WriteLine("  object <cmd> where <cmd> is one of the following:");
             Console.WriteLine("    write             Write an object");
             Console.WriteLine("    write range       Write a range of bytes to an existing object");
+            Console.WriteLine("    upload            Write an object from a file");
             Console.WriteLine("    read              Read an object");
             Console.WriteLine("    read range        Read a range of bytes from an existing object");
+            Console.WriteLine("    download          Read an object to a file");
             Console.WriteLine("    rename            Rename an object");
             Console.WriteLine("    delete            Delete an object");
             Console.WriteLine("    exists            Check if an object exists");
@@ -255,6 +265,25 @@ namespace Test
             }
         }
 
+        private static void ObjectUpload()
+        {
+            ObjectMetadata md = null;
+            if (!_Kvpbase.UploadFile(
+                KvpbaseCommon.InputString("Filename:", null, false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false),
+                KvpbaseCommon.InputString("Content Type:", "text/plain", false),
+                out md))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                Console.WriteLine(KvpbaseCommon.SerializeJson(md, true));
+            }
+        }
+
         private static void ObjectRead()
         {
             byte[] data = null;
@@ -296,6 +325,21 @@ namespace Test
                 {
                     Console.WriteLine(Encoding.UTF8.GetString(data));
                 }
+            }
+        }
+
+        private static void ObjectDownload()
+        {
+            if (!_Kvpbase.DownloadFile(
+                KvpbaseCommon.InputString("Filename:", null, false),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputString("Object Key:", "hello.txt", false)))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
             }
         }
 

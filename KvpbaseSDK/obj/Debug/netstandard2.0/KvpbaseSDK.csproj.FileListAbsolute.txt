@@ -6,3 +6,12 @@ C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\netstandard2.0\Kvpb
 C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.AssemblyInfo.cs
 C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\netstandard2.0\KvpbaseSDK.deps.json
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\netstandard2.0\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\netstandard2.0\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.AssemblyInfoInputs.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.AssemblyInfo.cs
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\netstandard2.0\KvpbaseSDK.pdb

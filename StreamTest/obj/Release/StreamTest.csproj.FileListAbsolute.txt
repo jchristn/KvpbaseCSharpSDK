@@ -7,9 +7,7 @@ C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\Newtonsoft.Json.dll
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\RestWrapper.dll
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\Newtonsoft.Json.pdb
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\Newtonsoft.Json.xml
-C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Release\RestWrapper.pdb
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.csprojAssemblyReference.cache
-C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.exe.config
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.csproj.CoreCompileInputs.cache
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.csproj.CopyComplete
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Release\StreamTest.exe
@@ -29,3 +27,4 @@ C:\code\KVPbase\sdk-csharp-3.0-retarget\StreamTest\obj\Release\StreamTest.csproj
 C:\code\KVPbase\sdk-csharp-3.0-retarget\StreamTest\obj\Release\StreamTest.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp-3.0-retarget\StreamTest\obj\Release\StreamTest.exe
 C:\code\KVPbase\sdk-csharp-3.0-retarget\StreamTest\obj\Release\StreamTest.pdb
+C:\code\kvpbase\sdk-csharp-3.0\StreamTest\bin\Release\KvpbaseSDK.pdb

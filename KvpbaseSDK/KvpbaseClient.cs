@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 namespace KvpbaseSDK
 {
 	/// <summary>
-	/// The Kvpbase client.
+	/// Kvpbase object storage client.
 	/// </summary>
 	public class KvpbaseClient
     {
@@ -133,11 +133,9 @@ namespace KvpbaseSDK
         /// <returns>True if connectivity exists.</returns>
         public bool VerifyConnectivity()
         {
-            RestResponse resp = RestRequest.SendRequestSafe(
-                _Endpoint,
-                null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, null, null);
+            RestRequest req = new RestRequest(_Endpoint, HttpMethod.GET, null, null, true);
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors; 
+            RestResponse resp = req.Send();
 
             if (resp != null && resp.StatusCode >= 200 && resp.StatusCode <= 299)
             {
@@ -153,11 +151,16 @@ namespace KvpbaseSDK
         /// <returns>True if able to successfully authenticate.</returns>
         public bool Authenticate()
         {
-            RestResponse resp = RestRequest.SendRequestSafe(
-                _Endpoint + "token",
-                null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+            RestRequest req = new RestRequest(
+                _Endpoint + "token", 
+                HttpMethod.GET, 
+                _AuthHeaders, 
+                null, 
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp != null && resp.StatusCode >= 200 && resp.StatusCode <= 299)
             {
@@ -190,11 +193,51 @@ namespace KvpbaseSDK
             
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.POST,
+                _AuthHeaders,
                 contentType,
-                "POST",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, data);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(data);
+
+            if (resp == null || resp.StatusCode != 201)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Write an object.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="contentType">The content type for the object.</param>
+        /// <param name="contentLength">The length of the data in the stream.</param>
+        /// <param name="stream">The stream containing the data.</param>
+        /// <returns>True if successful.</returns>
+        public bool WriteObject(string container, string objectKey, string contentType, long contentLength, Stream stream)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.POST,
+                _AuthHeaders,
+                contentType,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(stream, contentLength);
 
             if (resp == null || resp.StatusCode != 201)
             {
@@ -220,11 +263,52 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.PUT,
+                _AuthHeaders,
                 null,
-                "PUT",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, data);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(data);
+
+            if (resp == null || resp.StatusCode != 200)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Write a range of bytes to an existing object.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="startIndex">The byte position at which to write the data.</param>
+        /// <param name="contentLength">The length of the data in the stream.</param>
+        /// <param name="stream">The stream containing the data.</param>
+        /// <returns>True if successful.</returns>
+        public bool WriteObjectRange(string container, string objectKey, long startIndex, long contentLength, Stream stream)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+            if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex;
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.PUT,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(stream, contentLength);
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -250,11 +334,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.GET,
+                _AuthHeaders,
                 null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -265,6 +354,49 @@ namespace KvpbaseSDK
             {
                 data = new byte[resp.Data.Length];
                 Buffer.BlockCopy(resp.Data, 0, data, 0, resp.Data.Length);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Read an object.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="contentLength">The length of the data in the stream.</param>
+        /// <param name="stream">The stream containing the data.</param>
+        /// <returns>True if successful.</returns>
+        public bool ReadObject(string container, string objectKey, out long contentLength, out Stream stream)
+        {
+            contentLength = 0;
+            stream = null;
+
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                false);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200)
+            {
+                return false;
+            }
+
+            if (resp.DataStream != null && resp.ContentLength > 0)
+            {
+                contentLength = resp.ContentLength;
+                stream = resp.DataStream;
             }
 
             return true;
@@ -290,11 +422,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex + "&_count=" + count;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.GET,
+                _AuthHeaders,
                 null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -308,6 +445,51 @@ namespace KvpbaseSDK
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Read a range of bytes from an object.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="objectKey">The object key.</param>
+        /// <param name="startIndex">The byte position from which to read the data.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <param name="stream">The stream containing the data.</param>
+        /// <returns>True if successful.</returns>
+        public bool ReadObjectRange(string container, string objectKey, long startIndex, long count, out Stream stream)
+        {
+            stream = null;
+
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+            if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
+            if (count <= 0) throw new ArgumentException("Invalid value for count.");
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex + "&_count=" + count;
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                false);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200)
+            {
+                return false;
+            }
+
+            if (resp.DataStream != null && resp.ContentLength > 0)
+            {
+                stream = resp.DataStream;
+            }
+
+            return true;
+
         }
 
         /// <summary>
@@ -325,11 +507,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + originalObjectKey + "?_rename=" + newObjectKey;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.PUT,
+                _AuthHeaders,
                 null,
-                "PUT",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -352,11 +539,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.DELETE,
+                _AuthHeaders,
                 null,
-                "DELETE",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 204)
             {
@@ -379,11 +571,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.HEAD,
+                _AuthHeaders,
                 null,
-                "HEAD",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -407,14 +604,19 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_metadata=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_metadata=true"; 
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.GET,
+                _AuthHeaders,
                 null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
 
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+             
             if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
             {
                 return false;
@@ -445,38 +647,30 @@ namespace KvpbaseSDK
             if (!File.Exists(filename)) throw new IOException("File specified does not exist.");
             if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
 
-            long position = 0;
-            byte[] buffer = new byte[UploadStreamBufferSize];
-            int read = 0; 
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+
+            long fileLength = new FileInfo(filename).Length;
+            RestResponse resp = null;
 
             using (FileStream fs = new FileStream(filename, FileMode.Open))
             {
-                while ((read = fs.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    if (read != buffer.Length)
-                    {
-                        // rewrite the buffer into an array of the correct size
-                        byte[] tempBuffer = new byte[read];
-                        Buffer.BlockCopy(buffer, 0, tempBuffer, 0, read);
-                        buffer = new byte[read];
-                        Buffer.BlockCopy(tempBuffer, 0, buffer, 0, read);
-                    }
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.POST,
+                    _AuthHeaders,
+                    contentType,
+                    true);
 
-                    if (position == 0)
-                    {
-                        if (!WriteObject(container, objectKey, contentType, buffer))
-                            throw new IOException("Unable to write initial position for object.");
-                    }
-                    else
-                    {
-                        if (!WriteObjectRange(container, objectKey, position, buffer))
-                            throw new IOException("Unable to write to position " + position + " in object.");
-                    }
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-                    position += read;
-                } 
+                resp = req.Send(fs, fileLength);
             }
 
+            if (resp == null || resp.StatusCode != 201)
+            {
+                return false;
+            }
+             
             return GetObjectMetadata(container, objectKey, out metadata);
         }
 
@@ -489,37 +683,38 @@ namespace KvpbaseSDK
         /// <param name="contentType">The content type.</param>
         /// <param name="metadata">The object's metadata.</param>
         /// <returns>True if successful.</returns>
-        public bool UploadFromStream(Stream stream, string container, string objectKey, string contentType, out ObjectMetadata metadata)
+        public bool UploadFromStream(Stream stream, long contentLength, string container, string objectKey, string contentType, out ObjectMetadata metadata)
         {
             metadata = null;
 
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (!stream.CanRead) throw new ArgumentException("Stream cannot be read.");
+            if (contentLength < 0) throw new ArgumentException("Content length must be zero or greater.");
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
             if (!ContainerExists(container)) throw new IOException("Container does not exist.");
             if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
 
-            long position = 0;
-            byte[] buffer = new byte[UploadStreamBufferSize];
-            int read = 0; 
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+            RestResponse resp = null;
+             
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.POST,
+                _AuthHeaders,
+                contentType,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            resp = req.Send(stream, contentLength); 
+
+            if (resp == null || resp.StatusCode != 201)
             {
-                if (position == 0)
-                {
-                    if (!WriteObject(container, objectKey, contentType, buffer))
-                        throw new IOException("Unable to write initial position for object.");
-                }
-                else
-                {
-                    if (!WriteObjectRange(container, objectKey, position, buffer))
-                        throw new IOException("Unable to write to position " + position + " in object.");
-                }
-
-                position += read;
-            } 
+                return false;
+            }
 
             return GetObjectMetadata(container, objectKey, out metadata);
         }
@@ -544,41 +739,39 @@ namespace KvpbaseSDK
             ObjectMetadata metadata = null;
             if (!GetObjectMetadata(container, objectKey, out metadata)) throw new IOException("Unable to retrieve object metadata.");
 
-            long position = 0;
-            long remaining = Convert.ToInt64(metadata.ContentLength);
-            byte[] buffer = new byte[DownloadStreamBufferSize];
-            bool writing = true;
-
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+             
             using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
             {
-                while (writing)
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null,
+                    false);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = req.Send();
+
+                if (resp == null || resp.StatusCode != 200)
                 {
-                    if (remaining > DownloadStreamBufferSize)
+                    return false;
+                }
+
+                long bytesRemaining = resp.ContentLength;
+                byte[] buffer = new byte[DownloadStreamBufferSize];
+
+                if (bytesRemaining > 0)
+                {
+                    while (bytesRemaining > 0)
                     {
-                        buffer = new byte[DownloadStreamBufferSize];
-
-                        if (!ReadObjectRange(container, objectKey, position, DownloadStreamBufferSize, out buffer))
-                            throw new IOException("Unable to read from position " + position + " from object.");
-
-                        fs.Write(buffer, 0, buffer.Length);
-
-                        remaining -= DownloadStreamBufferSize;
-                        position += DownloadStreamBufferSize;
-                    }
-                    else
-                    {
-                        // final block
-                        buffer = new byte[remaining];
-
-                        if (!ReadObjectRange(container, objectKey, position, remaining, out buffer))
-                            throw new IOException("Unable to read final block from position " + position + " from object.");
-
-                        fs.Write(buffer, 0, buffer.Length);
-
-                        remaining -= DownloadStreamBufferSize;
-                        position += DownloadStreamBufferSize;
-
-                        writing = false;
+                        int bytesRead = resp.DataStream.Read(buffer, 0, buffer.Length);
+                        if (bytesRead > 0)
+                        {
+                            bytesRemaining -= bytesRead;
+                            fs.Write(buffer, 0, bytesRead);
+                        }
                     }
                 }
             }
@@ -592,9 +785,12 @@ namespace KvpbaseSDK
         /// <param name="stream">The output stream into which data read will be written.</param>
         /// <param name="container">The container.</param>
         /// <param name="objectKey">The object key.</param>
+        /// <param name="contentLength">Content length of the data in the stream.</param>
         /// <returns>True if successful.</returns>
-        public bool DownloadToStream(Stream stream, string container, string objectKey)
+        public bool DownloadToStream(Stream stream, string container, string objectKey, out long contentLength)
         {
+            contentLength = 0;
+
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (!stream.CanWrite) throw new ArgumentException("Stream cannot be written.");             
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
@@ -606,41 +802,42 @@ namespace KvpbaseSDK
             ObjectMetadata metadata = null;
             if (!GetObjectMetadata(container, objectKey, out metadata)) throw new IOException("Unable to retrieve object metadata.");
 
-            long position = 0;
-            long remaining = Convert.ToInt64(metadata.ContentLength);
-            byte[] buffer = new byte[DownloadStreamBufferSize];
-            bool writing = true;
-            
-            while (writing)
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+             
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                false);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200)
             {
-                if (remaining > DownloadStreamBufferSize)
-                {
-                    buffer = new byte[DownloadStreamBufferSize];
-
-                    if (!ReadObjectRange(container, objectKey, position, DownloadStreamBufferSize, out buffer))
-                        throw new IOException("Unable to read from position " + position + " from object.");
-
-                    stream.Write(buffer, 0, buffer.Length);
-
-                    remaining -= DownloadStreamBufferSize;
-                    position += DownloadStreamBufferSize;
-                }
-                else
-                {
-                    // final block
-                    buffer = new byte[remaining];
-
-                    if (!ReadObjectRange(container, objectKey, position, remaining, out buffer))
-                        throw new IOException("Unable to read final block from position " + position + " from object.");
-
-                    stream.Write(buffer, 0, buffer.Length);
-
-                    remaining -= DownloadStreamBufferSize;
-                    position += DownloadStreamBufferSize;
-
-                    writing = false;
-                }
+                return false;
             }
+
+            contentLength = resp.ContentLength;
+            long bytesRemaining = resp.ContentLength;
+            byte[] buffer = new byte[DownloadStreamBufferSize];
+
+            if (bytesRemaining > 0)
+            {
+                while (bytesRemaining > 0)
+                {
+                    int bytesRead = resp.DataStream.Read(buffer, 0, buffer.Length);
+                    if (bytesRead > 0)
+                    {
+                        bytesRemaining -= bytesRead;
+                        stream.Write(buffer, 0, bytesRead);
+                    }
+                }
+
+                if (stream.CanSeek) stream.Seek(0, SeekOrigin.Begin);
+            } 
 
             return true;
         }
@@ -660,11 +857,16 @@ namespace KvpbaseSDK
              
             string url = _Endpoint + _UserGuid + "?_container=true&_stats=true";
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.GET,
+                _AuthHeaders,
                 null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
             {
@@ -698,12 +900,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
-                null,
-                "POST",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders,
-                Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
+                HttpMethod.POST,
+                _AuthHeaders,
+                "application/json",
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
 
             if (resp == null || resp.StatusCode != 201)
             {
@@ -727,11 +933,16 @@ namespace KvpbaseSDK
              
             string url = _Endpoint + _UserGuid + "/" + container + "?_container=true&_config=true";
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.GET,
+                _AuthHeaders,
                 null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
             {
@@ -753,12 +964,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + settings.Name + "?_container=true";
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
-                null,
-                "PUT",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, 
-                Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
+                HttpMethod.PUT,
+                _AuthHeaders,
+                "application/json",
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -786,11 +1001,16 @@ namespace KvpbaseSDK
             if (startIndex != null) url += "&_index=" + startIndex;
             if (maxResults != null) url += "&_count=" + maxResults;
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.GET,
+                _AuthHeaders,
                 null,
-                "GET",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
             {
@@ -812,11 +1032,16 @@ namespace KvpbaseSDK
 
             string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.DELETE,
+                _AuthHeaders,
                 null,
-                "DELETE",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 204)
             {
@@ -837,11 +1062,16 @@ namespace KvpbaseSDK
             
             string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
 
-            RestResponse resp = RestRequest.SendRequestSafe(
+            RestRequest req = new RestRequest(
                 url,
+                HttpMethod.HEAD,
+                _AuthHeaders,
                 null,
-                "HEAD",
-                null, null, false, IgnoreCertificateErrors, _AuthHeaders, null);
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
 
             if (resp == null || resp.StatusCode != 200)
             {
@@ -893,8 +1123,7 @@ namespace KvpbaseSDK
             return s + "/";
         }
          
-        #endregion
-
+        #endregion 
     }
 }
 

@@ -8,3 +8,14 @@ C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.A
 C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp-3.0-retarget\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\net461\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\net461\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\net461\Newtonsoft.Json.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\bin\Debug\net461\RestWrapper.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.AssemblyInfoInputs.cache
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.AssemblyInfo.cs
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.csproj.CopyComplete
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.pdb

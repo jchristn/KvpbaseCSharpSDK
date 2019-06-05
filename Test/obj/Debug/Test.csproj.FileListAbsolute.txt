@@ -42,8 +42,6 @@ C:\code\KVPbase\sdk-csharp-3.0\Test\bin\Debug\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp-3.0\Test\bin\Debug\Newtonsoft.Json.dll
 C:\code\KVPbase\sdk-csharp-3.0\Test\bin\Debug\RestWrapper.dll
 C:\code\KVPbase\sdk-csharp-3.0\Test\bin\Debug\KvpbaseSDK.pdb
-C:\code\KVPbase\sdk-csharp-3.0\Test\bin\Debug\Newtonsoft.Json.xml
-C:\code\KVPbase\sdk-csharp-3.0\Test\bin\Debug\RestWrapper.pdb
 C:\code\KVPbase\sdk-csharp-3.0\Test\obj\Debug\Test.csprojAssemblyReference.cache
 C:\code\KVPbase\sdk-csharp-3.0\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp-3.0\Test\obj\Debug\Test.csproj.CopyComplete

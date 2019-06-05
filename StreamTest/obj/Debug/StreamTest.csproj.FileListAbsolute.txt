@@ -8,9 +8,7 @@ C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Debug\RestWrapper.dll
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Debug\KvpbaseSDK.pdb
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Debug\Newtonsoft.Json.pdb
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Debug\Newtonsoft.Json.xml
-C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\bin\Debug\RestWrapper.pdb
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Debug\StreamTest.csprojAssemblyReference.cache
-C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Debug\StreamTest.exe.config
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Debug\StreamTest.csproj.CoreCompileInputs.cache
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Debug\StreamTest.csproj.CopyComplete
 C:\Code\KVPbase\sdk-csharp-3.0\StreamTest\obj\Debug\StreamTest.exe

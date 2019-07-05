@@ -175,6 +175,279 @@ namespace KvpbaseSDK
         }
 
         #endregion
+         
+        #region Node
+
+        /// <summary>
+        /// Get the version number of the endpoint.
+        /// </summary>
+        /// <param name="version">Kvpbase version.</param>
+        /// <returns>True if successful.</returns>
+        public bool GetVersion(out string version)
+        {
+            version = null;
+            string url = _Endpoint + "version";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            {
+                return false;
+            }
+
+            version = Encoding.UTF8.GetString(resp.Data);
+            return true;
+        }
+
+        #endregion
+
+        #region Containers
+
+        /// <summary>
+        /// List the names of the existing containers.
+        /// </summary> 
+        /// <param name="settings">List of container settings.</param>
+        /// <returns>True if successful.</returns>
+        public bool ListContainers(out List<ContainerSettings> settings)
+        {
+            settings = new List<ContainerSettings>();
+
+            string url = _Endpoint + _UserGuid + "?_container=true&_stats=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            {
+                return false;
+            }
+
+            settings = KvpbaseCommon.DeserializeJson<List<ContainerSettings>>(resp.Data);
+            return true;
+        }
+
+        /// <summary>
+        /// Create a container.
+        /// </summary> 
+        /// <param name="container">The container.</param>
+        /// <param name="publicRead">True if available for read by unauthenticated users.</param>
+        /// <param name="publicWrite">True if available for write by unauthenticated users.</param>
+        /// <param name="auditLogging">True if audit logging should be enabled.</param>
+        /// <param name="replication">Replication mode for the container.</param>
+        /// <returns>True if successful.</returns>
+        public bool CreateContainer(string container, bool publicRead, bool publicWrite, bool auditLogging, ReplicationMode replication)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            ContainerSettings settings = new ContainerSettings();
+            settings.User = _UserGuid;
+            settings.Name = container;
+            settings.IsPublicRead = publicRead;
+            settings.IsPublicWrite = publicWrite;
+            settings.EnableAuditLogging = auditLogging;
+            settings.Replication = replication;
+
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.POST,
+                _AuthHeaders,
+                "application/json",
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
+
+            if (resp == null || resp.StatusCode != 201)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Retrieve a container's settings.
+        /// </summary> 
+        /// <param name="container">The container.</param>
+        /// <param name="settings">Settings for the container.</param>
+        /// <returns>True if successful.</returns>
+        public bool GetContainerSettings(string container, out ContainerSettings settings)
+        {
+            settings = null;
+
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true&_config=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            {
+                return false;
+            }
+
+            settings = KvpbaseCommon.DeserializeJson<ContainerSettings>(resp.Data);
+            return true;
+        }
+
+        /// <summary>
+        /// Update a container's settings.
+        /// </summary>
+        /// <param name="settings">Settings for the container.</param>
+        /// <returns>True if successful.</returns>
+        public bool UpdateContainer(ContainerSettings settings)
+        {
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+
+            string url = _Endpoint + _UserGuid + "/" + settings.Name + "?_container=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.PUT,
+                _AuthHeaders,
+                "application/json",
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
+
+            if (resp == null || resp.StatusCode != 200)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Enumerate container statistics and objects within the container.
+        /// </summary> 
+        /// <param name="container">The container.</param>
+        /// <param name="startIndex">Begin object enumeration from this position.</param>
+        /// <param name="maxResults">Maximum number of objects to return.</param>
+        /// <param name="metadata">The container's metadata.</param>
+        /// <returns>True if successful.</returns>
+        public bool EnumerateContainer(string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
+        {
+            metadata = null;
+
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+            if (startIndex != null) url += "&_index=" + startIndex;
+            if (maxResults != null) url += "&_count=" + maxResults;
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            {
+                return false;
+            }
+
+            metadata = KvpbaseCommon.DeserializeJson<ContainerMetadata>(resp.Data);
+            return true;
+        }
+
+        /// <summary>
+        /// Delete a container.
+        /// </summary> 
+        /// <param name="container">The container.</param>
+        /// <returns>True if successful.</returns>
+        public bool DeleteContainer(string container)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.DELETE,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 204)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if a container exists.
+        /// </summary> 
+        /// <param name="container">The container.</param>
+        /// <returns>True if the container exists.</returns>
+        public bool ContainerExists(string container)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.HEAD,
+                _AuthHeaders,
+                null,
+                true);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = req.Send();
+
+            if (resp == null || resp.StatusCode != 200)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
 
         #region Objects
 
@@ -838,245 +1111,6 @@ namespace KvpbaseSDK
 
                 if (stream.CanSeek) stream.Seek(0, SeekOrigin.Begin);
             } 
-
-            return true;
-        }
-
-        #endregion
-
-        #region Containers
-
-        /// <summary>
-        /// List the names of the existing containers.
-        /// </summary> 
-        /// <param name="settings">List of container settings.</param>
-        /// <returns>True if successful.</returns>
-        public bool ListContainers(out List<ContainerSettings> settings)
-        {
-            settings = new List<ContainerSettings>();
-             
-            string url = _Endpoint + _UserGuid + "?_container=true&_stats=true";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null,
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
-            {
-                return false;
-            }
-
-            settings = KvpbaseCommon.DeserializeJson<List<ContainerSettings>>(resp.Data);
-            return true;
-        }
-
-        /// <summary>
-        /// Create a container.
-        /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <param name="publicRead">True if available for read by unauthenticated users.</param>
-        /// <param name="publicWrite">True if available for write by unauthenticated users.</param>
-        /// <param name="auditLogging">True if audit logging should be enabled.</param>
-        /// <param name="replication">Replication mode for the container.</param>
-        /// <returns>True if successful.</returns>
-        public bool CreateContainer(string container, bool publicRead, bool publicWrite, bool auditLogging, ReplicationMode replication)
-        { 
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-
-            ContainerSettings settings = new ContainerSettings();
-            settings.User = _UserGuid;
-            settings.Name = container;
-            settings.IsPublicRead = publicRead;
-            settings.IsPublicWrite = publicWrite;
-            settings.EnableAuditLogging = auditLogging;
-            settings.Replication = replication;
-
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.POST,
-                _AuthHeaders,
-                "application/json",
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
-
-            if (resp == null || resp.StatusCode != 201)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Retrieve a container's settings.
-        /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <param name="settings">Settings for the container.</param>
-        /// <returns>True if successful.</returns>
-        public bool GetContainerSettings(string container, out ContainerSettings settings)
-        {
-            settings = null;
-             
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-             
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true&_config=true";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null,
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
-            {
-                return false;
-            }
-
-            settings = KvpbaseCommon.DeserializeJson<ContainerSettings>(resp.Data);
-            return true;
-        }
-
-        /// <summary>
-        /// Update a container's settings.
-        /// </summary>
-        /// <param name="settings">Settings for the container.</param>
-        /// <returns>True if successful.</returns>
-        public bool UpdateContainer(ContainerSettings settings)
-        {
-            if (settings == null) throw new ArgumentNullException(nameof(settings));
-
-            string url = _Endpoint + _UserGuid + "/" + settings.Name + "?_container=true";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                "application/json",
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
-
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Enumerate container statistics and objects within the container.
-        /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <param name="startIndex">Begin object enumeration from this position.</param>
-        /// <param name="maxResults">Maximum number of objects to return.</param>
-        /// <param name="metadata">The container's metadata.</param>
-        /// <returns>True if successful.</returns>
-        public bool EnumerateContainer(string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
-        {
-            metadata = null;
-             
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
-            if (startIndex != null) url += "&_index=" + startIndex;
-            if (maxResults != null) url += "&_count=" + maxResults;
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null,
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
-            {
-                return false;
-            }
-
-            metadata = KvpbaseCommon.DeserializeJson<ContainerMetadata>(resp.Data);
-            return true;
-        }
-
-        /// <summary>
-        /// Delete a container.
-        /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <returns>True if successful.</returns>
-        public bool DeleteContainer(string container)
-        { 
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.DELETE,
-                _AuthHeaders,
-                null,
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 204)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Check if a container exists.
-        /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <returns>True if the container exists.</returns>
-        public bool ContainerExists(string container)
-        { 
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-            
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.HEAD,
-                _AuthHeaders,
-                null,
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
 
             return true;
         }

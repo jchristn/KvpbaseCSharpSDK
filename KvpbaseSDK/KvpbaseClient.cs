@@ -24,17 +24,50 @@ namespace KvpbaseSDK
         /// <summary>
         /// Specify the maximum transfer size in bytes (default is 536870912).
         /// </summary>
-        public long MaxTransferSize { get; set; }
+        public long MaxTransferSize
+        {
+            get
+            {
+                return _MaxTransferSize;
+            }
+            set
+            {
+                if (value < 1) throw new ArgumentException("MaxTransferSize must be greater than zero.");
+                _MaxTransferSize = value;
+            }
+        }
 
         /// <summary>
         /// Buffer size to use when uploading files for file APIs or using stream, default 1MB.
         /// </summary>
-        public int UploadStreamBufferSize { get; set; }
+        public int UploadStreamBufferSize
+        {
+            get
+            {
+                return _UploadStreamBufferSize;
+            }
+            set
+            {
+                if (value < 1) throw new ArgumentException("UploadStreamBufferSize must be greater than zero.");
+                _UploadStreamBufferSize = value;
+            }
+        }
 
         /// <summary>
         /// Buffer size to use when downloading files for file APIs or using stream, default 1MB.
         /// </summary>
-        public int DownloadStreamBufferSize { get; set; }
+        public int DownloadStreamBufferSize
+        {
+            get
+            {
+                return _DownloadStreamBufferSize;
+            }
+            set
+            {
+                if (value < 1) throw new ArgumentException("DownloadStreamBufferSize must be greater than zero.");
+                _DownloadStreamBufferSize = value;
+            }
+        }
 
         /// <summary>
         /// Retrieve the user GUID for the client.
@@ -66,6 +99,10 @@ namespace KvpbaseSDK
         private string _Endpoint = null;
 
         private Dictionary<string, string> _AuthHeaders = null;
+
+        private long _MaxTransferSize = 536870912;
+        private int _UploadStreamBufferSize = (1024 * 1024);
+        private int _DownloadStreamBufferSize = (1024 * 1024);
 
         #endregion
 
@@ -359,6 +396,20 @@ namespace KvpbaseSDK
         /// <returns>True if successful.</returns>
         public bool EnumerateContainer(string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
         {
+            return EnumerateContainer(null, container, startIndex, maxResults, out metadata); 
+        }
+
+        /// <summary>
+        /// Enumerate container statistics and objects within the container.
+        /// </summary> 
+        /// <param name="prefix">Prefix to the object key.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="startIndex">Begin object enumeration from this position.</param>
+        /// <param name="maxResults">Maximum number of objects to return.</param>
+        /// <param name="metadata">The container's metadata.</param>
+        /// <returns>True if successful.</returns>
+        public bool EnumerateContainer(string prefix, string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
+        {
             metadata = null;
 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
@@ -366,6 +417,7 @@ namespace KvpbaseSDK
             string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
             if (startIndex != null) url += "&_index=" + startIndex;
             if (maxResults != null) url += "&_count=" + maxResults;
+            if (!String.IsNullOrEmpty(prefix)) url += "&_prefix=" + prefix;
 
             RestRequest req = new RestRequest(
                 url,

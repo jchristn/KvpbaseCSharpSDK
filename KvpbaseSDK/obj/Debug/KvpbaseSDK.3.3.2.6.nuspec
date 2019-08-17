@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>KvpbaseSDK</id>
-    <version>3.1.8</version>
+    <version>3.3.2.6</version>
     <authors>Joel Christner</authors>
     <owners>Joel Christner</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/kvpbase/sdk-csharp</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kvpbase/storage-server/master/assets/icon.ico</iconUrl>
     <description>C# SDK for Kvpbase object storage platform</description>
-    <releaseNotes>Fixes for stream interfaces</releaseNotes>
+    <releaseNotes>Enumeration by prefix</releaseNotes>
     <copyright>(c)2019 Joel Christner</copyright>
     <tags>storage rest object s3 blob nosql cloud kvp key value pair api</tags>
     <repository type="Github" url="https://github.com/kvpbase/sdk-csharp" />

@@ -133,6 +133,10 @@ namespace Test
                         ContainerEnumerate();
                         break;
 
+                    case "container enumerate prefix":
+                        ContainerEnumeratePrefix();
+                        break;
+
                     case "container delete":
                         ContainerDelete();
                         break;
@@ -184,6 +188,7 @@ namespace Test
             Console.WriteLine("    get settings      Retrieve container settings");
             Console.WriteLine("    update            Update container settings");
             Console.WriteLine("    enumerate         Enumerate container contents");
+            Console.WriteLine("    enumerate prefix  Enumerate objects in the container by prefix");
             Console.WriteLine("    delete            Delete a container");
             Console.WriteLine("    exists            Check if a container exists");
 			Console.WriteLine("");
@@ -421,7 +426,7 @@ namespace Test
                 Console.WriteLine(KvpbaseCommon.SerializeJson(settings, true));
             }
         }
-
+         
         private static void ContainerCreate()
         {
             if (!_Kvpbase.CreateContainer(
@@ -500,7 +505,27 @@ namespace Test
             {
                 Console.WriteLine("Success");
                 Console.WriteLine(KvpbaseCommon.SerializeJson(metadata, true));
-            } 
+            }
+        }
+
+        private static void ContainerEnumeratePrefix()
+        {
+            ContainerMetadata metadata = null;
+
+            if (!_Kvpbase.EnumerateContainer(
+                KvpbaseCommon.InputString("Prefix:", null, true),
+                KvpbaseCommon.InputString("Container:", "default", false),
+                KvpbaseCommon.InputInteger("Start Index:", 0, true, true),
+                KvpbaseCommon.InputInteger("Count:", 10, true, false),
+                out metadata))
+            {
+                Console.WriteLine("Failed");
+            }
+            else
+            {
+                Console.WriteLine("Success");
+                Console.WriteLine(KvpbaseCommon.SerializeJson(metadata, true));
+            }
         }
 
         private static void ContainerDelete()

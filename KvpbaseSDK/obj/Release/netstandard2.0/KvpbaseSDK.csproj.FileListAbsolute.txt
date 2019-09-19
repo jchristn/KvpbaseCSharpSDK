@@ -16,3 +16,13 @@ C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.
 C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.AssemblyInfo.cs
 C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.dll
 C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.pdb
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.deps.json
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.dll
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.pdb
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.AssemblyInfoInputs.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.AssemblyInfo.cs
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.dll
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.pdb
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.xml

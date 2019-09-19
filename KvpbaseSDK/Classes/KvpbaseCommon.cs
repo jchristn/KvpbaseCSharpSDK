@@ -18,11 +18,11 @@ namespace KvpbaseSDK
     /// <summary>
     /// Static methods used by the Kvpbase client.
     /// </summary>
-    public static class KvpbaseCommon
+    internal static class KvpbaseCommon
     { 
         #region Input
 
-        public static bool InputBoolean(string question, bool yesDefault)
+        internal static bool InputBoolean(string question, bool yesDefault)
         {
             Console.Write(question);
 
@@ -65,7 +65,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static string InputString(string question, string defaultAnswer, bool allowNull)
+        internal static string InputString(string question, string defaultAnswer, bool allowNull)
         {
             while (true)
             {
@@ -91,7 +91,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static int InputInteger(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
+        internal static int InputInteger(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
         {
             while (true)
             {
@@ -133,22 +133,62 @@ namespace KvpbaseSDK
             }
         }
 
+        internal static Dictionary<string, string> InputDictionary()
+        {
+            Dictionary<string, string> ret = new Dictionary<string, string>();
+            Console.WriteLine("Press ENTER with no input on key to exit");
+
+            while (true)
+            {
+                string key = InputString("Key [ENTER to end]:", null, true);
+                if (String.IsNullOrEmpty(key)) break;
+
+                string val = InputString("Value:", null, true);
+
+                if (ret.ContainsKey(key))
+                {
+                    Console.WriteLine("Key already exists");
+                    continue;
+                }
+
+                ret.Add(key, val);
+            }
+
+            return ret;
+        }
+
+        internal static List<string> InputStringList()
+        {
+            List<string> ret = new List<string>();
+            Console.WriteLine("Press ENTER with no input to exit");
+
+            while (true)
+            {
+                string value = InputString("Value [ENTER to end]:", null, true);
+                if (String.IsNullOrEmpty(value)) break;
+                
+                ret.Add(value);
+            }
+
+            return ret;
+        }
+
         #endregion
-          
+
         #region IsTrue
 
-        public static bool IsTrue(bool val)
+        internal static bool IsTrue(bool val)
         {
             return val;
         }
 
-        public static bool IsTrue(bool? val)
+        internal static bool IsTrue(bool? val)
         {
             if (val == null) return false;
             return Convert.ToBoolean(val);
         }
 
-        public static bool IsTrue(string val)
+        internal static bool IsTrue(string val)
         {
             if (String.IsNullOrEmpty(val)) return false;
             val = val.ToLower().Trim();
@@ -162,7 +202,7 @@ namespace KvpbaseSDK
          
         #region Compress
 
-        public static byte[] GzipCompress(byte[] input)
+        internal static byte[] GzipCompress(byte[] input)
         {
             if (input == null) return null;
             if (input.Length < 1) return null;
@@ -177,7 +217,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static byte[] GzipDecompress(byte[] input)
+        internal static byte[] GzipDecompress(byte[] input)
         {
             if (input == null) return null;
             if (input.Length < 1) return null;
@@ -207,7 +247,26 @@ namespace KvpbaseSDK
 
         #region Misc
 
-        public static string StringRemove(string original, string remove)
+        internal static byte[] StreamToBytes(Stream input)
+        {
+            if (input == null) throw new ArgumentNullException(nameof(input));
+            if (!input.CanRead) throw new InvalidOperationException("Input stream is not readable");
+
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+
+                return ms.ToArray();
+            }
+        }
+
+        internal static string StringRemove(string original, string remove)
         {
             if (String.IsNullOrEmpty(original)) return null;
             if (String.IsNullOrEmpty(remove)) return original;
@@ -220,7 +279,7 @@ namespace KvpbaseSDK
             return ret;
         }
 
-        public static string Line(int count, string fill)
+        internal static string Line(int count, string fill)
         {
             if (count < 1) return "";
 
@@ -233,7 +292,7 @@ namespace KvpbaseSDK
             return ret;
         }
 
-        public static string RandomString(int numChar)
+        internal static string RandomString(int numChar)
         {
             string ret = "";
             if (numChar < 1) return null;
@@ -261,7 +320,7 @@ namespace KvpbaseSDK
             return ret;
         }
 
-        public static double TotalMsFrom(DateTime startTime)
+        internal static double TotalMsFrom(DateTime startTime)
         {
             try
             {
@@ -275,7 +334,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static bool IsLaterThanNow(DateTime? dt)
+        internal static bool IsLaterThanNow(DateTime? dt)
         {
             try
             {
@@ -288,7 +347,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static bool IsLaterThanNow(DateTime dt)
+        internal static bool IsLaterThanNow(DateTime dt)
         {
             if (DateTime.Compare(dt, DateTime.Now) > 0)
             {
@@ -300,7 +359,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static bool ContainsUnsafeCharacters(string data)
+        internal static bool ContainsUnsafeCharacters(string data)
         {
             /*
              * 
@@ -368,7 +427,7 @@ namespace KvpbaseSDK
             return false;
         }
 
-        public static bool ContainsUnsafeCharacters(List<string> data)
+        internal static bool ContainsUnsafeCharacters(List<string> data)
         {
             if (data == null || data.Count < 1) return true;
             foreach (string curr in data)
@@ -378,7 +437,7 @@ namespace KvpbaseSDK
             return false;
         }
 
-        public static int GuidToInt(string guid)
+        internal static int GuidToInt(string guid)
         {
             if (String.IsNullOrEmpty(guid)) return 0;
             byte[] bytes = Encoding.UTF8.GetBytes(guid);
@@ -396,7 +455,7 @@ namespace KvpbaseSDK
 
         #region Dictionary
 
-        public static Dictionary<string, string> AddToDictionary(string key, string val, Dictionary<string, string> existing)
+        internal static Dictionary<string, string> AddToDictionary(string key, string val, Dictionary<string, string> existing)
         {
             Dictionary<string, string> ret = new Dictionary<string, string>();
 
@@ -416,7 +475,7 @@ namespace KvpbaseSDK
 
         #region Serialization
 
-        public static T CopyObject<T>(T source)
+        internal static T CopyObject<T>(T source)
         {
             if (source == null) return default(T);
 
@@ -431,7 +490,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static string SerializeJson(object obj, bool pretty)
+        internal static string SerializeJson(object obj, bool pretty)
         {
             if (obj == null) return null;
             string json;
@@ -460,7 +519,7 @@ namespace KvpbaseSDK
             return json;
         }
          
-        public static T DeserializeJson<T>(string json)
+        internal static T DeserializeJson<T>(string json)
         {
             if (String.IsNullOrEmpty(json)) throw new ArgumentNullException(nameof(json));
 
@@ -481,7 +540,7 @@ namespace KvpbaseSDK
             }
         }
 
-        public static T DeserializeJson<T>(byte[] data)
+        internal static T DeserializeJson<T>(byte[] data)
         {
             if (data == null || data.Length < 1) throw new ArgumentNullException(nameof(data));
             return DeserializeJson<T>(Encoding.UTF8.GetString(data));
@@ -491,7 +550,7 @@ namespace KvpbaseSDK
 
         #region Crypto
 
-        public static string Md5(byte[] data)
+        internal static string Md5(byte[] data)
         {
             if (data == null) return null;
 
@@ -503,7 +562,7 @@ namespace KvpbaseSDK
             return ret;
         }
 
-        public static string Md5(string data)
+        internal static string Md5(string data)
         {
             if (String.IsNullOrEmpty(data)) return null;
 
@@ -520,33 +579,39 @@ namespace KvpbaseSDK
 
         #region Encoding
 
-        public static byte[] Base64ToBytes(string data)
+        internal static byte[] Base64ToBytes(string data)
         {
             return Convert.FromBase64String(data);
         }
 
-        public static string Base64ToString(string data)
+        internal static string Base64ToString(string data)
         {
             if (String.IsNullOrEmpty(data)) return null;
             byte[] bytes = System.Convert.FromBase64String(data);
             return System.Text.UTF8Encoding.UTF8.GetString(bytes);
         }
 
-        public static string BytesToBase64(byte[] data)
+        internal static string BytesToBase64(byte[] data)
         {
             if (data == null) return null;
             if (data.Length < 1) return null;
             return System.Convert.ToBase64String(data);
         }
 
-        public static string StringToBase64(string data)
+        internal static string StringToBase64(string data)
         {
             if (String.IsNullOrEmpty(data)) return null;
             byte[] bytes = System.Text.UTF8Encoding.UTF8.GetBytes(data);
             return System.Convert.ToBase64String(bytes);
         }
 
-        public static List<string> CsvToStringList(string csv)
+        internal static string StringListToCsv(List<string> str)
+        {
+            if (str == null || str.Count < 1) return null;
+            return string.Join(",", str);
+        }
+
+        internal static List<string> CsvToStringList(string csv)
         {
             if (String.IsNullOrEmpty(csv)) return null;
 

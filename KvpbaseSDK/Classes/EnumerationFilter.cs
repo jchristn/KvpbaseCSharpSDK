@@ -12,7 +12,7 @@ namespace KvpbaseSDK
     public class EnumerationFilter
     {
         #region Public-Members
-         
+
         /// <summary>
         /// If not null, match objects created before the specified time (UTC).
         /// </summary>
@@ -44,6 +44,11 @@ namespace KvpbaseSDK
         public DateTime? LastAccessAfter { get; set; }
 
         /// <summary>
+        /// If not null, match objects with the specified prefix in the key.
+        /// </summary>
+        public string Prefix { get; set; }
+
+        /// <summary>
         /// If not null, match objects with the specified MD5 hash value.
         /// </summary>
         public string Md5 { get; set; }
@@ -62,6 +67,16 @@ namespace KvpbaseSDK
         /// If not null, match objects that are less than the specified size.
         /// </summary>
         public long? SizeMax { get; set; }
+
+        /// <summary>
+        /// If not null, match objects that contain each of the supplied tags.
+        /// </summary>
+        public List<string> Tags { get; set; }
+
+        /// <summary>
+        /// If not null, match objects that contain each of the supplied key-value pairs.
+        /// </summary>
+        public Dictionary<string, string> KeyValuePairs { get; set; }
 
         #endregion
 

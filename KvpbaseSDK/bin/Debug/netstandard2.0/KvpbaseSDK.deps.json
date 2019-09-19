@@ -1,17 +1,18 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "718510e51637e49c3aa43aa8b6e4c36528102538"
+    "signature": "2fa5a922f5a67b88a73679421e2ea865bb439233"
   },
   "compilationOptions": {},
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "KvpbaseSDK/3.3.2.6": {
+      "KvpbaseSDK/4.0.1": {
         "dependencies": {
           "NETStandard.Library": "2.0.3",
           "Newtonsoft.Json": "12.0.2",
-          "RestWrapper": "2.0.3"
+          "RestWrapper": "2.1.0",
+          "System.ValueTuple": "4.5.0"
         },
         "runtime": {
           "KvpbaseSDK.dll": {}
@@ -31,21 +32,22 @@
           }
         }
       },
-      "RestWrapper/2.0.3": {
+      "RestWrapper/2.1.0": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.2"
         },
         "runtime": {
           "lib/netstandard2.0/RestWrapper.dll": {
-            "assemblyVersion": "2.0.3.0",
-            "fileVersion": "2.0.3.0"
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
           }
         }
-      }
+      },
+      "System.ValueTuple/4.5.0": {}
     }
   },
   "libraries": {
-    "KvpbaseSDK/3.3.2.6": {
+    "KvpbaseSDK/4.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -53,7 +55,7 @@
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-a/iSwnRZb+LHFk49hQOyThh/ZNC3vsbZsF65XwQIb863qF6msmhdQtxGXFL28Ob2NsCz/drEj28BJd/YPpLRBg==",
+      "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
       "path": "microsoft.netcore.platforms/1.1.0",
       "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
     },
@@ -71,12 +73,19 @@
       "path": "newtonsoft.json/12.0.2",
       "hashPath": "newtonsoft.json.12.0.2.nupkg.sha512"
     },
-    "RestWrapper/2.0.3": {
+    "RestWrapper/2.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jvDSshbbgxZt1xba6kvsKlw3fI0HvjVndOz3Tyo11omj4AFAcejnT/JahexSFX9LvVzthLjHmuqgi2ZcMtodhA==",
-      "path": "restwrapper/2.0.3",
-      "hashPath": "restwrapper.2.0.3.nupkg.sha512"
+      "sha512": "sha512-yW6ZgnSWhZ+E0VGU+j2JN9Z6oZ048Dpp8Ow1tZvXxYKDb8zS2ut5d8hSL0waJkoegsGiagWZnF1Gjeimj+Ur6A==",
+      "path": "restwrapper/2.1.0",
+      "hashPath": "restwrapper.2.1.0.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
     }
   }
 }

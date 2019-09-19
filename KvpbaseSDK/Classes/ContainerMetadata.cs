@@ -14,14 +14,19 @@ namespace KvpbaseSDK
         #region Public-Members
 
         /// <summary>
-        /// The user that owns the container.
+        /// The user GUID that owns the container.
         /// </summary>
-        public string User { get; set; }
+        public string UserGuid { get; set; }
 
         /// <summary>
         /// The name of the container.
         /// </summary>
-        public string Name { get; set; }
+        public string ContainerName { get; set; }
+
+        /// <summary>
+        /// GUID for the container.
+        /// </summary>
+        public string ContainerGuid { get; set; }
 
         /// <summary>
         /// Indicates whether or not public users can read from the container.
@@ -34,29 +39,14 @@ namespace KvpbaseSDK
         public bool PublicWrite { get; set; }
 
         /// <summary>
-        /// The number of objects in the container.
+        /// Total counts for the container.
         /// </summary>
-        public long TotalCount { get; set; }
+        public Counts Totals { get; set; }
 
         /// <summary>
-        /// The number of objects in the response.
+        /// Counts for objects returned in this query.
         /// </summary>
-        public long Count { get; set; }
-
-        /// <summary>
-        /// The number of bytes consumed by objects in the container.
-        /// </summary>
-        public long TotalBytes { get; set; }
-
-        /// <summary>
-        /// The number of bytes consumed by objects listed in the results.
-        /// </summary>
-        public long Bytes { get; set; }
-
-        /// <summary>
-        /// The timestamp of the latest entry in the container.
-        /// </summary>
-        public DateTime? LatestEntry { get; set; }
+        public Counts Displayed { get; set; }
 
         /// <summary>
         /// The requested starting index, if any.
@@ -85,7 +75,7 @@ namespace KvpbaseSDK
         #endregion
 
         #region Constructors-and-Factories
-         
+
         /// <summary>
         /// Instantiates the object.
         /// </summary>
@@ -93,7 +83,7 @@ namespace KvpbaseSDK
         {
 
         }
-         
+
         #endregion
 
         #region Public-Methods
@@ -101,7 +91,27 @@ namespace KvpbaseSDK
         #endregion
 
         #region Private-Methods
-         
+
+        #endregion
+
+        #region Public-Embedded-Classes
+
+        /// <summary>
+        /// Summary statistics.
+        /// </summary>
+        public class Counts
+        {
+            /// <summary>
+            /// Number of objects.
+            /// </summary>
+            public long Objects { get; set; }
+
+            /// <summary>
+            /// Number of bytes.
+            /// </summary>
+            public long Bytes { get; set; }
+        }
+
         #endregion
     }
 }

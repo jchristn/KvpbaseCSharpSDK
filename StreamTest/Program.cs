@@ -92,30 +92,18 @@ namespace StreamTest
             string contentType = InputString("Content type:", "application/octet-stream", false);
             ObjectMetadata metadata = null;
 
-            if (_Kvpbase.UploadFile(filename, _Container, key, contentType, out metadata))
-            {
-                Console.WriteLine("Success");
-                Console.WriteLine(SerializeJson(metadata, true));
-            }
-            else
-            {
-                Console.WriteLine("Failed");
-            }
+            ObjectMetadata md = _Kvpbase.UploadFile(filename, _Container, key, contentType).Result;
+            Console.WriteLine("Success");
+            Console.WriteLine(SerializeJson(metadata, true));
         }
 
         static void Download()
         {
             string key = InputString("Object key:", null, false);
-            string filename = InputString("Filename:", null, false); 
+            string filename = InputString("Filename:", null, false);
 
-            if (_Kvpbase.DownloadFile(filename, _Container, key))
-            {
-                Console.WriteLine("Success"); 
-            }
-            else
-            {
-                Console.WriteLine("Failed");
-            }
+            _Kvpbase.DownloadFile(filename, _Container, key).Wait();
+            Console.WriteLine("Success"); 
         }
 
         #endregion

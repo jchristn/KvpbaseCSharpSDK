@@ -9,14 +9,24 @@ namespace KvpbaseSDK
     /// <summary>
     /// Settings for a container.
     /// </summary>
-    public class ContainerSettings
+    public class Container
     {
         #region Public-Members
 
         /// <summary>
+        /// Row ID in the database.
+        /// </summary>
+        public int? Id { get; set; }
+
+        /// <summary>
+        /// Object GUID.
+        /// </summary>
+        public string GUID { get; set; }
+
+        /// <summary>
         /// The username of the ontainer owner.
         /// </summary>
-        public string User { get; set; }
+        public string UserGuid { get; set; }
 
         /// <summary>
         /// The name of the container.
@@ -24,24 +34,9 @@ namespace KvpbaseSDK
         public string Name { get; set; }
 
         /// <summary>
-        /// The root directory of the container on the file system.
-        /// </summary>
-        public string RootDirectory { get; set; }
-
-        /// <summary>
-        /// The full path and filename of the container's metadata database.
-        /// </summary>
-        public string DatabaseFilename { get; set; }
-
-        /// <summary>
         /// The full path to where container objects should be stored.
         /// </summary>
         public string ObjectsDirectory { get; set; }
-
-        /// <summary>
-        /// The type of object handler used by the container.
-        /// </summary>
-        public ObjectHandlerType HandlerType { get; set; }
 
         /// <summary>
         /// Enable or disable audit logging.
@@ -56,17 +51,12 @@ namespace KvpbaseSDK
         /// <summary>
         /// Enable or disable public write access.
         /// </summary>
-        public bool IsPublicWrite { get; set; } 
+        public bool IsPublicWrite { get; set; }
 
         /// <summary>
-        /// Enable or disable database query debug logging.
+        /// The timestamp from when the object was created.
         /// </summary>
-        public bool DatabaseDebug { get; set; }
-
-        /// <summary>
-        /// The replication mode for the container.
-        /// </summary>
-        public ReplicationMode Replication { get; set; }
+        public DateTime? CreatedUtc { get; set; }
 
         #endregion
 
@@ -79,7 +69,7 @@ namespace KvpbaseSDK
         /// <summary>
         /// Instantiate the object using default settings.
         /// </summary>
-        public ContainerSettings()
+        public Container()
         {
             DefaultSettings("Default", "Default", "./");
         }
@@ -90,7 +80,7 @@ namespace KvpbaseSDK
         /// <param name="user">The name of the user that owns the container.</param>
         /// <param name="name">The name of the container.</param>
         /// <param name="baseDir">The base directory under which the container subdirectory will be created.</param>
-        public ContainerSettings(string user, string name, string baseDir)
+        public Container(string user, string name, string baseDir)
         {
             if (String.IsNullOrEmpty(user)) throw new ArgumentNullException(nameof(user));
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
@@ -113,18 +103,14 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(baseDir)) baseDir = "./";
 
             if (!baseDir.EndsWith("/")) baseDir += "/";
+            baseDir += user + "/" + name + "/";
 
-            User = user;
+            UserGuid = user;
             Name = name;
-            RootDirectory = baseDir + name + "/";
-            DatabaseFilename = RootDirectory + "__Container__.db";
-            ObjectsDirectory = RootDirectory + "__Objects__/";
-            HandlerType = ObjectHandlerType.Disk;
+            ObjectsDirectory = baseDir; 
             EnableAuditLogging = false;
             IsPublicRead = true;
-            IsPublicWrite = false;
-            DatabaseDebug = false;
-            Replication = ReplicationMode.None;
+            IsPublicWrite = false; 
         }
 
         #endregion

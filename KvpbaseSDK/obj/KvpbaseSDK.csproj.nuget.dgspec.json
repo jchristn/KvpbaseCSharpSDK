@@ -1,0 +1,97 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj": {}
+  },
+  "projects": {
+    "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj": {
+      "version": "4.0.1",
+      "restore": {
+        "projectUniqueName": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
+        "projectName": "KvpbaseSDK",
+        "projectPath": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
+        "packagesPath": "C:\\Users\\joelc\\.nuget\\packages\\",
+        "outputPath": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\obj\\",
+        "projectStyle": "PackageReference",
+        "crossTargeting": true,
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\joelc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net461",
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/jchristn/index.json": {},
+          "https://nuget.pkg.github.com/kvpbase/index.json": {}
+        },
+        "frameworks": {
+          "net461": {
+            "projectReferences": {}
+          },
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net461": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            },
+            "RestWrapper": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "System.ValueTuple": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            }
+          }
+        },
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            },
+            "RestWrapper": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "System.ValueTuple": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}

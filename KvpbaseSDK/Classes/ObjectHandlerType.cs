@@ -14,7 +14,7 @@ namespace KvpbaseSDK
     /// The type of object handler.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum ObjectHandlerType
+    internal enum ObjectHandlerType
     {
         [EnumMember(Value = "Disk")]
         Disk

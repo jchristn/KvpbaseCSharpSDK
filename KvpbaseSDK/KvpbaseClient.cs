@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using RestWrapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -94,8 +96,7 @@ namespace KvpbaseSDK
         private string _UserGuid = null;
         private string _Email = null;
         private string _Password = null;
-        private string _ApiKey = null;
-        private string _Token = null;
+        private string _ApiKey = null; 
         private string _Endpoint = null;
 
         private Dictionary<string, string> _AuthHeaders = null;
@@ -112,6 +113,7 @@ namespace KvpbaseSDK
         /// Initializes a new instance of the Kvpbase client.
         /// </summary>
         /// <param name="userGuid">The GUID of the user.</param>
+        /// <param name="email">Email address of the user.</param>
         /// <param name="password">The password of the user.</param>
         /// <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
         public KvpbaseClient(string userGuid, string email, string password, string endpointUrl)
@@ -168,47 +170,38 @@ namespace KvpbaseSDK
         /// Verify connectivity to Kvpbase.
         /// </summary>
         /// <returns>True if connectivity exists.</returns>
-        public bool VerifyConnectivity()
+        public async Task<bool> VerifyConnectivity()
         {
-            RestRequest req = new RestRequest(_Endpoint, HttpMethod.GET, null, null, true);
+            RestRequest req = new RestRequest(_Endpoint, HttpMethod.GET, null, null);
             req.IgnoreCertificateErrors = IgnoreCertificateErrors; 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp != null && resp.StatusCode >= 200 && resp.StatusCode <= 299)
-            {
-                return true;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return false;
+            return true;
         }
 
         /// <summary>
         /// Authenticate to Kvpbase.
         /// </summary>
         /// <returns>True if able to successfully authenticate.</returns>
-        public bool Authenticate()
+        public async Task<bool> Authenticate()
         {
             RestRequest req = new RestRequest(
                 _Endpoint + "token", 
                 HttpMethod.GET, 
                 _AuthHeaders, 
-                null, 
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp != null && resp.StatusCode >= 200 && resp.StatusCode <= 299)
-            {
-                if (resp.Data != null && resp.Data.Length > 0)
-                {
-                    _Token = Encoding.UTF8.GetString(resp.Data);
-                }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-                return true;
-            }
-            return false;
+            return true;
         }
 
         #endregion
@@ -217,32 +210,30 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// Get the version number of the endpoint.
-        /// </summary>
-        /// <param name="version">Kvpbase version.</param>
-        /// <returns>True if successful.</returns>
-        public bool GetVersion(out string version)
-        {
-            version = null;
-            string url = _Endpoint + "version";
-
+        /// </summary> 
+        /// <returns>Version string.</returns>
+        public async Task<string> GetVersion()
+        { 
             RestRequest req = new RestRequest(
-                url,
+                _Endpoint + "version",
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            if (resp.Data != null && resp.ContentLength > 0)
             {
-                return false;
+                byte[] data = KvpbaseCommon.StreamToBytes(resp.Data);
+                return Encoding.UTF8.GetString(data);
             }
 
-            version = Encoding.UTF8.GetString(resp.Data);
-            return true;
+            return null;
         }
 
         #endregion
@@ -251,109 +242,138 @@ namespace KvpbaseSDK
 
         /// <summary>
         /// List the names of the existing containers.
-        /// </summary> 
-        /// <param name="settings">List of container settings.</param>
-        /// <returns>True if successful.</returns>
-        public bool ListContainers(out List<ContainerSettings> settings)
-        {
-            settings = new List<ContainerSettings>();
-
-            string url = _Endpoint + _UserGuid + "?_container=true&_stats=true";
+        /// </summary>  
+        /// <returns>List of container names.</returns>
+        public async Task<List<string>> ListContainers()
+        { 
+            string url = _Endpoint + _UserGuid;
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            if (resp.Data != null && resp.ContentLength > 0)
             {
-                return false;
+                byte[] data = KvpbaseCommon.StreamToBytes(resp.Data);
+                return KvpbaseCommon.DeserializeJson<List<string>>(data);
             }
 
-            settings = KvpbaseCommon.DeserializeJson<List<ContainerSettings>>(resp.Data);
-            return true;
+            return new List<string>();
         }
 
         /// <summary>
         /// Create a container.
         /// </summary> 
-        /// <param name="container">The container.</param>
+        /// <param name="container">Container name.</param>
         /// <param name="publicRead">True if available for read by unauthenticated users.</param>
         /// <param name="publicWrite">True if available for write by unauthenticated users.</param>
-        /// <param name="auditLogging">True if audit logging should be enabled.</param>
-        /// <param name="replication">Replication mode for the container.</param>
-        /// <returns>True if successful.</returns>
-        public bool CreateContainer(string container, bool publicRead, bool publicWrite, bool auditLogging, ReplicationMode replication)
+        /// <param name="auditLogging">True if audit logging should be enabled.</param>  
+        public async Task CreateContainer(string container, bool publicRead, bool publicWrite, bool auditLogging)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            ContainerSettings settings = new ContainerSettings();
-            settings.User = _UserGuid;
+            Container settings = new Container();
+            settings.UserGuid = _UserGuid;
             settings.Name = container;
             settings.IsPublicRead = publicRead;
             settings.IsPublicWrite = publicWrite;
             settings.EnableAuditLogging = auditLogging;
-            settings.Replication = replication;
-
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+            
+            string url = _Endpoint + _UserGuid + "/" + container;
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.POST,
                 _AuthHeaders,
-                "application/json",
-                true);
+                "application/json");
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+             
+            RestResponse resp = await req.SendAsync(KvpbaseCommon.SerializeJson(settings, false));
 
-            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            if (resp == null || resp.StatusCode != 201)
-            {
-                return false;
-            }
-
-            return true;
+            return;
         }
 
         /// <summary>
         /// Retrieve a container's settings.
         /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <param name="settings">Settings for the container.</param>
-        /// <returns>True if successful.</returns>
-        public bool GetContainerSettings(string container, out ContainerSettings settings)
-        {
-            settings = null;
-
+        /// <param name="container">Container name.</param> 
+        /// <returns>Container settings.</returns>
+        public async Task<Container> GetContainerSettings(string container)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true&_config=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "?_config";
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            byte[] data = null;
+
+            if (resp.Data != null && resp.ContentLength > 0)
             {
-                return false;
+                data = KvpbaseCommon.StreamToBytes(resp.Data);
+                return KvpbaseCommon.DeserializeJson<Container>(data);
             }
 
-            settings = KvpbaseCommon.DeserializeJson<ContainerSettings>(resp.Data);
-            return true;
+            return null;
+        }
+         
+        /// <summary>
+        /// Retrieve key-value pairs applied to a container.
+        /// </summary>
+        /// <param name="container">Container name.</param> 
+        /// <returns>Container key-value pairs.</returns>
+        public async Task<Dictionary<string, string>> GetContainerKeyValuePairs(string container)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "?_keys";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = await req.SendAsync();
+
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            byte[] data = null;
+
+            if (resp.Data != null && resp.ContentLength > 0)
+            {
+                data = KvpbaseCommon.StreamToBytes(resp.Data); 
+                return KvpbaseCommon.DeserializeJson<Dictionary<string, string>>(data);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -361,140 +381,141 @@ namespace KvpbaseSDK
         /// </summary>
         /// <param name="settings">Settings for the container.</param>
         /// <returns>True if successful.</returns>
-        public bool UpdateContainer(ContainerSettings settings)
+        public async Task UpdateContainer(Container settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
-            string url = _Endpoint + _UserGuid + "/" + settings.Name + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + settings.Name;
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.PUT,
                 _AuthHeaders,
-                "application/json",
-                true);
+                "application/json");
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send(Encoding.UTF8.GetBytes(KvpbaseCommon.SerializeJson(settings, false)));
+            RestResponse resp = await req.SendAsync(KvpbaseCommon.SerializeJson(settings, false));
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return;
         }
-
+         
         /// <summary>
-        /// Enumerate container statistics and objects within the container.
-        /// </summary> 
-        /// <param name="container">The container.</param>
-        /// <param name="startIndex">Begin object enumeration from this position.</param>
-        /// <param name="maxResults">Maximum number of objects to return.</param>
-        /// <param name="metadata">The container's metadata.</param>
+        /// Write key-value pairs to a container.
+        /// </summary>
+        /// <param name="container">Container name.</param>
+        /// <param name="keyValuePairs">Key-value pairs.</param>
         /// <returns>True if successful.</returns>
-        public bool EnumerateContainer(string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
+        public async Task WriteContainerKeyValuePairs(string container, Dictionary<string, string> keyValuePairs)
         {
-            return EnumerateContainer(null, container, startIndex, maxResults, out metadata); 
-        }
-
-        /// <summary>
-        /// Enumerate container statistics and objects within the container.
-        /// </summary> 
-        /// <param name="prefix">Prefix to the object key.</param>
-        /// <param name="container">The container.</param>
-        /// <param name="startIndex">Begin object enumeration from this position.</param>
-        /// <param name="maxResults">Maximum number of objects to return.</param>
-        /// <param name="metadata">The container's metadata.</param>
-        /// <returns>True if successful.</returns>
-        public bool EnumerateContainer(string prefix, string container, long? startIndex, long? maxResults, out ContainerMetadata metadata)
-        {
-            metadata = null;
-
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
-            if (startIndex != null) url += "&_index=" + startIndex;
-            if (maxResults != null) url += "&_count=" + maxResults;
-            if (!String.IsNullOrEmpty(prefix)) url += "&_prefix=" + prefix;
+            string url = _Endpoint + _UserGuid + "/" + container + "?_keys";
 
             RestRequest req = new RestRequest(
                 url,
-                HttpMethod.GET,
+                HttpMethod.PUT,
                 _AuthHeaders,
-                null,
-                true);
+                "application/json");
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
+            RestResponse resp = null;
+            
+            if (keyValuePairs != null)
             {
-                return false;
+                resp = await req.SendAsync(KvpbaseCommon.SerializeJson(keyValuePairs, true));
+            }
+            else
+            {
+                resp = await req.SendAsync();
             }
 
-            metadata = KvpbaseCommon.DeserializeJson<ContainerMetadata>(resp.Data);
-            return true;
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return;
+        }
+
+        /// <summary>
+        /// Enumerate container statistics and objects within the container.
+        /// </summary> 
+        /// <param name="container">Container name.</param>
+        /// <param name="startIndex">Begin object enumeration from this position.</param>
+        /// <param name="maxResults">Maximum number of objects to return.</param> 
+        /// <returns>Container metadata.</returns>
+        public async Task<ContainerMetadata> EnumerateContainer(string container, long? startIndex, long? maxResults)
+        { 
+            return await EnumerateContainerInternal(null, container, startIndex, maxResults); 
+        }
+        
+        /// <summary>
+        /// Enumerate container statistics and objects within the container using a filter.
+        /// </summary>
+        /// <param name="filter">Enumeration filter.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="startIndex">Begin object enumeration from this position.</param>
+        /// <param name="maxResults">Maximum number of objects to return.</param> 
+        /// <returns>Container metadata.</returns>
+        public async Task<ContainerMetadata> EnumerateContainer(EnumerationFilter filter, string container, long? startIndex, long? maxResults)
+        {
+            return await EnumerateContainerInternal(filter, container, startIndex, maxResults);
         }
 
         /// <summary>
         /// Delete a container.
         /// </summary> 
-        /// <param name="container">The container.</param>
+        /// <param name="container">Container name.</param>
         /// <returns>True if successful.</returns>
-        public bool DeleteContainer(string container)
+        public async Task DeleteContainer(string container)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + container;
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.DELETE,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 204)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Check if a container exists.
         /// </summary> 
-        /// <param name="container">The container.</param>
+        /// <param name="container">Container name.</param>
         /// <returns>True if the container exists.</returns>
-        public bool ContainerExists(string container)
+        public async Task<bool> ContainerExists(string container)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_container=true";
+            string url = _Endpoint + _UserGuid + "/" + container;
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.HEAD,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
+            if (resp != null && resp.StatusCode == 404) return false;
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
             return true;
         }
@@ -506,12 +527,12 @@ namespace KvpbaseSDK
         /// <summary>
         /// Write an object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <param name="contentType">The content type for the object.</param>
         /// <param name="data">The data to write.</param>
         /// <returns>True if successful.</returns>
-        public bool WriteObject(string container, string objectKey, string contentType, byte[] data)
+        public async Task WriteObject(string container, string objectKey, string contentType, byte[] data)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
@@ -522,31 +543,28 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.POST,
                 _AuthHeaders,
-                contentType,
-                true);
+                contentType);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send(data);
+            RestResponse resp = await req.SendAsync(data);
 
-            if (resp == null || resp.StatusCode != 201)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Write an object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <param name="contentType">The content type for the object.</param>
         /// <param name="contentLength">The length of the data in the stream.</param>
         /// <param name="stream">The stream containing the data.</param>
         /// <returns>True if successful.</returns>
-        public bool WriteObject(string container, string objectKey, string contentType, long contentLength, Stream stream)
+        public async Task WriteObject(string container, string objectKey, string contentType, long contentLength, Stream stream)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
@@ -557,30 +575,27 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.POST,
                 _AuthHeaders,
-                contentType,
-                true);
+                contentType);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send(stream, contentLength);
+            RestResponse resp = await req.SendAsync(contentLength, stream);
 
-            if (resp == null || resp.StatusCode != 201)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Write a range of bytes to an existing object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <param name="startIndex">The byte position at which to write the data.</param>
         /// <param name="data">The data to write.</param>
         /// <returns>True if successful.</returns>
-        public bool WriteObjectRange(string container, string objectKey, long startIndex, byte[] data)
+        public async Task WriteObjectRange(string container, string objectKey, long startIndex, byte[] data)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
@@ -592,31 +607,28 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.PUT,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send(data);
+            RestResponse resp = await req.SendAsync(data);
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Write a range of bytes to an existing object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <param name="startIndex">The byte position at which to write the data.</param>
         /// <param name="contentLength">The length of the data in the stream.</param>
         /// <param name="stream">The stream containing the data.</param>
         /// <returns>True if successful.</returns>
-        public bool WriteObjectRange(string container, string objectKey, long startIndex, long contentLength, Stream stream)
+        public async Task WriteObjectRange(string container, string objectKey, long startIndex, long contentLength, Stream stream)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
@@ -628,32 +640,129 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.PUT,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send(stream, contentLength);
+            RestResponse resp = await req.SendAsync(contentLength, stream);
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return;
         }
 
         /// <summary>
+        /// Write tags to an object.
+        /// </summary>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
+        /// <param name="tags">Tags.</param>
+        /// <returns>True if successful.</returns>
+        public async Task WriteObjectTags(string container, string objectKey, List<string> tags)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_tags=" + KvpbaseCommon.StringListToCsv(tags);
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.PUT,
+                _AuthHeaders,
+                null);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = await req.SendAsync();
+
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return;
+        }
+
+        /// <summary>
+        /// Write key-value pairs to an object.
+        /// </summary>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
+        /// <param name="keyValuePairs">Key-value pairs.</param>
+        /// <returns>True if successful.</returns>
+        public async Task WriteObjectKeyValuePairs(string container, string objectKey, Dictionary<string, string> keyValuePairs)
+        {
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_keys";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.PUT,
+                _AuthHeaders,
+                null);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = null;
+
+            if (keyValuePairs == null || keyValuePairs.Count < 1)
+            {
+                resp = await req.SendAsync();
+            }
+            else
+            {
+                resp = await req.SendAsync(KvpbaseCommon.SerializeJson(keyValuePairs, true));
+            }
+
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return;
+        }
+
+        /// <summary>
+        /// Retrieve an object's metadata.
+        /// </summary>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param> 
+        /// <returns>Object metadata.</returns>
+        public async Task<ObjectMetadata> ReadObjectMetadata(string container, string objectKey)
+        { 
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_metadata=true";
+
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.GET,
+                _AuthHeaders,
+                null);
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            RestResponse resp = await req.SendAsync();
+
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            if (resp.Data != null && resp.ContentLength > 0)
+            {
+                return KvpbaseCommon.DeserializeJson<ObjectMetadata>(KvpbaseCommon.StreamToBytes(resp.Data));
+            }
+
+            return null;
+        }
+         
+        /// <summary>
         /// Read an object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="data">Data from the object.</param>
-        /// <returns>True if successful.</returns>
-        public bool ReadObject(string container, string objectKey, out byte[] data)
-        {
-            data = null;
-             
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param> 
+        /// <returns>KvpbaseObject.</returns>
+        public async Task<KvpbaseObject> ReadObject(string container, string objectKey)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
@@ -663,83 +772,28 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
-            
-            if (resp.Data != null && resp.Data.Length > 0)
-            {
-                data = new byte[resp.Data.Length];
-                Buffer.BlockCopy(resp.Data, 0, data, 0, resp.Data.Length);
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
+            return KvpbaseObject.FromRestResponse(resp);
         }
-
-        /// <summary>
-        /// Read an object.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="contentLength">The length of the data in the stream.</param>
-        /// <param name="stream">The stream containing the data.</param>
-        /// <returns>True if successful.</returns>
-        public bool ReadObject(string container, string objectKey, out long contentLength, out Stream stream)
-        {
-            contentLength = 0;
-            stream = null;
-
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null,
-                false);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
-
-            if (resp.DataStream != null && resp.ContentLength > 0)
-            {
-                contentLength = resp.ContentLength;
-                stream = resp.DataStream;
-            }
-
-            return true;
-        }
-
+         
         /// <summary>
         /// Read a range of bytes from an object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <param name="startIndex">The byte position from which to read the data.</param>
-        /// <param name="count">The number of bytes to read.</param>
-        /// <param name="data">Data from the object.</param>
-        /// <returns>True if successful.</returns>
-        public bool ReadObjectRange(string container, string objectKey, long startIndex, long count, out byte[] data)
-        {
-            data = null;
-             
+        /// <param name="count">The number of bytes to read.</param> 
+        /// <returns>KvpbaseObject.</returns>
+        public async Task<KvpbaseObject> ReadObjectRange(string container, string objectKey, long startIndex, long count)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
@@ -751,80 +805,60 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            if (resp.Data != null && resp.Data.Length > 0)
-            {
-                data = new byte[resp.Data.Length];
-                Buffer.BlockCopy(resp.Data, 0, data, 0, resp.Data.Length);
-            }
-
-            return true;
+            return KvpbaseObject.FromRestResponse(resp);
         }
-
+        
         /// <summary>
-        /// Read a range of bytes from an object.
+        /// Retrieve key-value pairs from an object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="startIndex">The byte position from which to read the data.</param>
-        /// <param name="count">The number of bytes to read.</param>
-        /// <param name="stream">The stream containing the data.</param>
-        /// <returns>True if successful.</returns>
-        public bool ReadObjectRange(string container, string objectKey, long startIndex, long count, out Stream stream)
-        {
-            stream = null;
-
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param> 
+        /// <returns>Object key-value pairs.</returns>
+        public async Task<Dictionary<string, string>> ReadObjectKeyValuePairs(string container, string objectKey)
+        { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-            if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
-            if (count <= 0) throw new ArgumentException("Invalid value for count.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex + "&_count=" + count;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_keys";
 
             RestRequest req = new RestRequest(
                 url,
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                false);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200)
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+             
+            if (resp.Data != null && resp.ContentLength > 0)
             {
-                return false;
+                return KvpbaseCommon.DeserializeJson<Dictionary<string, string>>(KvpbaseCommon.StreamToBytes(resp.Data));
             }
 
-            if (resp.DataStream != null && resp.ContentLength > 0)
-            {
-                stream = resp.DataStream;
-            }
-
-            return true;
-
+            return new Dictionary<string, string>();
         }
 
         /// <summary>
         /// Rename an object.
         /// </summary>
-        /// <param name="container">The container.</param>
+        /// <param name="container">Container name.</param>
         /// <param name="originalObjectKey">The original object key.</param>
         /// <param name="newObjectKey">The desired object key.</param>
         /// <returns>True if successful.</returns>
-        public bool RenameObject(string container, string originalObjectKey, string newObjectKey)
+        public async Task RenameObject(string container, string originalObjectKey, string newObjectKey)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(originalObjectKey)) throw new ArgumentNullException(nameof(originalObjectKey));
@@ -836,28 +870,25 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.PUT,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
-             
-            return true;
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return;
         }
 
         /// <summary>
         /// Delete an object.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <returns>True if successful.</returns>
-        public bool DeleteObject(string container, string objectKey)
+        public async Task DeleteObject(string container, string objectKey)
         {  
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
@@ -868,28 +899,25 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.DELETE,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 204)
-            {
-                return false;
-            }
-             
-            return true;
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return;
         }
 
         /// <summary>
         /// Check if an object exists.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <returns>True if the object exists.</returns>
-        public bool ObjectExists(string container, string objectKey)
+        public async Task<bool> ObjectExists(string container, string objectKey)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
@@ -900,54 +928,16 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.HEAD,
                 _AuthHeaders,
-                null,
-                true);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
+            if (resp != null && resp.StatusCode == 404) return false;
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return true;
-        }
-
-        /// <summary>
-        /// Retrieve an object's metadata.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="metadata">The object's metadata.</param>
-        /// <returns>True if successful.</returns>
-        public bool GetObjectMetadata(string container, string objectKey, out ObjectMetadata metadata)
-        {
-            metadata = null;
-             
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_metadata=true"; 
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null,
-                true);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = req.Send();
-             
-            if (resp == null || resp.StatusCode != 200 || resp.Data == null || resp.Data.Length < 1)
-            {
-                return false;
-            }
-
-            metadata = KvpbaseCommon.DeserializeJson<ObjectMetadata>(resp.Data);
             return true;
         }
 
@@ -955,22 +945,23 @@ namespace KvpbaseSDK
         /// Upload from a file to an object.
         /// </summary>
         /// <param name="filename">The filename of the file to upload.</param>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="contentType">The content type.</param>
-        /// <param name="metadata">The object's metadata.</param>
-        /// <returns>True if successful.</returns>
-        public bool UploadFile(string filename, string container, string objectKey, string contentType, out ObjectMetadata metadata)
-        {
-            metadata = null;
-
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
+        /// <param name="contentType">The content type.</param> 
+        /// <returns>Object metadata.</returns>
+        public async Task<ObjectMetadata> UploadFile(string filename, string container, string objectKey, string contentType)
+        { 
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
+            bool containerExists = await ContainerExists(container);
+            if (!containerExists) throw new IOException("Container does not exist.");
+
             if (!File.Exists(filename)) throw new IOException("File specified does not exist.");
-            if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
+
+            bool objectExists = await ObjectExists(container, objectKey);
+            if (objectExists) throw new IOException("Object specified already exists.");
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
@@ -983,43 +974,41 @@ namespace KvpbaseSDK
                     url,
                     HttpMethod.POST,
                     _AuthHeaders,
-                    contentType,
-                    true);
+                    contentType);
 
                 req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-                resp = req.Send(fs, fileLength);
+                resp = await req.SendAsync(fileLength, fs);
             }
 
-            if (resp == null || resp.StatusCode != 201)
-            {
-                return false;
-            }
-             
-            return GetObjectMetadata(container, objectKey, out metadata);
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return await ReadObjectMetadata(container, objectKey);
         }
 
         /// <summary>
         /// Upload from a stream to an object.
         /// </summary>
         /// <param name="stream">The input stream from which to read.</param>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="contentType">The content type.</param>
-        /// <param name="metadata">The object's metadata.</param>
-        /// <returns>True if successful.</returns>
-        public bool UploadFromStream(Stream stream, long contentLength, string container, string objectKey, string contentType, out ObjectMetadata metadata)
-        {
-            metadata = null;
-
+        /// <param name="contentLength">Number of bytes to read from the input stream.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
+        /// <param name="contentType">The content type.</param> 
+        /// <returns>Object metadata.</returns>
+        public async Task<ObjectMetadata> UploadFromStream(Stream stream, long contentLength, string container, string objectKey, string contentType)
+        { 
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (!stream.CanRead) throw new ArgumentException("Stream cannot be read.");
             if (contentLength < 0) throw new ArgumentException("Content length must be zero or greater.");
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
-            if (ObjectExists(container, objectKey)) throw new IOException("Object specified already exists.");
+            bool containerExists = await ContainerExists(container);
+            if (!containerExists) throw new IOException("Container does not exist.");
+
+            bool objectExists = await ObjectExists(container, objectKey);
+            if (objectExists) throw new IOException("Object specified already exists.");
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
@@ -1029,40 +1018,41 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.POST,
                 _AuthHeaders,
-                contentType,
-                true);
+                contentType);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            resp = req.Send(stream, contentLength); 
+            resp = await req.SendAsync(contentLength, stream);
 
-            if (resp == null || resp.StatusCode != 201)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            return GetObjectMetadata(container, objectKey, out metadata);
+            return await ReadObjectMetadata(container, objectKey);
         }
 
         /// <summary>
         /// Download an object to a file.
         /// </summary>
         /// <param name="filename">The filename of the file to upload.</param>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
         /// <returns>True if successful.</returns>
-        public bool DownloadFile(string filename, string container, string objectKey)
+        public async Task DownloadFile(string filename, string container, string objectKey)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
-            if (File.Exists(filename)) throw new IOException("File specified already exists.");
-            if (!ObjectExists(container, objectKey)) throw new IOException("Object specified does not exist.");
+            bool containerExists = await ContainerExists(container);
+            if (!containerExists) throw new IOException("Container does not exist.");
 
-            ObjectMetadata metadata = null;
-            if (!GetObjectMetadata(container, objectKey, out metadata)) throw new IOException("Unable to retrieve object metadata.");
+            if (File.Exists(filename)) throw new IOException("File specified already exists.");
+
+            bool objectExists = await ObjectExists(container, objectKey);
+            if (!objectExists) throw new IOException("Object specified does not exist.");
+
+            ObjectMetadata metadata = await ReadObjectMetadata(container, objectKey);
+            if (metadata == null) throw new IOException("Unable to retrieve object metadata.");
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
              
@@ -1072,18 +1062,15 @@ namespace KvpbaseSDK
                     url,
                     HttpMethod.GET,
                     _AuthHeaders,
-                    null,
-                    false);
+                    null);
 
                 req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
                 RestResponse resp = req.Send();
 
-                if (resp == null || resp.StatusCode != 200)
-                {
-                    return false;
-                }
-
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+                 
                 long bytesRemaining = resp.ContentLength;
                 byte[] buffer = new byte[DownloadStreamBufferSize];
 
@@ -1091,7 +1078,7 @@ namespace KvpbaseSDK
                 {
                     while (bytesRemaining > 0)
                     {
-                        int bytesRead = resp.DataStream.Read(buffer, 0, buffer.Length);
+                        int bytesRead = resp.Data.Read(buffer, 0, buffer.Length);
                         if (bytesRead > 0)
                         {
                             bytesRemaining -= bytesRead;
@@ -1101,31 +1088,28 @@ namespace KvpbaseSDK
                 }
             }
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Download an object to a stream.
-        /// </summary>
-        /// <param name="stream">The output stream into which data read will be written.</param>
-        /// <param name="container">The container.</param>
-        /// <param name="objectKey">The object key.</param>
-        /// <param name="contentLength">Content length of the data in the stream.</param>
+        /// </summary> 
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param> 
         /// <returns>True if successful.</returns>
-        public bool DownloadToStream(Stream stream, string container, string objectKey, out long contentLength)
-        {
-            contentLength = 0;
-
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
-            if (!stream.CanWrite) throw new ArgumentException("Stream cannot be written.");             
+        public async Task<KvpbaseObject> DownloadToStream(string container, string objectKey)
+        {               
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            if (!ContainerExists(container)) throw new IOException("Container does not exist.");
-            if (!ObjectExists(container, objectKey)) throw new IOException("Object specified does not exist.");
+            bool containerExists = await ContainerExists(container);
+            if (!containerExists) throw new IOException("Container does not exist.");
 
-            ObjectMetadata metadata = null;
-            if (!GetObjectMetadata(container, objectKey, out metadata)) throw new IOException("Unable to retrieve object metadata.");
+            bool objectExists = await ObjectExists(container, objectKey);
+            if (!objectExists) throw new IOException("Object specified does not exist.");
+
+            ObjectMetadata metadata = await ReadObjectMetadata(container, objectKey);
+            if (metadata == null) throw new IOException("Unable to retrieve object metadata.");
 
             string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
              
@@ -1133,38 +1117,16 @@ namespace KvpbaseSDK
                 url,
                 HttpMethod.GET,
                 _AuthHeaders,
-                null,
-                false);
+                null);
 
             req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = req.Send();
+            RestResponse resp = await req.SendAsync();
 
-            if (resp == null || resp.StatusCode != 200)
-            {
-                return false;
-            }
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
 
-            contentLength = resp.ContentLength;
-            long bytesRemaining = resp.ContentLength;
-            byte[] buffer = new byte[DownloadStreamBufferSize];
-
-            if (bytesRemaining > 0)
-            {
-                while (bytesRemaining > 0)
-                {
-                    int bytesRead = resp.DataStream.Read(buffer, 0, buffer.Length);
-                    if (bytesRead > 0)
-                    {
-                        bytesRemaining -= bytesRead;
-                        stream.Write(buffer, 0, bytesRead);
-                    }
-                }
-
-                if (stream.CanSeek) stream.Seek(0, SeekOrigin.Begin);
-            } 
-
-            return true;
+            return KvpbaseObject.FromRestResponse(resp);
         }
 
         #endregion
@@ -1207,6 +1169,42 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(s)) return "/";
             if (s.EndsWith("/", StringComparison.InvariantCulture)) return s;
             return s + "/";
+        }
+          
+        private async Task<ContainerMetadata> EnumerateContainerInternal(EnumerationFilter filter, string container, long? startIndex, long? maxResults)
+        { 
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+
+            string url = _Endpoint + _UserGuid + "/" + container;
+            url += "?_search";
+            if (startIndex != null) url += "&_index=" + startIndex;
+            if (maxResults != null) url += "&_count=" + maxResults;
+            
+            RestRequest req = new RestRequest(
+                url,
+                HttpMethod.PUT,
+                _AuthHeaders,
+                "application/json");
+
+            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+            string data = null;
+            RestResponse resp = null;
+             
+            if (filter != null)
+            {
+                data = KvpbaseCommon.SerializeJson(filter, true);
+                resp = await req.SendAsync(data);
+            }
+            else
+            {
+                resp = await req.SendAsync();
+            } 
+
+            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+            if (e != null) throw e;
+
+            return KvpbaseCommon.DeserializeJson<ContainerMetadata>(KvpbaseCommon.StreamToBytes(resp.Data)); 
         }
          
         #endregion 

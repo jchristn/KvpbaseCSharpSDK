@@ -46,6 +46,15 @@ namespace KvpbaseSDK
                 return e;
             }
 
+            if (resp.StatusCode == 413)
+            {
+                e.StatusCode = resp.StatusCode;
+                if (resp.ContentLength > 0) e.ResponseData = KvpbaseCommon.StreamToBytes(resp.Data);
+                else e.ResponseData = null;
+                e.Type = ExceptionType.PayloadTooLarge;
+                return e;
+            }
+
             if (resp.StatusCode == 409)
             {
                 e.StatusCode = resp.StatusCode;
@@ -103,6 +112,10 @@ namespace KvpbaseSDK
         /// A server-side error was encountered.
         /// </summary>
         InternalServerError,
+        /// <summary>
+        /// Request data too large.
+        /// </summary>
+        PayloadTooLarge,
         /// <summary>
         /// A conflict exists, for example, attempting to write an object using a key that already exists.
         /// </summary>

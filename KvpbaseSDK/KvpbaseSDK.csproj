@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>4.0.2</Version>
+    <Version>4.0.3</Version>
     <Authors>Joel Christner</Authors>
     <Description>C# SDK for Kvpbase object storage platform</Description>
     <Copyright>(c)2019 Joel Christner</Copyright>

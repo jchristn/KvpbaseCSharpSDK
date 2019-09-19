@@ -1024,6 +1024,11 @@
             A server-side error was encountered.
             </summary>
         </member>
+        <member name="F:KvpbaseSDK.ExceptionType.PayloadTooLarge">
+            <summary>
+            Request data too large.
+            </summary>
+        </member>
         <member name="F:KvpbaseSDK.ExceptionType.Conflict">
             <summary>
             A conflict exists, for example, attempting to write an object using a key that already exists.

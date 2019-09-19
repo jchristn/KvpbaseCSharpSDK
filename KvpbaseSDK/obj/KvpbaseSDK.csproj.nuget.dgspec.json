@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj": {}
+    "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj": {}
   },
   "projects": {
-    "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj": {
-      "version": "4.0.1",
+    "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj": {
+      "version": "4.0.2",
       "restore": {
-        "projectUniqueName": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
+        "projectUniqueName": "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
         "projectName": "KvpbaseSDK",
-        "projectPath": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
+        "projectPath": "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
         "packagesPath": "C:\\Users\\joelc\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\obj\\",
+        "outputPath": "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [
@@ -57,10 +57,6 @@
             "RestWrapper": {
               "target": "Package",
               "version": "[2.1.0, )"
-            },
-            "System.ValueTuple": {
-              "target": "Package",
-              "version": "[4.5.0, )"
             }
           }
         },
@@ -79,10 +75,6 @@
             "RestWrapper": {
               "target": "Package",
               "version": "[2.1.0, )"
-            },
-            "System.ValueTuple": {
-              "target": "Package",
-              "version": "[4.5.0, )"
             }
           },
           "imports": [

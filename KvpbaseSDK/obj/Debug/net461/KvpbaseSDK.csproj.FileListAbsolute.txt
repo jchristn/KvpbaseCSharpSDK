@@ -23,7 +23,6 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\net461\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\net461\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\net461\Newtonsoft.Json.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\net461\RestWrapper.dll
-C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\net461\System.ValueTuple.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.csprojAssemblyReference.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\net461\KvpbaseSDK.AssemblyInfoInputs.cache

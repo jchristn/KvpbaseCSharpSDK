@@ -30,5 +30,4 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\Newtonsoft.Json.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\RestWrapper.dll
-C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.ValueTuple.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csproj.CopyComplete

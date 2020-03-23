@@ -7,8 +7,6 @@ namespace KvpbaseSDK
     /// </summary>
     public class ErrorResponse
     {
-        #region Public-Members
-
         /// <summary>
         /// Indicates success or failure of the operation.
         /// </summary>
@@ -39,14 +37,6 @@ namespace KvpbaseSDK
         /// </summary>
         public object Data;
 
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
-
         /// <summary>
         /// Instantiates the object.
         /// </summary>
@@ -63,7 +53,7 @@ namespace KvpbaseSDK
             Id = id;
             Data = data;
             HttpStatus = status;
-             
+
             switch (HttpStatus)
             {
                 case 200:
@@ -194,21 +184,11 @@ namespace KvpbaseSDK
                     Text = "Unknown failure code.";
                     break;
             }
-             
+
             if (!String.IsNullOrEmpty(textAppend))
             {
                 Text += "  " + textAppend;
             }
         }
-
-        #endregion
-
-        #region Public-Methods
-         
-        #endregion
-
-        #region Private-Methods
-
-        #endregion
     }
 }

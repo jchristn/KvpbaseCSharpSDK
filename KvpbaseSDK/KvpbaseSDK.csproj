@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>4.0.3</Version>
+    <Version>4.1.0</Version>
     <Authors>Joel Christner</Authors>
     <Description>C# SDK for Kvpbase object storage platform</Description>
     <Copyright>(c)2019 Joel Christner</Copyright>
@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/kvpbase/sdk-csharp</PackageProjectUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageReleaseNotes>Breaking changes, please refer to README.  Compatibility with Kvpbase Storage Server v3.0 and v4.0, async task-based APIs, KvpbaseException class returned from SDK when errors are encountered</PackageReleaseNotes>
+    <PackageReleaseNotes>Maintenance update.</PackageReleaseNotes>
     <PackageIconUrl>https://raw.githubusercontent.com/kvpbase/storage-server/master/assets/icon.ico</PackageIconUrl>
     <PackageTags>storage rest object s3 blob nosql cloud kvp key value pair api</PackageTags>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -26,8 +26,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="RestWrapper" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RestWrapper" Version="2.1.4.1" />
   </ItemGroup>
 
   <ItemGroup>

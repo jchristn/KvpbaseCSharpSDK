@@ -9,8 +9,6 @@ namespace KvpbaseSDK
     /// </summary>
     public class DiskInfo
     {
-        #region Public-Members
-
         /// <summary>
         /// The name of the disk, i.e. 'C:\\'.
         /// </summary>
@@ -50,14 +48,6 @@ namespace KvpbaseSDK
         /// The amount of free space on the disk, in gigabytes.
         /// </summary>
         public long AvailableSizeGigabytes { get; set; }
-
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
 
         /// <summary>
         /// Instantiates the object.
@@ -100,15 +90,5 @@ namespace KvpbaseSDK
 
             return ret;
         }
-
-        #endregion
-
-        #region Public-Methods
-
-        #endregion
-
-        #region Private-Methods
-
-        #endregion
     }
 }

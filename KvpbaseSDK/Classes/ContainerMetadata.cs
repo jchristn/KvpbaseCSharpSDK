@@ -11,12 +11,10 @@ namespace KvpbaseSDK
     /// </summary>
     public class ContainerMetadata
     {
-        #region Public-Members
-
         /// <summary>
-        /// The user GUID that owns the container.
+        /// GUID for the container.
         /// </summary>
-        public string UserGuid { get; set; }
+        public string ContainerGUID { get; set; }
 
         /// <summary>
         /// The name of the container.
@@ -24,9 +22,9 @@ namespace KvpbaseSDK
         public string ContainerName { get; set; }
 
         /// <summary>
-        /// GUID for the container.
+        /// The user GUID that owns the container.
         /// </summary>
-        public string ContainerGuid { get; set; }
+        public string UserGUID { get; set; }
 
         /// <summary>
         /// Indicates whether or not public users can read from the container.
@@ -68,33 +66,15 @@ namespace KvpbaseSDK
         /// </summary>
         public List<ObjectMetadata> Objects { get; set; }
 
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
-
         /// <summary>
         /// Instantiates the object.
         /// </summary>
         public ContainerMetadata()
         {
-
+            Totals = new Counts();
+            Displayed = new Counts();
+            Objects = new List<ObjectMetadata>();
         }
-
-        #endregion
-
-        #region Public-Methods
-
-        #endregion
-
-        #region Private-Methods
-
-        #endregion
-
-        #region Public-Embedded-Classes
 
         /// <summary>
         /// Summary statistics.
@@ -111,7 +91,5 @@ namespace KvpbaseSDK
             /// </summary>
             public long Bytes { get; set; }
         }
-
-        #endregion
     }
 }

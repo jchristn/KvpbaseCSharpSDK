@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
-      "Newtonsoft.Json/12.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
@@ -11,7 +11,7 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
-      "RestWrapper/2.1.0": {
+      "RestWrapper/2.1.4.1": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.2"
@@ -49,7 +49,7 @@
           "build/netstandard2.0/NETStandard.Library.targets": {}
         }
       },
-      "Newtonsoft.Json/12.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
@@ -58,7 +58,7 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
-      "RestWrapper/2.1.0": {
+      "RestWrapper/2.1.4.1": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.2"
@@ -216,10 +216,10 @@
         "netstandard.library.nuspec"
       ]
     },
-    "Newtonsoft.Json/12.0.2": {
-      "sha512": "mtweBXPWhp1CMQATtBT7ZfMZrbZBTKfjGwz6Y75NwGjx/GztDaUnfw8GK9KZ2T4fDIqKJyDjc9Rxlw5+G2FcVA==",
+    "Newtonsoft.Json/12.0.3": {
+      "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "type": "package",
-      "path": "newtonsoft.json/12.0.2",
+      "path": "newtonsoft.json/12.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -242,34 +242,36 @@
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "newtonsoft.json.12.0.2.nupkg.sha512",
-        "newtonsoft.json.nuspec"
+        "newtonsoft.json.12.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
-    "RestWrapper/2.1.0": {
-      "sha512": "yW6ZgnSWhZ+E0VGU+j2JN9Z6oZ048Dpp8Ow1tZvXxYKDb8zS2ut5d8hSL0waJkoegsGiagWZnF1Gjeimj+Ur6A==",
+    "RestWrapper/2.1.4.1": {
+      "sha512": "gJQr7Va37wTjClS+/Q4NWaM3HD5O/fPx/xPBzdgL/l85lG1ei6ALzLgc/6zVd1Te1Wveg3KHSgpzd4JaKyTGzQ==",
       "type": "package",
-      "path": "restwrapper/2.1.0",
+      "path": "restwrapper/2.1.4.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
         "lib/net452/RestWrapper.dll",
         "lib/netstandard2.0/RestWrapper.dll",
-        "restwrapper.2.1.0.nupkg.sha512",
+        "lib/netstandard2.0/RestWrapper.xml",
+        "restwrapper.2.1.4.1.nupkg.sha512",
         "restwrapper.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.6.1": [
-      "Newtonsoft.Json >= 12.0.2",
-      "RestWrapper >= 2.1.0"
+      "Newtonsoft.Json >= 12.0.3",
+      "RestWrapper >= 2.1.4.1"
     ],
     ".NETStandard,Version=v2.0": [
       "NETStandard.Library >= 2.0.3",
-      "Newtonsoft.Json >= 12.0.2",
-      "RestWrapper >= 2.1.0"
+      "Newtonsoft.Json >= 12.0.3",
+      "RestWrapper >= 2.1.4.1"
     ]
   },
   "packageFolders": {
@@ -278,7 +280,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "4.0.3",
+    "version": "4.1.0",
     "restore": {
       "projectUniqueName": "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
       "projectName": "KvpbaseSDK",
@@ -303,8 +305,7 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.pkg.github.com/jchristn/index.json": {},
-        "https://nuget.pkg.github.com/kvpbase/index.json": {}
+        "https://nuget.pkg.github.com/jchristn/index.json": {}
       },
       "frameworks": {
         "net461": {
@@ -325,13 +326,14 @@
         "dependencies": {
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[12.0.2, )"
+            "version": "[12.0.3, )"
           },
           "RestWrapper": {
             "target": "Package",
-            "version": "[2.1.0, )"
+            "version": "[2.1.4.1, )"
           }
-        }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       },
       "netstandard2.0": {
         "dependencies": {
@@ -343,18 +345,24 @@
           },
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[12.0.2, )"
+            "version": "[12.0.3, )"
           },
           "RestWrapper": {
             "target": "Package",
-            "version": "[2.1.0, )"
+            "version": "[2.1.4.1, )"
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

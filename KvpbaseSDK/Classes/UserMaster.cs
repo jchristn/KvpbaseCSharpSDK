@@ -10,17 +10,15 @@ namespace KvpbaseSDK
     /// </summary>
     public class UserMaster
     {
-        #region Public-Members
+        /// <summary>
+        /// Row ID in the database.
+        /// </summary>
+        public int Id { get; set; }
 
         /// <summary>
-        /// The ID of the user.
+        /// GUID.
         /// </summary>
-        public int? UserMasterId { get; set; }
-
-        /// <summary>
-        /// The ID of the node to which the user is mapped (set to 0 if none).
-        /// </summary>
-        public int? NodeId { get; set; } 
+        public string GUID { get; set; }
 
         /// <summary>
         /// The first name.
@@ -48,94 +46,27 @@ namespace KvpbaseSDK
         public string Password { get; set; }
 
         /// <summary>
-        /// Cellular phone number.
-        /// </summary>
-        public string Cellphone { get; set; }
-
-        /// <summary>
-        /// Address line 1.
-        /// </summary>
-        public string Address1 { get; set; }
-
-        /// <summary>
-        /// Address line 2.
-        /// </summary>
-        public string Address2 { get; set; }
-
-        /// <summary>
-        /// City.
-        /// </summary>
-        public string City { get; set; }
-
-        /// <summary>
-        /// State.
-        /// </summary>
-        public string State { get; set; }
-
-        /// <summary>
-        /// Postal code.
-        /// </summary>
-        public string PostalCode { get; set; }
-
-        /// <summary>
-        /// Country (recommend using the ISO A3 country code).
-        /// </summary>
-        public string Country { get; set; }
-         
-        /// <summary>
         /// The user's home directory.  If null, a directory will be created under the default storage directory.
         /// </summary>
         public string HomeDirectory { get; set; }
-          
-        /// <summary>
-        /// GUID for the user.
-        /// </summary>
-        public string Guid { get; set; }
 
         /// <summary>
-        /// Indicates if the account is active (1) or disabled (0).
+        /// Indicates if the object is active or disabled.
         /// </summary>
-        public int? Active { get; set; }
+        public bool Active { get; set; }
 
         /// <summary>
-        /// The timestamp from when the user was created.
+        /// The timestamp from when the object was created.
         /// </summary>
-        public DateTime? Created { get; set; }
-
-        /// <summary>
-        /// The timestamp from when the user was last updated.
-        /// </summary>
-        public DateTime? LastUpdate { get; set; }
-
-        /// <summary>
-        /// The timestamp for when the account should be considered expired.
-        /// </summary>
-        public DateTime? Expiration { get; set; }
-
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
+        public DateTime CreatedUtc { get; set; }
 
         /// <summary>
         /// Instantiates the object.
         /// </summary>
         public UserMaster()
         {
-
+            GUID = Guid.NewGuid().ToString();
+            CreatedUtc = DateTime.Now.ToUniversalTime();
         }
-         
-        #endregion
-
-        #region Public-Methods
-         
-        #endregion
-
-        #region Private-Methods
-
-        #endregion
     }
 }

@@ -36,7 +36,6 @@ C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\bin\Debug\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\bin\Debug\Newtonsoft.Json.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\bin\Debug\Newtonsoft.Json.xml
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.csprojAssemblyReference.cache
-C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.exe
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Debug\KvpbaseStreamTest.pdb

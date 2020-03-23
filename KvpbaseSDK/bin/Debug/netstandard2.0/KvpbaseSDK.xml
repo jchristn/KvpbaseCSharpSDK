@@ -11,12 +11,22 @@
         </member>
         <member name="P:KvpbaseSDK.AuditLogEntry.Id">
             <summary>
-            ID of the entry.
+            Row ID in the database.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.AuditLogEntry.Key">
+        <member name="P:KvpbaseSDK.AuditLogEntry.GUID">
             <summary>
-            Key, if any, associated with the action.
+            GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.ContainerGUID">
+            <summary>
+            Container GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.ObjectGUID">
+            <summary>
+            Object GUID.
             </summary>
         </member>
         <member name="P:KvpbaseSDK.AuditLogEntry.Action">
@@ -39,14 +49,84 @@
             Instantiates the object.
             </summary>
         </member>
+        <member name="T:KvpbaseSDK.AuditLogEntryType">
+            <summary>
+            Entry types for the container audit log.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Enumerate">
+            <summary>
+            Enumerate.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Read">
+            <summary>
+            Read.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.ReadRange">
+            <summary>
+            ReadRange.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Write">
+            <summary>
+            Write.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.WriteKeyValue">
+            <summary>
+            WriteKeyValue.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.WriteRange">
+            <summary>
+            WriteRange.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.WriteTags">
+            <summary>
+            WriteTags.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Delete">
+            <summary>
+            Delete.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.DeleteKeyValue">
+            <summary>
+            DeleteKeyValue.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.DeleteTags">
+            <summary>
+            DeleteTags.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Rename">
+            <summary>
+            Rename.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Exists">
+            <summary>
+            Exists.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Configuration">
+            <summary>
+            Configuration.
+            </summary>
+        </member>
         <member name="T:KvpbaseSDK.ContainerMetadata">
             <summary>
             Metadata for a container.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.ContainerMetadata.UserGuid">
+        <member name="P:KvpbaseSDK.ContainerMetadata.ContainerGUID">
             <summary>
-            The user GUID that owns the container.
+            GUID for the container.
             </summary>
         </member>
         <member name="P:KvpbaseSDK.ContainerMetadata.ContainerName">
@@ -54,9 +134,9 @@
             The name of the container.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.ContainerMetadata.ContainerGuid">
+        <member name="P:KvpbaseSDK.ContainerMetadata.UserGUID">
             <summary>
-            GUID for the container.
+            The user GUID that owns the container.
             </summary>
         </member>
         <member name="P:KvpbaseSDK.ContainerMetadata.PublicRead">
@@ -131,12 +211,12 @@
         </member>
         <member name="P:KvpbaseSDK.Container.GUID">
             <summary>
-            Object GUID.
+            GUID.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.Container.UserGuid">
+        <member name="P:KvpbaseSDK.Container.UserGUID">
             <summary>
-            The username of the ontainer owner.
+            The username of the owner.
             </summary>
         </member>
         <member name="P:KvpbaseSDK.Container.Name">
@@ -171,14 +251,14 @@
         </member>
         <member name="M:KvpbaseSDK.Container.#ctor">
             <summary>
-            Instantiate the object using default settings.
+            Instantiate the object.
             </summary>
         </member>
         <member name="M:KvpbaseSDK.Container.#ctor(System.String,System.String,System.String)">
             <summary>
             Instantiate the object with a specific name (propagates to child members).
             </summary>
-            <param name="user">The name of the user that owns the container.</param>
+            <param name="userGuid">The GUID of the user that owns the container.</param>
             <param name="name">The name of the container.</param>
             <param name="baseDir">The base directory under which the container subdirectory will be created.</param>
         </member>
@@ -313,6 +393,12 @@
             Instantiates the object.
             </summary>
         </member>
+        <member name="M:KvpbaseSDK.EnumerationFilter.ToString">
+            <summary>
+            Create a human-readable string of the object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:KvpbaseSDK.ErrorResponse">
             <summary>
             Object containing error-related information, used in HTTP API responses.
@@ -362,99 +448,6 @@
             Static methods used by the Kvpbase client.
             </summary>
         </member>
-        <member name="T:KvpbaseSDK.Node">
-            <summary>
-            A node on the Kvpbase peer-to-peer mesh network.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.NodeId">
-            <summary>
-            ID of the node.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.Name">
-            <summary>
-            Name of the node.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.Http">
-            <summary>
-            HTTP server settings.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.Tcp">
-            <summary>
-            TCP server settings.
-            </summary>
-        </member>
-        <member name="M:KvpbaseSDK.Node.#ctor">
-            <summary>
-            Instantiates the object.
-            </summary>
-        </member>
-        <member name="M:KvpbaseSDK.Node.ToString">
-            <summary>
-            Returns a human-readable string of the object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="M:KvpbaseSDK.Node.Sanitized">
-            <summary>
-            Return a sanitized Node object, which can then be serialized.
-            Certain properties within HttpRequest cannot be serialized, so objects must be sanitized first.
-            </summary>
-            <returns>Serializable version of the object.</returns>
-        </member>
-        <member name="T:KvpbaseSDK.Node.HttpSettings">
-            <summary>
-            HTTP API server settings.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.HttpSettings.Port">
-            <summary>
-            The port number on which the server will listen.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.HttpSettings.DnsHostname">
-            <summary>
-            The DNS hostname that must be found on incoming HTTP requests in the 'Host' header.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.HttpSettings.Ssl">
-            <summary>
-            Enable or disable SSL.
-            </summary>
-        </member>
-        <member name="T:KvpbaseSDK.Node.TcpSettings">
-            <summary>
-            TCP server settings.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.TcpSettings.IpAddress">
-            <summary>
-            The IP address on which the server will listen.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.TcpSettings.Port">
-            <summary>
-            The port number on which the server will listen.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.TcpSettings.Ssl">
-            <summary>
-            Enable or disable SSL.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.TcpSettings.PfxCertificateFile">
-            <summary>
-            PFX certificate path and filename.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Node.TcpSettings.PfxCertificatePass">
-            <summary>
-            Password for the PFX certificate file.
-            </summary>
-        </member>
         <member name="T:KvpbaseSDK.ObjectHandlerType">
             <summary>
             The type of object handler.
@@ -473,6 +466,11 @@
         <member name="P:KvpbaseSDK.ObjectMetadata.GUID">
             <summary>
             The GUID of the object, also used as a unique name to store the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.ContainerGUID">
+            <summary>
+            The GUID of the container that contains the object. 
             </summary>
         </member>
         <member name="P:KvpbaseSDK.ObjectMetadata.ObjectKey">
@@ -538,51 +536,19 @@
             <param name="contentLength">The object's length.</param>
             <param name="tags">Tags associated with the object.</param>
         </member>
-        <member name="M:KvpbaseSDK.ObjectMetadata.FromDataRow(System.Data.DataRow)">
-            <summary>
-            Instantiate the object from a DataRow.
-            </summary>
-            <param name="row">DataRow.</param>
-            <returns>ObjectMetadata.</returns>
-        </member>
-        <member name="T:KvpbaseSDK.Topology">
-            <summary>
-            The topology containing metadata on all of the Kvpbase nodes in the network.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Topology.NodeId">
-            <summary>
-            The ID of the node.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Topology.Nodes">
-            <summary>
-            The list of all nodes in the network, including the current node.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.Topology.Replicas">
-            <summary>
-            List of IDs of all replicas for the current node.
-            </summary>
-        </member>
-        <member name="M:KvpbaseSDK.Topology.#ctor">
-            <summary>
-            Instantiates the object.
-            </summary>
-        </member>
         <member name="T:KvpbaseSDK.UserMaster">
             <summary>
             A Kvpbase user.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.UserMaster.UserMasterId">
+        <member name="P:KvpbaseSDK.UserMaster.Id">
             <summary>
-            The ID of the user.
+            Row ID in the database.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.UserMaster.NodeId">
+        <member name="P:KvpbaseSDK.UserMaster.GUID">
             <summary>
-            The ID of the node to which the user is mapped (set to 0 if none).
+            GUID.
             </summary>
         </member>
         <member name="P:KvpbaseSDK.UserMaster.FirstName">
@@ -610,69 +576,19 @@
             Password.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.UserMaster.Cellphone">
-            <summary>
-            Cellular phone number.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.Address1">
-            <summary>
-            Address line 1.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.Address2">
-            <summary>
-            Address line 2.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.City">
-            <summary>
-            City.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.State">
-            <summary>
-            State.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.PostalCode">
-            <summary>
-            Postal code.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.Country">
-            <summary>
-            Country (recommend using the ISO A3 country code).
-            </summary>
-        </member>
         <member name="P:KvpbaseSDK.UserMaster.HomeDirectory">
             <summary>
             The user's home directory.  If null, a directory will be created under the default storage directory.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.UserMaster.Guid">
-            <summary>
-            GUID for the user.
-            </summary>
-        </member>
         <member name="P:KvpbaseSDK.UserMaster.Active">
             <summary>
-            Indicates if the account is active (1) or disabled (0).
+            Indicates if the object is active or disabled.
             </summary>
         </member>
-        <member name="P:KvpbaseSDK.UserMaster.Created">
+        <member name="P:KvpbaseSDK.UserMaster.CreatedUtc">
             <summary>
-            The timestamp from when the user was created.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.LastUpdate">
-            <summary>
-            The timestamp from when the user was last updated.
-            </summary>
-        </member>
-        <member name="P:KvpbaseSDK.UserMaster.Expiration">
-            <summary>
-            The timestamp for when the account should be considered expired.
+            The timestamp from when the object was created.
             </summary>
         </member>
         <member name="M:KvpbaseSDK.UserMaster.#ctor">
@@ -737,18 +653,6 @@
             Verify connectivity to Kvpbase.
             </summary>
             <returns>True if connectivity exists.</returns>
-        </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.Authenticate">
-            <summary>
-            Authenticate to Kvpbase.
-            </summary>
-            <returns>True if able to successfully authenticate.</returns>
-        </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.GetVersion">
-            <summary>
-            Get the version number of the endpoint.
-            </summary> 
-            <returns>Version string.</returns>
         </member>
         <member name="M:KvpbaseSDK.KvpbaseClient.ListContainers">
             <summary>

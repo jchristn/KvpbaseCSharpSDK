@@ -181,63 +181,9 @@ namespace KvpbaseSDK
 
             return true;
         }
-
-        /// <summary>
-        /// Authenticate to Kvpbase.
-        /// </summary>
-        /// <returns>True if able to successfully authenticate.</returns>
-        public async Task<bool> Authenticate()
-        {
-            RestRequest req = new RestRequest(
-                _Endpoint + "token", 
-                HttpMethod.GET, 
-                _AuthHeaders, 
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            return true;
-        }
-
-        #endregion
          
-        #region Node
-
-        /// <summary>
-        /// Get the version number of the endpoint.
-        /// </summary> 
-        /// <returns>Version string.</returns>
-        public async Task<string> GetVersion()
-        { 
-            RestRequest req = new RestRequest(
-                _Endpoint + "version",
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            if (resp.Data != null && resp.ContentLength > 0)
-            {
-                byte[] data = KvpbaseCommon.StreamToBytes(resp.Data);
-                return Encoding.UTF8.GetString(data);
-            }
-
-            return null;
-        }
-
         #endregion
-
+          
         #region Containers
 
         /// <summary>
@@ -282,7 +228,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
             Container settings = new Container();
-            settings.UserGuid = _UserGuid;
+            settings.UserGUID = _UserGuid;
             settings.Name = container;
             settings.IsPublicRead = publicRead;
             settings.IsPublicWrite = publicWrite;
@@ -315,7 +261,7 @@ namespace KvpbaseSDK
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_config";
+            string url = _Endpoint + _UserGuid + "/" + container + "?config";
 
             RestRequest req = new RestRequest(
                 url,
@@ -350,7 +296,7 @@ namespace KvpbaseSDK
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_keys";
+            string url = _Endpoint + _UserGuid + "/" + container + "?keys";
 
             RestRequest req = new RestRequest(
                 url,
@@ -413,7 +359,7 @@ namespace KvpbaseSDK
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?_keys";
+            string url = _Endpoint + _UserGuid + "/" + container + "?keys";
 
             RestRequest req = new RestRequest(
                 url,
@@ -601,7 +547,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex;
 
             RestRequest req = new RestRequest(
                 url,
@@ -634,7 +580,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex;
 
             RestRequest req = new RestRequest(
                 url,
@@ -664,7 +610,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_tags=" + KvpbaseCommon.StringListToCsv(tags);
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?tags=" + KvpbaseCommon.StringListToCsv(tags);
 
             RestRequest req = new RestRequest(
                 url,
@@ -694,7 +640,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_keys";
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?keys";
 
             RestRequest req = new RestRequest(
                 url,
@@ -732,7 +678,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_metadata=true";
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?metadata";
 
             RestRequest req = new RestRequest(
                 url,
@@ -799,7 +745,7 @@ namespace KvpbaseSDK
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
             if (count <= 0) throw new ArgumentException("Invalid value for count.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_index=" + startIndex + "&_count=" + count;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex + "&count=" + count;
 
             RestRequest req = new RestRequest(
                 url,
@@ -828,7 +774,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?_keys";
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?keys";
 
             RestRequest req = new RestRequest(
                 url,
@@ -864,7 +810,7 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(originalObjectKey)) throw new ArgumentNullException(nameof(originalObjectKey));
             if (String.IsNullOrEmpty(newObjectKey)) throw new ArgumentNullException(nameof(newObjectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + originalObjectKey + "?_rename=" + newObjectKey;
+            string url = _Endpoint + _UserGuid + "/" + container + "/" + originalObjectKey + "?rename=" + newObjectKey;
 
             RestRequest req = new RestRequest(
                 url,
@@ -1176,9 +1122,9 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
             string url = _Endpoint + _UserGuid + "/" + container;
-            url += "?_search";
-            if (startIndex != null) url += "&_index=" + startIndex;
-            if (maxResults != null) url += "&_count=" + maxResults;
+            url += "?search";
+            if (startIndex != null) url += "&index=" + startIndex;
+            if (maxResults != null) url += "&count=" + maxResults;
             
             RestRequest req = new RestRequest(
                 url,

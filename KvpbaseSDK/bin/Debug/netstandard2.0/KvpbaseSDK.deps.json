@@ -1,17 +1,17 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "52b548cb47fb4055b4fcbe71ab1aee4ddf9af073"
+    "signature": ""
   },
   "compilationOptions": {},
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "KvpbaseSDK/4.0.3": {
+      "KvpbaseSDK/4.1.0": {
         "dependencies": {
           "NETStandard.Library": "2.0.3",
-          "Newtonsoft.Json": "12.0.2",
-          "RestWrapper": "2.1.0"
+          "Newtonsoft.Json": "12.0.3",
+          "RestWrapper": "2.1.4.1"
         },
         "runtime": {
           "KvpbaseSDK.dll": {}
@@ -23,29 +23,29 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
-      "Newtonsoft.Json/12.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "12.0.0.0",
-            "fileVersion": "12.0.2.23222"
+            "fileVersion": "12.0.3.23909"
           }
         }
       },
-      "RestWrapper/2.1.0": {
+      "RestWrapper/2.1.4.1": {
         "dependencies": {
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/RestWrapper.dll": {
-            "assemblyVersion": "2.1.0.0",
-            "fileVersion": "2.1.0.0"
+            "assemblyVersion": "2.1.4.1",
+            "fileVersion": "2.1.4.1"
           }
         }
       }
     }
   },
   "libraries": {
-    "KvpbaseSDK/4.0.3": {
+    "KvpbaseSDK/4.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -64,19 +64,19 @@
       "path": "netstandard.library/2.0.3",
       "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
     },
-    "Newtonsoft.Json/12.0.2": {
+    "Newtonsoft.Json/12.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-mtweBXPWhp1CMQATtBT7ZfMZrbZBTKfjGwz6Y75NwGjx/GztDaUnfw8GK9KZ2T4fDIqKJyDjc9Rxlw5+G2FcVA==",
-      "path": "newtonsoft.json/12.0.2",
-      "hashPath": "newtonsoft.json.12.0.2.nupkg.sha512"
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
-    "RestWrapper/2.1.0": {
+    "RestWrapper/2.1.4.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yW6ZgnSWhZ+E0VGU+j2JN9Z6oZ048Dpp8Ow1tZvXxYKDb8zS2ut5d8hSL0waJkoegsGiagWZnF1Gjeimj+Ur6A==",
-      "path": "restwrapper/2.1.0",
-      "hashPath": "restwrapper.2.1.0.nupkg.sha512"
+      "sha512": "sha512-gJQr7Va37wTjClS+/Q4NWaM3HD5O/fPx/xPBzdgL/l85lG1ei6ALzLgc/6zVd1Te1Wveg3KHSgpzd4JaKyTGzQ==",
+      "path": "restwrapper/2.1.4.1",
+      "hashPath": "restwrapper.2.1.4.1.nupkg.sha512"
     }
   }
 }

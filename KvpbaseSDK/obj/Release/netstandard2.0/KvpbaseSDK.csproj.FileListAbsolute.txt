@@ -20,7 +20,6 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.deps
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.csprojAssemblyReference.cache
-C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.AssemblyInfoInputs.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.AssemblyInfo.cs
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.dll

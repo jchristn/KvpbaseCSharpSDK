@@ -10,23 +10,31 @@ namespace KvpbaseSDK
     /// Details about an audit log entry.
     /// </summary>
     public class AuditLogEntry
-    {
-        #region Public-Members
-         
+    { 
         /// <summary>
-        /// ID of the entry.
+        /// Row ID in the database.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Key, if any, associated with the action.
+        /// GUID.
         /// </summary>
-        public string Key { get; set; }
+        public string GUID { get; set; }
+
+        /// <summary>
+        /// Container GUID.
+        /// </summary>
+        public string ContainerGUID { get; set; }
+
+        /// <summary>
+        /// Object GUID.
+        /// </summary>
+        public string ObjectGUID { get; set; }
 
         /// <summary>
         /// Action performed by the requestor.
         /// </summary>
-        public string Action { get; set; }
+        public AuditLogEntryType Action { get; set; }
 
         /// <summary>
         /// Metadata associated with the action.
@@ -36,32 +44,14 @@ namespace KvpbaseSDK
         /// <summary>
         /// Timestamp of the action.
         /// </summary>
-        public DateTime? CreatedUtc { get; set; }
-
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
-
+        public DateTime CreatedUtc { get; set; }
+         
         /// <summary>
         /// Instantiates the object.
         /// </summary>
         public AuditLogEntry()
         {
 
-        }
-
-        #endregion
-
-        #region Public-Methods
-         
-        #endregion
-
-        #region Private-Methods
-
-        #endregion
+        } 
     }
 }

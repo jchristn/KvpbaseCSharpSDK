@@ -12,17 +12,20 @@ namespace KvpbaseSDK
     /// </summary>
     public class ObjectMetadata
     {
-        #region Public-Members
-
         /// <summary>
         /// The ID of the object.
         /// </summary>
-        public long? Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// The GUID of the object, also used as a unique name to store the object.
         /// </summary>
         public string GUID { get; set; }
+
+        /// <summary>
+        /// The GUID of the container that contains the object. 
+        /// </summary>
+        public string ContainerGUID { get; set; }
 
         /// <summary>
         /// The object's key.
@@ -37,7 +40,7 @@ namespace KvpbaseSDK
         /// <summary>
         /// The content length of the object.
         /// </summary>
-        public long? ContentLength { get; set; }
+        public long ContentLength { get; set; }
 
         /// <summary>
         /// The MD5 hash of the object's data.
@@ -63,14 +66,6 @@ namespace KvpbaseSDK
         /// The time of last access, in UTC.
         /// </summary>
         public DateTime? LastAccessUtc { get; set; }
-
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
 
         /// <summary>
         /// Instantiate the object.
@@ -141,59 +136,7 @@ namespace KvpbaseSDK
             LastUpdateUtc = ts;
             LastAccessUtc = ts;
         }
-
-        /// <summary>
-        /// Instantiate the object from a DataRow.
-        /// </summary>
-        /// <param name="row">DataRow.</param>
-        /// <returns>ObjectMetadata.</returns>
-        public static ObjectMetadata FromDataRow(DataRow row)
-        {
-            if (row == null) throw new ArgumentNullException(nameof(row));
-
-            ObjectMetadata ret = new ObjectMetadata();
-
-            if (row["Id"] != null && row["Id"] != DBNull.Value)
-                ret.Id = Convert.ToInt64(row["Id"]);
-
-            if (row["ObjectKey"] != null && row["ObjectKey"] != DBNull.Value)
-                ret.ObjectKey = row["ObjectKey"].ToString();
-
-            if (row["GUID"] != null && row["GUID"] != DBNull.Value)
-                ret.GUID = row["GUID"].ToString();
-
-            if (row["ContentType"] != null && row["ContentType"] != DBNull.Value)
-                ret.ContentType = row["ContentType"].ToString();
-
-            if (row["ContentLength"] != null && row["ContentLength"] != DBNull.Value)
-                ret.ContentLength = Convert.ToInt64(row["ContentLength"]);
-
-            if (row["Md5"] != null && row["Md5"] != DBNull.Value)
-                ret.Md5 = row["Md5"].ToString();
-
-            if (row["Tags"] != null && row["Tags"] != DBNull.Value)
-                ret.Tags = KvpbaseCommon.CsvToStringList(row["Tags"].ToString());
-
-            if (row["CreatedUtc"] != null && row["CreatedUtc"] != DBNull.Value)
-                ret.CreatedUtc = Convert.ToDateTime(row["CreatedUtc"]);
-
-            if (row["LastUpdateUtc"] != null && row["LastUpdateUtc"] != DBNull.Value)
-                ret.LastUpdateUtc = Convert.ToDateTime(row["LastUpdateUtc"]);
-
-            if (row["LastAccessUtc"] != null && row["LastAccessUtc"] != DBNull.Value)
-                ret.LastAccessUtc = Convert.ToDateTime(row["LastAccessUtc"]);
-
-            return ret;
-        }
-
-        #endregion
-
-        #region Public-Methods
-
-        #endregion
-
-        #region Private-Methods
-
+         
         private void Initialize()
         {
             Id = 0;
@@ -205,8 +148,6 @@ namespace KvpbaseSDK
             CreatedUtc = null;
             LastUpdateUtc = null;
             LastAccessUtc = null;
-        }
-
-        #endregion
+        } 
     }
 }

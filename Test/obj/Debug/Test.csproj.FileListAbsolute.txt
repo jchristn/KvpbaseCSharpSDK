@@ -69,7 +69,6 @@ C:\code\KVPbase\sdk-csharp\Test\bin\Debug\RestWrapper.dll
 C:\code\KVPbase\sdk-csharp\Test\bin\Debug\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\Test\bin\Debug\System.ValueTuple.xml
 C:\code\KVPbase\sdk-csharp\Test\obj\Debug\Test.csprojAssemblyReference.cache
-C:\code\KVPbase\sdk-csharp\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp\Test\obj\Debug\Test.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp\Test\obj\Debug\Test.exe
 C:\code\KVPbase\sdk-csharp\Test\obj\Debug\Test.pdb

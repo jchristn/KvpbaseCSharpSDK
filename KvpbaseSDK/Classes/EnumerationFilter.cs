@@ -11,8 +11,6 @@ namespace KvpbaseSDK
     /// </summary>
     public class EnumerationFilter
     {
-        #region Public-Members
-
         /// <summary>
         /// If not null, match objects created before the specified time (UTC).
         /// </summary>
@@ -78,14 +76,6 @@ namespace KvpbaseSDK
         /// </summary>
         public Dictionary<string, string> KeyValuePairs { get; set; }
 
-        #endregion
-
-        #region Private-Members
-
-        #endregion
-
-        #region Constructors-and-Factories
-
         /// <summary>
         /// Instantiates the object.
         /// </summary>
@@ -97,16 +87,47 @@ namespace KvpbaseSDK
             UpdatedAfter = null;
             LastAccessBefore = null;
             LastAccessAfter = null;
-        }
+            Tags = new List<string>();
+            KeyValuePairs = new Dictionary<string, string>();
+        } 
 
-        #endregion
+        /// <summary>
+        /// Create a human-readable string of the object.
+        /// </summary>
+        /// <returns>String.</returns>
+        public override string ToString()
+        {
+            string ret = "";
 
-        #region Public-Methods
-         
-        #endregion
+            ret += "---" + Environment.NewLine;
+            ret += "  Prefix       : " + (String.IsNullOrEmpty(Prefix) ? "null" : Prefix) + Environment.NewLine;
+            ret += "  Md5          : " + (String.IsNullOrEmpty(Md5) ? "null" : Md5) + Environment.NewLine;
+            ret += "  Content Type : " + (String.IsNullOrEmpty(ContentType) ? "null" : ContentType) + Environment.NewLine;
+            ret += "  Created" + Environment.NewLine;
+            ret += "    Before     : " + (CreatedBefore == null ? "null" : CreatedBefore.Value.ToString()) + Environment.NewLine;
+            ret += "    After      : " + (CreatedAfter == null ? "null" : CreatedAfter.Value.ToString()) + Environment.NewLine;
+            ret += "  Updated" + Environment.NewLine;
+            ret += "    Before     : " + (UpdatedBefore == null ? "null" : UpdatedBefore.Value.ToString()) + Environment.NewLine;
+            ret += "    After      : " + (UpdatedAfter == null ? "null" : UpdatedAfter.Value.ToString()) + Environment.NewLine;
+            ret += "  Last Access" + Environment.NewLine;
+            ret += "    Before     : " + (LastAccessBefore == null ? "null" : LastAccessBefore.Value.ToString()) + Environment.NewLine;
+            ret += "    After      : " + (LastAccessAfter == null ? "null" : LastAccessAfter.Value.ToString()) + Environment.NewLine;
+            ret += "  Size         " + Environment.NewLine;
+            ret += "    Min        : " + (SizeMin == null ? "null" : SizeMin.ToString()) + Environment.NewLine;
+            ret += "    After      : " + (SizeMax == null ? "null" : SizeMax.ToString()) + Environment.NewLine;
+            ret += "  Tags         : " + ((Tags == null || Tags.Count < 1) ? "null" : Tags.Count.ToString() + " tags") + Environment.NewLine;
 
-        #region Private-Methods
+            if (Tags != null && Tags.Count > 0)
+                foreach (string curr in Tags)
+                    Console.WriteLine("    " + curr + Environment.NewLine);
 
-        #endregion
+            ret += "  Key Values   : " + ((KeyValuePairs == null || KeyValuePairs.Count < 1) ? "null" : KeyValuePairs.Count + " pairs") + Environment.NewLine;
+
+            if (KeyValuePairs != null && KeyValuePairs.Count > 0)
+                foreach (KeyValuePair<string, string> curr in KeyValuePairs)
+                    Console.WriteLine("    " + curr.Key + " = " + curr.Value + Environment.NewLine);
+
+            return ret;
+        } 
     }
 }

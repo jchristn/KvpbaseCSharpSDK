@@ -47,7 +47,6 @@ C:\code\KVPbase\sdk-csharp-3.0-retarget\Test\obj\Release\Test.csproj.CopyComplet
 C:\code\KVPbase\sdk-csharp-3.0-retarget\Test\obj\Release\Test.exe
 C:\code\kvpbase\sdk-csharp-3.0\Test\bin\Release\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\Test\obj\Release\Test.csprojAssemblyReference.cache
-C:\code\KVPbase\sdk-csharp\Test\obj\Release\Test.csproj.CoreCompileInputs.cache
 C:\code\KVPbase\sdk-csharp\Test\obj\Release\Test.exe
 C:\code\KVPbase\sdk-csharp\Test\bin\Release\Test.exe.config
 C:\code\KVPbase\sdk-csharp\Test\bin\Release\Test.exe

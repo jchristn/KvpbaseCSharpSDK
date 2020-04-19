@@ -1,9 +1,6 @@
 # Kvpbase C# SDK
 
-[![][nuget-img]][nuget]
-
-[nuget]:     https://www.nuget.org/packages/KvpbaseSDK
-[nuget-img]: https://badge.fury.io/nu/Object.svg
+[![NuGet Version](https://img.shields.io/nuget/v/KvpbaseSDK.svg?style=flat)](https://www.nuget.org/packages/KvpbaseSDK/) [![NuGet](https://img.shields.io/nuget/dt/KvpbaseSDK.svg)](https://www.nuget.org/packages/KvpbaseSDK) 
 
 Kvpbase is a RESTful object storage platform.  This SDK is intended to help application developers integrate object storage using Kvpbase into their C# applications.
  

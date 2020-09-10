@@ -1,0 +1,10 @@
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\bin\Debug\net451\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\bin\Debug\net451\KvpbaseSDK.pdb
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\bin\Debug\net451\Newtonsoft.Json.dll
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\bin\Debug\net451\RestWrapper.dll
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\net451\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\net451\KvpbaseSDK.AssemblyInfoInputs.cache
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\net451\KvpbaseSDK.AssemblyInfo.cs
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\net451\KvpbaseSDK.csproj.CopyComplete
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\net451\KvpbaseSDK.dll
+C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\net451\KvpbaseSDK.pdb

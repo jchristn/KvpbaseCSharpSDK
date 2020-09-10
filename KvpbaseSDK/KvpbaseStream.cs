@@ -11,7 +11,7 @@ namespace KvpbaseSDK
     /// <summary>
     /// Stream interface for an object stored on Kvpbase v3.1 or greater.
     /// </summary>
-    public class KvpbaseStream : Stream, IDisposable
+    public class KvpbaseStream : Stream
     {
         #region Public-Members
 
@@ -248,7 +248,7 @@ namespace KvpbaseSDK
         public override Task FlushAsync(CancellationToken cancellationToken)
         {
             // return base.FlushAsync(cancellationToken);
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>

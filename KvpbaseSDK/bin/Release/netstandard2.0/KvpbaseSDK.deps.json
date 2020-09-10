@@ -7,11 +7,11 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "KvpbaseSDK/4.1.0": {
+      "KvpbaseSDK/4.1.1": {
         "dependencies": {
           "NETStandard.Library": "2.0.3",
           "Newtonsoft.Json": "12.0.3",
-          "RestWrapper": "2.1.4.1"
+          "RestWrapper": "2.1.4.2"
         },
         "runtime": {
           "KvpbaseSDK.dll": {}
@@ -31,21 +31,21 @@
           }
         }
       },
-      "RestWrapper/2.1.4.1": {
+      "RestWrapper/2.1.4.2": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/RestWrapper.dll": {
-            "assemblyVersion": "2.1.4.1",
-            "fileVersion": "2.1.4.1"
+            "assemblyVersion": "2.1.4.2",
+            "fileVersion": "2.1.4.2"
           }
         }
       }
     }
   },
   "libraries": {
-    "KvpbaseSDK/4.1.0": {
+    "KvpbaseSDK/4.1.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -71,12 +71,12 @@
       "path": "newtonsoft.json/12.0.3",
       "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
-    "RestWrapper/2.1.4.1": {
+    "RestWrapper/2.1.4.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-gJQr7Va37wTjClS+/Q4NWaM3HD5O/fPx/xPBzdgL/l85lG1ei6ALzLgc/6zVd1Te1Wveg3KHSgpzd4JaKyTGzQ==",
-      "path": "restwrapper/2.1.4.1",
-      "hashPath": "restwrapper.2.1.4.1.nupkg.sha512"
+      "sha512": "sha512-cSBX7KIGnnfR8j6EYTAzBZ13Wfe52Gfo6l/4sl363VOIEZlihpljL+dopwAaPI3m3luJ5cnrTqMnsNoapofBEA==",
+      "path": "restwrapper/2.1.4.2",
+      "hashPath": "restwrapper.2.1.4.2.nupkg.sha512"
     }
   }
 }

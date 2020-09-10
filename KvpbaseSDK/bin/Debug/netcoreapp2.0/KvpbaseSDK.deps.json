@@ -1,0 +1,60 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.0": {
+      "KvpbaseSDK/4.1.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
+          "RestWrapper": "2.1.4.2"
+        },
+        "runtime": {
+          "KvpbaseSDK.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.3": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.3.23909"
+          }
+        }
+      },
+      "RestWrapper/2.1.4.2": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/RestWrapper.dll": {
+            "assemblyVersion": "2.1.4.2",
+            "fileVersion": "2.1.4.2"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "KvpbaseSDK/4.1.1": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Newtonsoft.Json/12.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
+    },
+    "RestWrapper/2.1.4.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cSBX7KIGnnfR8j6EYTAzBZ13Wfe52Gfo6l/4sl363VOIEZlihpljL+dopwAaPI3m3luJ5cnrTqMnsNoapofBEA==",
+      "path": "restwrapper/2.1.4.2",
+      "hashPath": "restwrapper.2.1.4.2.nupkg.sha512"
+    }
+  }
+}

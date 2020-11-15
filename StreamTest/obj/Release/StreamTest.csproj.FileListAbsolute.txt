@@ -42,3 +42,4 @@ C:\code\KVPbase\sdk-csharp\StreamTest\obj\Release\StreamTest.csprojAssemblyRefer
 C:\code\KVPbase\sdk-csharp\StreamTest\obj\Release\StreamTest.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp\StreamTest\obj\Release\StreamTest.exe
 C:\code\KVPbase\sdk-csharp\StreamTest\obj\Release\StreamTest.pdb
+C:\code\KVPbase\sdk-csharp\StreamTest\obj\Release\StreamTest.csproj.CoreCompileInputs.cache

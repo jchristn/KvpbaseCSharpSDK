@@ -58,3 +58,4 @@ C:\code\KVPbase\sdk-csharp\Test\bin\Release\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\Test\bin\Release\System.ValueTuple.xml
 C:\code\KVPbase\sdk-csharp\Test\obj\Release\Test.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp\Test\bin\Release\Newtonsoft.Json.xml
+C:\code\KVPbase\sdk-csharp\Test\obj\Release\Test.csproj.CoreCompileInputs.cache

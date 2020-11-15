@@ -1,0 +1,9 @@
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netcoreapp3.1\KvpbaseSDK.deps.json
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netcoreapp3.1\KvpbaseSDK.dll
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netcoreapp3.1\KvpbaseSDK.pdb
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp3.1\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp3.1\KvpbaseSDK.AssemblyInfoInputs.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp3.1\KvpbaseSDK.AssemblyInfo.cs
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp3.1\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp3.1\KvpbaseSDK.dll
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp3.1\KvpbaseSDK.pdb

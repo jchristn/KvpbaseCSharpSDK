@@ -39,3 +39,4 @@ C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Release\KvpbaseStreamTest.cspro
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Release\KvpbaseStreamTest.csproj.CopyComplete
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Release\KvpbaseStreamTest.exe
 C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Release\KvpbaseStreamTest.pdb
+C:\code\KVPbase\sdk-csharp\KvpbaseStreamTest\obj\Release\KvpbaseStreamTest.csproj.CoreCompileInputs.cache

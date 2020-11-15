@@ -5,3 +5,5 @@ C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp2.0\KvpbaseSDK.Assem
 C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp2.0\KvpbaseSDK.AssemblyInfo.cs
 C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp2.0\KvpbaseSDK.dll
 C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp2.0\KvpbaseSDK.pdb
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp2.0\KvpbaseSDK.csprojAssemblyReference.cache
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netcoreapp2.0\KvpbaseSDK.csproj.CoreCompileInputs.cache

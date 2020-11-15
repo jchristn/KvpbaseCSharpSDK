@@ -25,3 +25,4 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.Asse
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.0\KvpbaseSDK.xml
+C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\netstandard2.0\KvpbaseSDK.csproj.CoreCompileInputs.cache

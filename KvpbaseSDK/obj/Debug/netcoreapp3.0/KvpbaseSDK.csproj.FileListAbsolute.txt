@@ -1,0 +1,9 @@
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp3.0\KvpbaseSDK.csprojAssemblyReference.cache
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp3.0\KvpbaseSDK.AssemblyInfoInputs.cache
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp3.0\KvpbaseSDK.AssemblyInfo.cs
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp3.0\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\netcoreapp3.0\KvpbaseSDK.deps.json
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\netcoreapp3.0\KvpbaseSDK.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Debug\netcoreapp3.0\KvpbaseSDK.pdb
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp3.0\KvpbaseSDK.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp3.0\KvpbaseSDK.pdb

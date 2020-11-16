@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tT9+cDrF7jyOF8Jt4F2dpIOtVxktAK26+6/M1H5gAYeqHEpzIfss9GnEwTvuWET7i0ITQpYg9hueoPtD/SA8UQ==",
+  "dgSpecHash": "GT8WBQr61GOdHRjSJmFg/8EcPXftbH33VkTeL60usmwM+M4iemmaxZO9Igpn77h1PlefsAFm+mBLsr4EMGN8kA==",
   "success": true,
-  "projectFilePath": "C:\\code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
+  "projectFilePath": "C:\\Code\\KVPbase\\sdk-csharp\\KvpbaseSDK\\KvpbaseSDK.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joelc\\.nuget\\packages\\microsoft.netcore.app\\2.0.0\\microsoft.netcore.app.2.0.0.nupkg.sha512",
     "C:\\Users\\joelc\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.0.0\\microsoft.netcore.dotnetapphost.2.0.0.nupkg.sha512",
@@ -14,7 +14,7 @@
     "C:\\Users\\joelc\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
     "C:\\Users\\joelc\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
-    "C:\\Users\\joelc\\.nuget\\packages\\restwrapper\\2.2.1.3\\restwrapper.2.2.1.3.nupkg.sha512",
+    "C:\\Users\\joelc\\.nuget\\packages\\restwrapper\\2.2.1.4\\restwrapper.2.2.1.4.nupkg.sha512",
     "C:\\Users\\joelc\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "C:\\Users\\joelc\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "C:\\Users\\joelc\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",

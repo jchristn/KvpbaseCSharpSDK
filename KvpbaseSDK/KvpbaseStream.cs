@@ -74,7 +74,7 @@ namespace KvpbaseSDK
 
             if (!_Kvpbase.ObjectExists(_Container, _ObjectKey).Result)
             {
-                _Kvpbase.WriteObject(_Container, _ObjectKey, "application/octet-stream", null).Wait();
+                _Kvpbase.WriteObject(_Container, _ObjectKey, null).Wait();
             }
 
             GetObjectMetadata();

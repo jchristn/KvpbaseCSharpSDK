@@ -30,3 +30,9 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\KvpbaseSDK.pdb
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\Newtonsoft.Json.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\RestWrapper.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csproj.CopyComplete
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Net.Http.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptography.Algorithms.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptography.Encoding.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptography.Primitives.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptography.X509Certificates.dll
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csproj.CoreCompileInputs.cache

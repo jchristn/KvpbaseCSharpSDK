@@ -648,19 +648,21 @@
             <param name="apiKey">The API key of the user.</param>
             <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.VerifyConnectivity">
+        <member name="M:KvpbaseSDK.KvpbaseClient.VerifyConnectivity(System.Threading.CancellationToken)">
             <summary>
             Verify connectivity to Kvpbase.
             </summary>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if connectivity exists.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ListContainers">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ListContainers(System.Threading.CancellationToken)">
             <summary>
             List the names of the existing containers.
             </summary>  
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>List of container names.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.CreateContainer(System.String,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.CreateContainer(System.String,System.Boolean,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Create a container.
             </summary> 
@@ -668,70 +670,79 @@
             <param name="publicRead">True if available for read by unauthenticated users.</param>
             <param name="publicWrite">True if available for write by unauthenticated users.</param>
             <param name="auditLogging">True if audit logging should be enabled.</param>  
+            <param name="token">Cancellation token to cancel the request.</param>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.GetContainerSettings(System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.GetContainerSettings(System.String,System.Threading.CancellationToken)">
             <summary>
             Retrieve a container's settings.
             </summary> 
             <param name="container">Container name.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>Container settings.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.GetContainerKeyValuePairs(System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.GetContainerKeyValuePairs(System.String,System.Threading.CancellationToken)">
             <summary>
             Retrieve key-value pairs applied to a container.
             </summary>
             <param name="container">Container name.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>Container key-value pairs.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.UpdateContainer(KvpbaseSDK.Container)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.UpdateContainer(KvpbaseSDK.Container,System.Threading.CancellationToken)">
             <summary>
             Update a container's settings.
             </summary>
             <param name="settings">Settings for the container.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteContainerKeyValuePairs(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteContainerKeyValuePairs(System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
             Write key-value pairs to a container.
             </summary>
             <param name="container">Container name.</param>
             <param name="keyValuePairs">Key-value pairs.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.EnumerateContainer(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64})">
+        <member name="M:KvpbaseSDK.KvpbaseClient.EnumerateContainer(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
             Enumerate container statistics and objects within the container.
             </summary> 
             <param name="container">Container name.</param>
             <param name="startIndex">Begin object enumeration from this position.</param>
             <param name="maxResults">Maximum number of objects to return.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>Container metadata.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.EnumerateContainer(KvpbaseSDK.EnumerationFilter,System.String,System.Nullable{System.Int64},System.Nullable{System.Int64})">
+        <member name="M:KvpbaseSDK.KvpbaseClient.EnumerateContainer(KvpbaseSDK.EnumerationFilter,System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
             Enumerate container statistics and objects within the container using a filter.
             </summary>
             <param name="filter">Enumeration filter.</param>
             <param name="container">Container name.</param>
             <param name="startIndex">Begin object enumeration from this position.</param>
-            <param name="maxResults">Maximum number of objects to return.</param> 
+            <param name="maxResults">Maximum number of objects to return.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
             <returns>Container metadata.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.DeleteContainer(System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.DeleteContainer(System.String,System.Threading.CancellationToken)">
             <summary>
             Delete a container.
             </summary> 
             <param name="container">Container name.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ContainerExists(System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ContainerExists(System.String,System.Threading.CancellationToken)">
             <summary>
             Check if a container exists.
             </summary> 
             <param name="container">Container name.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if the container exists.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObject(System.String,System.String,System.String,System.Byte[])">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObject(System.String,System.String,System.Byte[],System.String,System.Threading.CancellationToken)">
             <summary>
             Write an object.
             </summary>
@@ -739,9 +750,10 @@
             <param name="objectKey">Object key.</param>
             <param name="contentType">The content type for the object.</param>
             <param name="data">The data to write.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObject(System.String,System.String,System.String,System.Int64,System.IO.Stream)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObject(System.String,System.String,System.Int64,System.IO.Stream,System.String,System.Threading.CancellationToken)">
             <summary>
             Write an object.
             </summary>
@@ -750,9 +762,10 @@
             <param name="contentType">The content type for the object.</param>
             <param name="contentLength">The length of the data in the stream.</param>
             <param name="stream">The stream containing the data.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectRange(System.String,System.String,System.Int64,System.Byte[])">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectRange(System.String,System.String,System.Int64,System.Byte[],System.Threading.CancellationToken)">
             <summary>
             Write a range of bytes to an existing object.
             </summary>
@@ -760,9 +773,10 @@
             <param name="objectKey">Object key.</param>
             <param name="startIndex">The byte position at which to write the data.</param>
             <param name="data">The data to write.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectRange(System.String,System.String,System.Int64,System.Int64,System.IO.Stream)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectRange(System.String,System.String,System.Int64,System.Int64,System.IO.Stream,System.Threading.CancellationToken)">
             <summary>
             Write a range of bytes to an existing object.
             </summary>
@@ -771,96 +785,107 @@
             <param name="startIndex">The byte position at which to write the data.</param>
             <param name="contentLength">The length of the data in the stream.</param>
             <param name="stream">The stream containing the data.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectTags(System.String,System.String,System.Collections.Generic.List{System.String})">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectTags(System.String,System.String,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
             <summary>
             Write tags to an object.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
             <param name="tags">Tags.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectKeyValuePairs(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectKeyValuePairs(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
             Write key-value pairs to an object.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
             <param name="keyValuePairs">Key-value pairs.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectMetadata(System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectMetadata(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Retrieve an object's metadata.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>Object metadata.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObject(System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObject(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Read an object.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>KvpbaseObject.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectRange(System.String,System.String,System.Int64,System.Int64)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectRange(System.String,System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
             <summary>
             Read a range of bytes from an object.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
             <param name="startIndex">The byte position from which to read the data.</param>
-            <param name="count">The number of bytes to read.</param> 
+            <param name="count">The number of bytes to read.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
             <returns>KvpbaseObject.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectKeyValuePairs(System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectKeyValuePairs(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Retrieve key-value pairs from an object.
             </summary>
             <param name="container">Container name.</param>
-            <param name="objectKey">Object key.</param> 
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
             <returns>Object key-value pairs.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.RenameObject(System.String,System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.RenameObject(System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Rename an object.
             </summary>
             <param name="container">Container name.</param>
             <param name="originalObjectKey">The original object key.</param>
             <param name="newObjectKey">The desired object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.DeleteObject(System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.DeleteObject(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Delete an object.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.ObjectExists(System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.ObjectExists(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Check if an object exists.
             </summary>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if the object exists.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.UploadFile(System.String,System.String,System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.UploadFile(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Upload from a file to an object.
             </summary>
             <param name="filename">The filename of the file to upload.</param>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
-            <param name="contentType">The content type.</param> 
+            <param name="contentType">The content type.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
             <returns>Object metadata.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.UploadFromStream(System.IO.Stream,System.Int64,System.String,System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.UploadFromStream(System.IO.Stream,System.Int64,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Upload from a stream to an object.
             </summary>
@@ -869,23 +894,26 @@
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
             <param name="contentType">The content type.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>Object metadata.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.DownloadFile(System.String,System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.DownloadFile(System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Download an object to a file.
             </summary>
             <param name="filename">The filename of the file to upload.</param>
             <param name="container">Container name.</param>
             <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
             <returns>True if successful.</returns>
         </member>
-        <member name="M:KvpbaseSDK.KvpbaseClient.DownloadToStream(System.String,System.String)">
+        <member name="M:KvpbaseSDK.KvpbaseClient.DownloadToStream(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Download an object to a stream.
             </summary> 
             <param name="container">Container name.</param>
-            <param name="objectKey">Object key.</param> 
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
             <returns>True if successful.</returns>
         </member>
         <member name="T:KvpbaseSDK.KvpbaseException">

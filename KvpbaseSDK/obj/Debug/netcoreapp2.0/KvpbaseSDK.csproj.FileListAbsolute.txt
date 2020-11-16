@@ -6,3 +6,4 @@ C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp2.0\KvpbaseSDK.Assembl
 C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp2.0\KvpbaseSDK.AssemblyInfo.cs
 C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp2.0\KvpbaseSDK.dll
 C:\code\kvpbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp2.0\KvpbaseSDK.pdb
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Debug\netcoreapp2.0\KvpbaseSDK.csproj.CoreCompileInputs.cache

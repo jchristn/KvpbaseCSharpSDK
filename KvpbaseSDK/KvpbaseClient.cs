@@ -169,17 +169,29 @@ namespace KvpbaseSDK
         /// <summary>
         /// Verify connectivity to Kvpbase.
         /// </summary>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if connectivity exists.</returns>
-        public async Task<bool> VerifyConnectivity()
+        public async Task<bool> VerifyConnectivity(CancellationToken token = default)
         {
-            RestRequest req = new RestRequest(_Endpoint, HttpMethod.GET, null, null);
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors; 
-            RestResponse resp = await req.SendAsync();
+            try
+            {
+                RestRequest req = new RestRequest(_Endpoint, HttpMethod.GET, null, null);
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return true;
+                return true;
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
         }
          
         #endregion
@@ -189,31 +201,43 @@ namespace KvpbaseSDK
         /// <summary>
         /// List the names of the existing containers.
         /// </summary>  
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>List of container names.</returns>
-        public async Task<List<string>> ListContainers()
-        { 
-            string url = _Endpoint + _UserGuid;
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            if (resp.Data != null && resp.ContentLength > 0)
+        public async Task<List<string>> ListContainers(CancellationToken token = default)
+        {
+            try
             {
-                byte[] data = KvpbaseCommon.StreamToBytes(resp.Data);
-                return KvpbaseCommon.DeserializeJson<List<string>>(data);
-            }
+                string url = _Endpoint + _UserGuid;
 
-            return new List<string>();
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                if (resp.Data != null && resp.ContentLength > 0)
+                {
+                    byte[] data = KvpbaseCommon.StreamToBytes(resp.Data);
+                    return KvpbaseCommon.DeserializeJson<List<string>>(data);
+                }
+
+                return new List<string>();
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -223,167 +247,227 @@ namespace KvpbaseSDK
         /// <param name="publicRead">True if available for read by unauthenticated users.</param>
         /// <param name="publicWrite">True if available for write by unauthenticated users.</param>
         /// <param name="auditLogging">True if audit logging should be enabled.</param>  
-        public async Task CreateContainer(string container, bool publicRead, bool publicWrite, bool auditLogging)
+        /// <param name="token">Cancellation token to cancel the request.</param>
+        public async Task CreateContainer(string container, bool publicRead = false, bool publicWrite = false, bool auditLogging = false, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            Container settings = new Container();
-            settings.UserGUID = _UserGuid;
-            settings.Name = container;
-            settings.IsPublicRead = publicRead;
-            settings.IsPublicWrite = publicWrite;
-            settings.EnableAuditLogging = auditLogging;
-            
-            string url = _Endpoint + _UserGuid + "/" + container;
+            try
+            {
+                Container settings = new Container();
+                settings.UserGUID = _UserGuid;
+                settings.Name = container;
+                settings.IsPublicRead = publicRead;
+                settings.IsPublicWrite = publicWrite;
+                settings.EnableAuditLogging = auditLogging;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.POST,
-                _AuthHeaders,
-                "application/json");
+                string url = _Endpoint + _UserGuid + "/" + container;
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-             
-            RestResponse resp = await req.SendAsync(KvpbaseCommon.SerializeJson(settings, false));
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.POST,
+                    _AuthHeaders,
+                    "application/json");
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            return;
+                RestResponse resp = await req.SendAsync(KvpbaseCommon.SerializeJson(settings, false), token).ConfigureAwait(false);
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
         /// Retrieve a container's settings.
         /// </summary> 
         /// <param name="container">Container name.</param> 
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>Container settings.</returns>
-        public async Task<Container> GetContainerSettings(string container)
+        public async Task<Container> GetContainerSettings(string container, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?config";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            byte[] data = null;
-
-            if (resp.Data != null && resp.ContentLength > 0)
+            try
             {
-                data = KvpbaseCommon.StreamToBytes(resp.Data);
-                return KvpbaseCommon.DeserializeJson<Container>(data);
-            }
+                string url = _Endpoint + _UserGuid + "/" + container + "?config";
 
-            return null;
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                byte[] data = null;
+
+                if (resp.Data != null && resp.ContentLength > 0)
+                {
+                    data = KvpbaseCommon.StreamToBytes(resp.Data);
+                    return KvpbaseCommon.DeserializeJson<Container>(data);
+                }
+
+                return null;
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
-         
+
         /// <summary>
         /// Retrieve key-value pairs applied to a container.
         /// </summary>
         /// <param name="container">Container name.</param> 
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>Container key-value pairs.</returns>
-        public async Task<Dictionary<string, string>> GetContainerKeyValuePairs(string container)
+        public async Task<Dictionary<string, string>> GetContainerKeyValuePairs(string container, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?keys";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            byte[] data = null;
-
-            if (resp.Data != null && resp.ContentLength > 0)
+            try
             {
-                data = KvpbaseCommon.StreamToBytes(resp.Data); 
-                return KvpbaseCommon.DeserializeJson<Dictionary<string, string>>(data);
-            }
+                string url = _Endpoint + _UserGuid + "/" + container + "?keys";
 
-            return null;
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                byte[] data = null;
+
+                if (resp.Data != null && resp.ContentLength > 0)
+                {
+                    data = KvpbaseCommon.StreamToBytes(resp.Data);
+                    return KvpbaseCommon.DeserializeJson<Dictionary<string, string>>(data);
+                }
+
+                return null;
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
         /// Update a container's settings.
         /// </summary>
         /// <param name="settings">Settings for the container.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task UpdateContainer(Container settings)
+        public async Task UpdateContainer(Container settings, CancellationToken token = default)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
-            string url = _Endpoint + _UserGuid + "/" + settings.Name;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + settings.Name;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                "application/json");
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    "application/json");
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync(KvpbaseCommon.SerializeJson(settings, false));
+                RestResponse resp = await req.SendAsync(KvpbaseCommon.SerializeJson(settings, false), token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
-         
+
         /// <summary>
         /// Write key-value pairs to a container.
         /// </summary>
         /// <param name="container">Container name.</param>
         /// <param name="keyValuePairs">Key-value pairs.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteContainerKeyValuePairs(string container, Dictionary<string, string> keyValuePairs)
+        public async Task WriteContainerKeyValuePairs(string container, Dictionary<string, string> keyValuePairs, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "?keys";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                "application/json");
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = null;
-            
-            if (keyValuePairs != null)
+            try
             {
-                resp = await req.SendAsync(KvpbaseCommon.SerializeJson(keyValuePairs, true));
+                string url = _Endpoint + _UserGuid + "/" + container + "?keys";
+
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    "application/json");
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = null;
+
+                if (keyValuePairs != null)
+                {
+                    resp = await req.SendAsync(KvpbaseCommon.SerializeJson(keyValuePairs, true), token).ConfigureAwait(false);
+                }
+                else
+                {
+                    resp = await req.SendAsync(token).ConfigureAwait(false);
+                }
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                return;
             }
-            else
+            catch (TaskCanceledException)
             {
-                resp = await req.SendAsync();
+                return;
             }
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            return;
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -392,78 +476,104 @@ namespace KvpbaseSDK
         /// <param name="container">Container name.</param>
         /// <param name="startIndex">Begin object enumeration from this position.</param>
         /// <param name="maxResults">Maximum number of objects to return.</param> 
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>Container metadata.</returns>
-        public async Task<ContainerMetadata> EnumerateContainer(string container, long? startIndex, long? maxResults)
+        public Task<ContainerMetadata> EnumerateContainer(string container, long? startIndex = null, long? maxResults = null, CancellationToken token = default)
         { 
-            return await EnumerateContainerInternal(null, container, startIndex, maxResults); 
+            return EnumerateContainerInternal(null, container, startIndex, maxResults, token); 
         }
-        
+
         /// <summary>
         /// Enumerate container statistics and objects within the container using a filter.
         /// </summary>
         /// <param name="filter">Enumeration filter.</param>
         /// <param name="container">Container name.</param>
         /// <param name="startIndex">Begin object enumeration from this position.</param>
-        /// <param name="maxResults">Maximum number of objects to return.</param> 
+        /// <param name="maxResults">Maximum number of objects to return.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param> 
         /// <returns>Container metadata.</returns>
-        public async Task<ContainerMetadata> EnumerateContainer(EnumerationFilter filter, string container, long? startIndex, long? maxResults)
+        public Task<ContainerMetadata> EnumerateContainer(EnumerationFilter filter, string container, long? startIndex = null, long? maxResults = null, CancellationToken token = default)
         {
-            return await EnumerateContainerInternal(filter, container, startIndex, maxResults);
+            return EnumerateContainerInternal(filter, container, startIndex, maxResults, token);
         }
 
         /// <summary>
         /// Delete a container.
         /// </summary> 
         /// <param name="container">Container name.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task DeleteContainer(string container)
+        public async Task DeleteContainer(string container, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.DELETE,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.DELETE,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
         /// Check if a container exists.
         /// </summary> 
         /// <param name="container">Container name.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if the container exists.</returns>
-        public async Task<bool> ContainerExists(string container)
+        public async Task<bool> ContainerExists(string container, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
-            string url = _Endpoint + _UserGuid + "/" + container;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.HEAD,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.HEAD,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
-            if (resp != null && resp.StatusCode == 404) return false;
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+                if (resp != null && resp.StatusCode == 404) return false;
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return true;
+                return true;
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
         }
 
         #endregion
@@ -477,28 +587,40 @@ namespace KvpbaseSDK
         /// <param name="objectKey">Object key.</param>
         /// <param name="contentType">The content type for the object.</param>
         /// <param name="data">The data to write.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteObject(string container, string objectKey, string contentType, byte[] data)
+        public async Task WriteObject(string container, string objectKey, byte[] data, string contentType = "application/octet-stream", CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-            
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.POST,
-                _AuthHeaders,
-                contentType);
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.POST,
+                    _AuthHeaders,
+                    contentType);
 
-            RestResponse resp = await req.SendAsync(data);
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                RestResponse resp = await req.SendAsync(data, token).ConfigureAwait(false);
 
-            return;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -509,28 +631,40 @@ namespace KvpbaseSDK
         /// <param name="contentType">The content type for the object.</param>
         /// <param name="contentLength">The length of the data in the stream.</param>
         /// <param name="stream">The stream containing the data.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteObject(string container, string objectKey, string contentType, long contentLength, Stream stream)
+        public async Task WriteObject(string container, string objectKey, long contentLength, Stream stream, string contentType = "application/octet-stream", CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.POST,
-                _AuthHeaders,
-                contentType);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.POST,
+                    _AuthHeaders,
+                    contentType);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync(contentLength, stream);
+                RestResponse resp = await req.SendAsync(contentLength, stream, token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -540,29 +674,41 @@ namespace KvpbaseSDK
         /// <param name="objectKey">Object key.</param>
         /// <param name="startIndex">The byte position at which to write the data.</param>
         /// <param name="data">The data to write.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteObjectRange(string container, string objectKey, long startIndex, byte[] data)
+        public async Task WriteObjectRange(string container, string objectKey, long startIndex, byte[] data, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync(data);
+                RestResponse resp = await req.SendAsync(data, token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -573,29 +719,41 @@ namespace KvpbaseSDK
         /// <param name="startIndex">The byte position at which to write the data.</param>
         /// <param name="contentLength">The length of the data in the stream.</param>
         /// <param name="stream">The stream containing the data.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteObjectRange(string container, string objectKey, long startIndex, long contentLength, Stream stream)
+        public async Task WriteObjectRange(string container, string objectKey, long startIndex, long contentLength, Stream stream, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync(contentLength, stream);
+                RestResponse resp = await req.SendAsync(contentLength, stream, token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -604,28 +762,40 @@ namespace KvpbaseSDK
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
         /// <param name="tags">Tags.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteObjectTags(string container, string objectKey, List<string> tags)
+        public async Task WriteObjectTags(string container, string objectKey, List<string> tags, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?tags=" + KvpbaseCommon.StringListToCsv(tags);
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?tags=" + KvpbaseCommon.StringListToCsv(tags);
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -634,37 +804,49 @@ namespace KvpbaseSDK
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
         /// <param name="keyValuePairs">Key-value pairs.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task WriteObjectKeyValuePairs(string container, string objectKey, Dictionary<string, string> keyValuePairs)
+        public async Task WriteObjectKeyValuePairs(string container, string objectKey, Dictionary<string, string> keyValuePairs, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?keys";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = null;
-
-            if (keyValuePairs == null || keyValuePairs.Count < 1)
+            try
             {
-                resp = await req.SendAsync();
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?keys";
+
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    null);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = null;
+
+                if (keyValuePairs == null || keyValuePairs.Count < 1)
+                {
+                    resp = await req.SendAsync(token).ConfigureAwait(false);
+                }
+                else
+                {
+                    resp = await req.SendAsync(KvpbaseCommon.SerializeJson(keyValuePairs, true), token).ConfigureAwait(false);
+                }
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                return;
             }
-            else
+            catch (TaskCanceledException)
             {
-                resp = await req.SendAsync(KvpbaseCommon.SerializeJson(keyValuePairs, true));
+                return;
             }
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            return;
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -672,129 +854,177 @@ namespace KvpbaseSDK
         /// </summary>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param> 
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>Object metadata.</returns>
-        public async Task<ObjectMetadata> ReadObjectMetadata(string container, string objectKey)
+        public async Task<ObjectMetadata> ReadObjectMetadata(string container, string objectKey, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?metadata";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            if (resp.Data != null && resp.ContentLength > 0)
+            try
             {
-                return KvpbaseCommon.DeserializeJson<ObjectMetadata>(KvpbaseCommon.StreamToBytes(resp.Data));
-            }
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?metadata";
 
-            return null;
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                if (resp.Data != null && resp.ContentLength > 0)
+                {
+                    return KvpbaseCommon.DeserializeJson<ObjectMetadata>(KvpbaseCommon.StreamToBytes(resp.Data));
+                }
+
+                return null;
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
-         
+
         /// <summary>
         /// Read an object.
         /// </summary>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param> 
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>KvpbaseObject.</returns>
-        public async Task<KvpbaseObject> ReadObject(string container, string objectKey)
+        public async Task<KvpbaseObject> ReadObject(string container, string objectKey, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return KvpbaseObject.FromRestResponse(resp);
+                return KvpbaseObject.FromRestResponse(resp);
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
-         
+
         /// <summary>
         /// Read a range of bytes from an object.
         /// </summary>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
         /// <param name="startIndex">The byte position from which to read the data.</param>
-        /// <param name="count">The number of bytes to read.</param> 
+        /// <param name="count">The number of bytes to read.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param> 
         /// <returns>KvpbaseObject.</returns>
-        public async Task<KvpbaseObject> ReadObjectRange(string container, string objectKey, long startIndex, long count)
+        public async Task<KvpbaseObject> ReadObjectRange(string container, string objectKey, long startIndex, long count, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
             if (startIndex < 0) throw new ArgumentException("Invalid value for startIndex.");
             if (count <= 0) throw new ArgumentException("Invalid value for count.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex + "&count=" + count;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?index=" + startIndex + "&count=" + count;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return KvpbaseObject.FromRestResponse(resp);
+                return KvpbaseObject.FromRestResponse(resp);
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
-        
+
         /// <summary>
         /// Retrieve key-value pairs from an object.
         /// </summary>
         /// <param name="container">Container name.</param>
-        /// <param name="objectKey">Object key.</param> 
+        /// <param name="objectKey">Object key.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param> 
         /// <returns>Object key-value pairs.</returns>
-        public async Task<Dictionary<string, string>> ReadObjectKeyValuePairs(string container, string objectKey)
+        public async Task<Dictionary<string, string>> ReadObjectKeyValuePairs(string container, string objectKey, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?keys";
-
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-             
-            if (resp.Data != null && resp.ContentLength > 0)
+            try
             {
-                return KvpbaseCommon.DeserializeJson<Dictionary<string, string>>(KvpbaseCommon.StreamToBytes(resp.Data));
-            }
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey + "?keys";
 
-            return new Dictionary<string, string>();
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.GET,
+                    _AuthHeaders,
+                    null);
+
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                if (resp.Data != null && resp.ContentLength > 0)
+                {
+                    return KvpbaseCommon.DeserializeJson<Dictionary<string, string>>(KvpbaseCommon.StreamToBytes(resp.Data));
+                }
+
+                return new Dictionary<string, string>();
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -803,29 +1033,41 @@ namespace KvpbaseSDK
         /// <param name="container">Container name.</param>
         /// <param name="originalObjectKey">The original object key.</param>
         /// <param name="newObjectKey">The desired object key.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task RenameObject(string container, string originalObjectKey, string newObjectKey)
+        public async Task RenameObject(string container, string originalObjectKey, string newObjectKey, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(originalObjectKey)) throw new ArgumentNullException(nameof(originalObjectKey));
             if (String.IsNullOrEmpty(newObjectKey)) throw new ArgumentNullException(nameof(newObjectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + originalObjectKey + "?rename=" + newObjectKey;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + originalObjectKey + "?rename=" + newObjectKey;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.PUT,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.PUT,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -833,28 +1075,40 @@ namespace KvpbaseSDK
         /// </summary>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task DeleteObject(string container, string objectKey)
+        public async Task DeleteObject(string container, string objectKey, CancellationToken token = default)
         {  
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.DELETE,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.DELETE,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return;
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -862,29 +1116,41 @@ namespace KvpbaseSDK
         /// </summary>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if the object exists.</returns>
-        public async Task<bool> ObjectExists(string container, string objectKey)
+        public async Task<bool> ObjectExists(string container, string objectKey, CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+            try
+            {
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.HEAD,
-                _AuthHeaders,
-                null);
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.HEAD,
+                    _AuthHeaders,
+                    null);
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            RestResponse resp = await req.SendAsync();
-            if (resp != null && resp.StatusCode == 404) return false;
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+                if (resp != null && resp.StatusCode == 404) return false;
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
 
-            return true;
+                return true;
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -893,44 +1159,56 @@ namespace KvpbaseSDK
         /// <param name="filename">The filename of the file to upload.</param>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
-        /// <param name="contentType">The content type.</param> 
+        /// <param name="contentType">The content type.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param> 
         /// <returns>Object metadata.</returns>
-        public async Task<ObjectMetadata> UploadFile(string filename, string container, string objectKey, string contentType)
+        public async Task<ObjectMetadata> UploadFile(string filename, string container, string objectKey, string contentType = "application/octet-stream", CancellationToken token = default)
         { 
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            bool containerExists = await ContainerExists(container);
-            if (!containerExists) throw new IOException("Container does not exist.");
-
-            if (!File.Exists(filename)) throw new IOException("File specified does not exist.");
-
-            bool objectExists = await ObjectExists(container, objectKey);
-            if (objectExists) throw new IOException("Object specified already exists.");
-
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
-
-            long fileLength = new FileInfo(filename).Length;
-            RestResponse resp = null;
-
-            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            try
             {
-                RestRequest req = new RestRequest(
-                    url,
-                    HttpMethod.POST,
-                    _AuthHeaders,
-                    contentType);
+                bool containerExists = await ContainerExists(container, token);
+                if (!containerExists) throw new IOException("Container does not exist.");
 
-                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                if (!File.Exists(filename)) throw new IOException("File specified does not exist.");
 
-                resp = await req.SendAsync(fileLength, fs);
+                bool objectExists = await ObjectExists(container, objectKey, token);
+                if (objectExists) throw new IOException("Object specified already exists.");
+
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+
+                long fileLength = new FileInfo(filename).Length;
+                RestResponse resp = null;
+
+                using (FileStream fs = new FileStream(filename, FileMode.Open))
+                {
+                    RestRequest req = new RestRequest(
+                        url,
+                        HttpMethod.POST,
+                        _AuthHeaders,
+                        contentType);
+
+                    req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                    resp = await req.SendAsync(fileLength, fs, token).ConfigureAwait(false);
+                }
+
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                return await ReadObjectMetadata(container, objectKey, token).ConfigureAwait(false);
             }
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            return await ReadObjectMetadata(container, objectKey);
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -941,8 +1219,9 @@ namespace KvpbaseSDK
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
         /// <param name="contentType">The content type.</param> 
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>Object metadata.</returns>
-        public async Task<ObjectMetadata> UploadFromStream(Stream stream, long contentLength, string container, string objectKey, string contentType)
+        public async Task<ObjectMetadata> UploadFromStream(Stream stream, long contentLength, string container, string objectKey, string contentType = "application/octet-stream", CancellationToken token = default)
         { 
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (!stream.CanRead) throw new ArgumentException("Stream cannot be read.");
@@ -950,30 +1229,41 @@ namespace KvpbaseSDK
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            bool containerExists = await ContainerExists(container);
-            if (!containerExists) throw new IOException("Container does not exist.");
+            try
+            {
+                bool containerExists = await ContainerExists(container, token).ConfigureAwait(false);
+                if (!containerExists) throw new IOException("Container does not exist.");
 
-            bool objectExists = await ObjectExists(container, objectKey);
-            if (objectExists) throw new IOException("Object specified already exists.");
+                bool objectExists = await ObjectExists(container, objectKey, token).ConfigureAwait(false);
+                if (objectExists) throw new IOException("Object specified already exists.");
 
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
 
-            RestResponse resp = null;
-             
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.POST,
-                _AuthHeaders,
-                contentType);
+                RestResponse resp = null;
 
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+                RestRequest req = new RestRequest(
+                    url,
+                    HttpMethod.POST,
+                    _AuthHeaders,
+                    contentType);
 
-            resp = await req.SendAsync(contentLength, stream);
+                req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
+                resp = await req.SendAsync(contentLength, stream, token).ConfigureAwait(false);
 
-            return await ReadObjectMetadata(container, objectKey);
+                KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                if (e != null) throw e;
+
+                return await ReadObjectMetadata(container, objectKey, token).ConfigureAwait(false);
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -982,28 +1272,98 @@ namespace KvpbaseSDK
         /// <param name="filename">The filename of the file to upload.</param>
         /// <param name="container">Container name.</param>
         /// <param name="objectKey">Object key.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param>
         /// <returns>True if successful.</returns>
-        public async Task DownloadFile(string filename, string container, string objectKey)
+        public async Task DownloadFile(string filename, string container, string objectKey, CancellationToken token = default)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
             if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
 
-            bool containerExists = await ContainerExists(container);
-            if (!containerExists) throw new IOException("Container does not exist.");
-
-            if (File.Exists(filename)) throw new IOException("File specified already exists.");
-
-            bool objectExists = await ObjectExists(container, objectKey);
-            if (!objectExists) throw new IOException("Object specified does not exist.");
-
-            ObjectMetadata metadata = await ReadObjectMetadata(container, objectKey);
-            if (metadata == null) throw new IOException("Unable to retrieve object metadata.");
-
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
-             
-            using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+            try
             {
+                bool containerExists = await ContainerExists(container, token).ConfigureAwait(false);
+                if (!containerExists) throw new IOException("Container does not exist.");
+
+                if (File.Exists(filename)) throw new IOException("File specified already exists.");
+
+                bool objectExists = await ObjectExists(container, objectKey, token).ConfigureAwait(false);
+                if (!objectExists) throw new IOException("Object specified does not exist.");
+
+                ObjectMetadata metadata = await ReadObjectMetadata(container, objectKey, token).ConfigureAwait(false);
+                if (metadata == null) throw new IOException("Unable to retrieve object metadata.");
+
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+
+                using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+                {
+                    RestRequest req = new RestRequest(
+                        url,
+                        HttpMethod.GET,
+                        _AuthHeaders,
+                        null);
+
+                    req.IgnoreCertificateErrors = IgnoreCertificateErrors;
+
+                    RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
+
+                    KvpbaseException e = KvpbaseException.FromRestResponse(resp);
+                    if (e != null) throw e;
+
+                    long bytesRemaining = resp.ContentLength;
+                    byte[] buffer = new byte[DownloadStreamBufferSize];
+
+                    if (bytesRemaining > 0)
+                    {
+                        while (bytesRemaining > 0)
+                        {
+                            int bytesRead = resp.Data.Read(buffer, 0, buffer.Length);
+                            if (bytesRead > 0)
+                            {
+                                bytesRemaining -= bytesRead;
+                                fs.Write(buffer, 0, bytesRead);
+                            }
+                        }
+                    }
+                }
+
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Download an object to a stream.
+        /// </summary> 
+        /// <param name="container">Container name.</param>
+        /// <param name="objectKey">Object key.</param>
+        /// <param name="token">Cancellation token to cancel the request.</param> 
+        /// <returns>True if successful.</returns>
+        public async Task<KvpbaseObject> DownloadToStream(string container, string objectKey, CancellationToken token = default)
+        {               
+            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
+            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
+
+            try
+            {
+                bool containerExists = await ContainerExists(container, token).ConfigureAwait(false);
+                if (!containerExists) throw new IOException("Container does not exist.");
+
+                bool objectExists = await ObjectExists(container, objectKey, token).ConfigureAwait(false);
+                if (!objectExists) throw new IOException("Object specified does not exist.");
+
+                ObjectMetadata metadata = await ReadObjectMetadata(container, objectKey, token).ConfigureAwait(false);
+                if (metadata == null) throw new IOException("Unable to retrieve object metadata.");
+
+                string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
+
                 RestRequest req = new RestRequest(
                     url,
                     HttpMethod.GET,
@@ -1012,67 +1372,21 @@ namespace KvpbaseSDK
 
                 req.IgnoreCertificateErrors = IgnoreCertificateErrors;
 
-                RestResponse resp = req.Send();
+                RestResponse resp = await req.SendAsync(token).ConfigureAwait(false);
 
                 KvpbaseException e = KvpbaseException.FromRestResponse(resp);
                 if (e != null) throw e;
-                 
-                long bytesRemaining = resp.ContentLength;
-                byte[] buffer = new byte[DownloadStreamBufferSize];
 
-                if (bytesRemaining > 0)
-                {
-                    while (bytesRemaining > 0)
-                    {
-                        int bytesRead = resp.Data.Read(buffer, 0, buffer.Length);
-                        if (bytesRead > 0)
-                        {
-                            bytesRemaining -= bytesRead;
-                            fs.Write(buffer, 0, bytesRead);
-                        }
-                    }
-                }
+                return KvpbaseObject.FromRestResponse(resp);
             }
-
-            return;
-        }
-
-        /// <summary>
-        /// Download an object to a stream.
-        /// </summary> 
-        /// <param name="container">Container name.</param>
-        /// <param name="objectKey">Object key.</param> 
-        /// <returns>True if successful.</returns>
-        public async Task<KvpbaseObject> DownloadToStream(string container, string objectKey)
-        {               
-            if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
-            if (String.IsNullOrEmpty(objectKey)) throw new ArgumentNullException(nameof(objectKey));
-
-            bool containerExists = await ContainerExists(container);
-            if (!containerExists) throw new IOException("Container does not exist.");
-
-            bool objectExists = await ObjectExists(container, objectKey);
-            if (!objectExists) throw new IOException("Object specified does not exist.");
-
-            ObjectMetadata metadata = await ReadObjectMetadata(container, objectKey);
-            if (metadata == null) throw new IOException("Unable to retrieve object metadata.");
-
-            string url = _Endpoint + _UserGuid + "/" + container + "/" + objectKey;
-             
-            RestRequest req = new RestRequest(
-                url,
-                HttpMethod.GET,
-                _AuthHeaders,
-                null);
-
-            req.IgnoreCertificateErrors = IgnoreCertificateErrors;
-
-            RestResponse resp = await req.SendAsync();
-
-            KvpbaseException e = KvpbaseException.FromRestResponse(resp);
-            if (e != null) throw e;
-
-            return KvpbaseObject.FromRestResponse(resp);
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         #endregion
@@ -1117,7 +1431,7 @@ namespace KvpbaseSDK
             return s + "/";
         }
           
-        private async Task<ContainerMetadata> EnumerateContainerInternal(EnumerationFilter filter, string container, long? startIndex, long? maxResults)
+        private async Task<ContainerMetadata> EnumerateContainerInternal(EnumerationFilter filter, string container, long? startIndex, long? maxResults, CancellationToken token)
         { 
             if (String.IsNullOrEmpty(container)) throw new ArgumentNullException(nameof(container));
 
@@ -1144,7 +1458,7 @@ namespace KvpbaseSDK
             }
             else
             {
-                resp = await req.SendAsync();
+                resp = await req.SendAsync(token).ConfigureAwait(false);
             } 
 
             KvpbaseException e = KvpbaseException.FromRestResponse(resp);

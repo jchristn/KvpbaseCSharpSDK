@@ -20,7 +20,6 @@ C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.Assembly
 C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csproj.CopyComplete
 C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.dll
 C:\code\kvpbase\sdk-csharp-3.0\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.pdb
-C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csprojAssemblyReference.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.AssemblyInfoInputs.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.AssemblyInfo.cs
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.dll
@@ -36,3 +35,6 @@ C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptog
 C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptography.Primitives.dll
 C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\System.Security.Cryptography.X509Certificates.dll
 C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csproj.CoreCompileInputs.cache
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.csproj.AssemblyReference.cache
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net461\KvpbaseSDK.GeneratedMSBuildEditorConfig.editorconfig
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\KvpbaseSDK.xml

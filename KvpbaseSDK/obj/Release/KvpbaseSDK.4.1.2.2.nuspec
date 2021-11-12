@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>KvpbaseSDK</id>
+    <version>4.1.2.2</version>
+    <authors>Joel Christner</authors>
+    <license type="file">LICENSE.md</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/kvpbase/sdk-csharp</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/kvpbase/storage-server/master/assets/icon.ico</iconUrl>
+    <description>C# SDK for Kvpbase object storage platform</description>
+    <releaseNotes>.NET 6 support.</releaseNotes>
+    <copyright>(c)2019 Joel Christner</copyright>
+    <tags>storage rest object s3 blob nosql cloud kvp key value pair api</tags>
+    <repository type="Github" url="https://github.com/kvpbase/sdk-csharp" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.1">
+        <dependency id="RestWrapper" version="2.2.1.13" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETCoreApp3.1">
+        <dependency id="RestWrapper" version="2.2.1.13" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net5.0">
+        <dependency id="RestWrapper" version="2.2.1.13" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net6.0">
+        <dependency id="RestWrapper" version="2.2.1.13" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="RestWrapper" version="2.2.1.13" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net461\KvpbaseSDK.dll" target="lib\net461\KvpbaseSDK.dll" />
+    <file src="C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net5.0\KvpbaseSDK.dll" target="lib\net5.0\KvpbaseSDK.dll" />
+    <file src="C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net6.0\KvpbaseSDK.dll" target="lib\net6.0\KvpbaseSDK.dll" />
+    <file src="C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netcoreapp3.1\KvpbaseSDK.dll" target="lib\netcoreapp3.1\KvpbaseSDK.dll" />
+    <file src="C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\netstandard2.1\KvpbaseSDK.dll" target="lib\netstandard2.1\KvpbaseSDK.dll" />
+    <file src="C:\Code\KVPbase\sdk-csharp\LICENSE.md" target="LICENSE.md" />
+  </files>
+</package>

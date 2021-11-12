@@ -2,7 +2,6 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net5.0\KvpbaseSDK.deps.json
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net5.0\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net5.0\ref\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net5.0\KvpbaseSDK.pdb
-C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.csprojAssemblyReference.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.GeneratedMSBuildEditorConfig.editorconfig
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.AssemblyInfoInputs.cache
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.AssemblyInfo.cs
@@ -10,3 +9,5 @@ C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.csproj.CoreC
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\ref\KvpbaseSDK.dll
 C:\code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.pdb
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\obj\Release\net5.0\KvpbaseSDK.csproj.AssemblyReference.cache
+C:\Code\KVPbase\sdk-csharp\KvpbaseSDK\bin\Release\net5.0\KvpbaseSDK.xml

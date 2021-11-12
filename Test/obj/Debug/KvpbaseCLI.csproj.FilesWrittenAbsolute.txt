@@ -1,5 +1,0 @@
-/Users/hax0r/Documents/Code/c#/KvpbaseSDK/KvpbaseCLI/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
-/Users/hax0r/Documents/Code/c#/KvpbaseSDK/KvpbaseCLI/bin/Debug/KvpbaseCLI.exe.mdb
-/Users/hax0r/Documents/Code/c#/KvpbaseSDK/KvpbaseCLI/bin/Debug/KvpbaseCLI.exe
-/Users/hax0r/Documents/Code/c#/KvpbaseSDK/KvpbaseCLI/obj/Debug/KvpbaseCLI.exe
-/Users/hax0r/Documents/Code/c#/KvpbaseSDK/KvpbaseCLI/obj/Debug/KvpbaseCLI.exe.mdb

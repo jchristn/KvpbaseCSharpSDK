@@ -9,15 +9,15 @@ using KvpbaseSDK;
 
 namespace Test
 {
-	public class MainClass
-	{
+    public class Program
+    {
         private static string _UserGuid = "";
-		private static string _Endpoint = ""; 
-		private static string _ApiKey = ""; 
+        private static string _Endpoint = "";
+        private static string _ApiKey = "";
         private static KvpbaseClient _Kvpbase;
 
-		public static void Main(string[] args)
-		{
+        public static void Main(string[] args)
+        {
             #region Initialize
 
             _UserGuid = InputString("User GUID:", "default", false);
@@ -25,43 +25,43 @@ namespace Test
             _Endpoint = InputString("Endpoint:", "http://localhost:8000", false);
             _Kvpbase = new KvpbaseClient(_UserGuid, _ApiKey, _Endpoint);
 
-			#endregion
+            #endregion
 
-			#region Variables
+            #region Variables
 
-			bool runForever = true;
-			string userInput = "";  
+            bool runForever = true;
+            string userInput = "";
 
-			#endregion
+            #endregion
 
-			#region Menu
+            #region Menu
 
-			while (runForever)
-			{
-				Console.Write("Command [? for help]: ");
-				userInput = Console.ReadLine();
-				if (String.IsNullOrEmpty(userInput)) continue;
+            while (runForever)
+            {
+                Console.Write("Command [? for help]: ");
+                userInput = Console.ReadLine();
+                if (String.IsNullOrEmpty(userInput)) continue;
 
-				switch (userInput)
-				{
-					case "?":
-						Menu();
-						break;
+                switch (userInput)
+                {
+                    case "?":
+                        Menu();
+                        break;
 
-					case "c":
-					case "cls":
-						Console.Clear();
-						break;
+                    case "c":
+                    case "cls":
+                        Console.Clear();
+                        break;
 
-					case "q":
-					case "quit":
-						runForever = false;
-						break;
+                    case "q":
+                    case "quit":
+                        runForever = false;
+                        break;
 
                     case "test":
                         TestConnectivity();
                         break;
-                         
+
                     #region Object-Commands
 
                     case "object write":
@@ -95,7 +95,7 @@ namespace Test
                     case "object read range":
                         ObjectReadRange();
                         break;
-                        
+
                     case "object download":
                         ObjectDownload();
                         break;
@@ -147,7 +147,7 @@ namespace Test
                     case "container enumerate":
                         ContainerEnumerate();
                         break;
-                        
+
                     case "container delete":
                         ContainerDelete();
                         break;
@@ -159,26 +159,26 @@ namespace Test
                     #endregion 
 
                     default:
-						break;
-				}
-			}
+                        break;
+                }
+            }
 
-			#endregion
+            #endregion
 
-			return;
-		}
+            return;
+        }
 
-		public static void Menu()
-		{
-		 // Console.WriteLine("12345678901234567890123456789012345678901234567890123456789012345678901234567890");
-			Console.WriteLine("---");
-			Console.WriteLine("General commands:");
-			Console.WriteLine("  q                   Quit");
-			Console.WriteLine("  cls                 Clear the screen");
-			Console.WriteLine("  ?                   Help (this menu)");
-            Console.WriteLine("  test                Test connectivity to the endpoint"); 
-			Console.WriteLine("");
-			Console.WriteLine("Object commands:");
+        public static void Menu()
+        {
+            // Console.WriteLine("12345678901234567890123456789012345678901234567890123456789012345678901234567890");
+            Console.WriteLine("---");
+            Console.WriteLine("General commands:");
+            Console.WriteLine("  q                   Quit");
+            Console.WriteLine("  cls                 Clear the screen");
+            Console.WriteLine("  ?                   Help (this menu)");
+            Console.WriteLine("  test                Test connectivity to the endpoint");
+            Console.WriteLine("");
+            Console.WriteLine("Object commands:");
             Console.WriteLine("  object <cmd> where <cmd> is one of the following:");
             Console.WriteLine("    write             Write an object");
             Console.WriteLine("    write keys        Write key-value pair metadata to the object");
@@ -193,8 +193,8 @@ namespace Test
             Console.WriteLine("    delete            Delete an object");
             Console.WriteLine("    exists            Check if an object exists");
             Console.WriteLine("    metadata          Retrieve object metadata");
-			Console.WriteLine("");
-			Console.WriteLine("Container commands:");
+            Console.WriteLine("");
+            Console.WriteLine("Container commands:");
             Console.WriteLine("  container <cmd> where <cmd> is one of the following:");
             Console.WriteLine("    list              List available containers");
             Console.WriteLine("    create            Create a container");
@@ -205,11 +205,11 @@ namespace Test
             Console.WriteLine("    enumerate         Enumerate container contents");
             Console.WriteLine("    delete            Delete a container");
             Console.WriteLine("    exists            Check if a container exists");
-			Console.WriteLine("");
-		}
+            Console.WriteLine("");
+        }
 
         #region Private-General-Methods
-          
+
         private static void TestConnectivity()
         {
             if (!_Kvpbase.VerifyConnectivity().Result)
@@ -221,7 +221,7 @@ namespace Test
                 Console.WriteLine("Success");
             }
         }
-         
+
         private static EnumerationFilter BuildEnumerationFilter()
         {
             if (!InputBoolean("Create filter?", true)) return null;
@@ -512,8 +512,8 @@ namespace Test
             _Kvpbase.WriteObject(
                 InputString("Container:", "default", false),
                 InputString("Object Key:", "hello.txt", false),
-                InputString("Content Type:", "text/plain", false),
-                Encoding.UTF8.GetBytes(InputString("Data:", "Hello world!", false))).Wait();
+                Encoding.UTF8.GetBytes(InputString("Data:", "Hello world!", false)),
+                InputString("Content Type:", "text/plain", false)).Wait();
         }
 
         private static void ObjectWriteKeys()
@@ -561,11 +561,11 @@ namespace Test
         }
 
         private static void ObjectRead()
-        { 
+        {
             KvpbaseObject ret = _Kvpbase.ReadObject(
                 InputString("Container:", "default", false),
                 InputString("Object Key:", "hello.txt", false)).Result;
-            
+
             if (ret.ContentLength > 0 && ret.Data != null)
             {
                 Console.WriteLine(Encoding.UTF8.GetString(StreamToBytes(ret.Data)));
@@ -588,7 +588,7 @@ namespace Test
         }
 
         private static void ObjectReadRange()
-        { 
+        {
             KvpbaseObject ret = _Kvpbase.ReadObjectRange(
                 InputString("Container:", "default", false),
                 InputString("Object Key:", "hello.txt", false),
@@ -600,7 +600,7 @@ namespace Test
                 Console.WriteLine(Encoding.UTF8.GetString(StreamToBytes(ret.Data)));
             }
         }
-        
+
         private static void ObjectDownload()
         {
             _Kvpbase.DownloadFile(
@@ -621,7 +621,7 @@ namespace Test
         {
             _Kvpbase.DeleteObject(
                 InputString("Container:", "default", false),
-                InputString("Object Key:", "hello.txt", false)).Wait(); 
+                InputString("Object Key:", "hello.txt", false)).Wait();
         }
 
         private static void ObjectExists()
@@ -670,7 +670,7 @@ namespace Test
                 }
             }
         }
-         
+
         private static void ContainerCreate()
         {
             _Kvpbase.CreateContainer(
@@ -743,7 +743,7 @@ namespace Test
                 Console.WriteLine(SerializeJson(metadata, true));
             }
         }
-        
+
         private static void ContainerDelete()
         {
             _Kvpbase.DeleteContainer(InputString("Container:", "default", false)).Wait();
@@ -760,7 +760,7 @@ namespace Test
             {
                 Console.WriteLine("Success");
             }
-        } 
+        }
 
         #endregion
     }

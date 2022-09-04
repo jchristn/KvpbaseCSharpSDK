@@ -1,0 +1,1213 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KvpbaseSDK</name>
+    </assembly>
+    <members>
+        <member name="T:KvpbaseSDK.AuditLogEntry">
+            <summary>
+            Details about an audit log entry.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.Id">
+            <summary>
+            Row ID in the database.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.GUID">
+            <summary>
+            GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.ContainerGUID">
+            <summary>
+            Container GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.ObjectGUID">
+            <summary>
+            Object GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.Action">
+            <summary>
+            Action performed by the requestor.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.Metadata">
+            <summary>
+            Metadata associated with the action.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.AuditLogEntry.CreatedUtc">
+            <summary>
+            Timestamp of the action.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.AuditLogEntry.#ctor">
+            <summary>
+            Instantiates the object.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.AuditLogEntryType">
+            <summary>
+            Entry types for the container audit log.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Enumerate">
+            <summary>
+            Enumerate.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Read">
+            <summary>
+            Read.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.ReadRange">
+            <summary>
+            ReadRange.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Write">
+            <summary>
+            Write.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.WriteKeyValue">
+            <summary>
+            WriteKeyValue.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.WriteRange">
+            <summary>
+            WriteRange.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.WriteTags">
+            <summary>
+            WriteTags.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Delete">
+            <summary>
+            Delete.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.DeleteKeyValue">
+            <summary>
+            DeleteKeyValue.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.DeleteTags">
+            <summary>
+            DeleteTags.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Rename">
+            <summary>
+            Rename.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Exists">
+            <summary>
+            Exists.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.AuditLogEntryType.Configuration">
+            <summary>
+            Configuration.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.ContainerMetadata">
+            <summary>
+            Metadata for a container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.ContainerGUID">
+            <summary>
+            GUID for the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.ContainerName">
+            <summary>
+            The name of the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.UserGUID">
+            <summary>
+            The user GUID that owns the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.PublicRead">
+            <summary>
+            Indicates whether or not public users can read from the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.PublicWrite">
+            <summary>
+            Indicates whether or not public users can write to the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.Totals">
+            <summary>
+            Total counts for the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.Displayed">
+            <summary>
+            Counts for objects returned in this query.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.IndexStart">
+            <summary>
+            The requested starting index, if any.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.MaxResults">
+            <summary>
+            The requested number of results to retrieve, if any.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.Filter">
+            <summary>
+            The requested enumeration filter, if any.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.Objects">
+            <summary>
+            List of object metadata.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.ContainerMetadata.#ctor">
+            <summary>
+            Instantiates the object.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.ContainerMetadata.Counts">
+            <summary>
+            Summary statistics.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.Counts.Objects">
+            <summary>
+            Number of objects.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ContainerMetadata.Counts.Bytes">
+            <summary>
+            Number of bytes.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.Container">
+            <summary>
+            Settings for a container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.Id">
+            <summary>
+            Row ID in the database.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.GUID">
+            <summary>
+            GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.UserGUID">
+            <summary>
+            The username of the owner.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.Name">
+            <summary>
+            The name of the container.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.ObjectsDirectory">
+            <summary>
+            The full path to where container objects should be stored.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.EnableAuditLogging">
+            <summary>
+            Enable or disable audit logging.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.IsPublicRead">
+            <summary>
+            Enable or disable public read access.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.IsPublicWrite">
+            <summary>
+            Enable or disable public write access.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.Container.CreatedUtc">
+            <summary>
+            The timestamp from when the object was created.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.Container.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.Container.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Instantiate the object with a specific name (propagates to child members).
+            </summary>
+            <param name="userGuid">The GUID of the user that owns the container.</param>
+            <param name="name">The name of the container.</param>
+            <param name="baseDir">The base directory under which the container subdirectory will be created.</param>
+        </member>
+        <member name="T:KvpbaseSDK.DiskInfo">
+            <summary>
+            Information about attached disks.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.Name">
+            <summary>
+            The name of the disk, i.e. 'C:\\'.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.VolumeLabel">
+            <summary>
+            The volume label for the disk.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.DriveFormat">
+            <summary>
+            The format of the disk, i.e. NTFS.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.DriveType">
+            <summary>
+            The type of the disk, i.e. 'Fixed'.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.TotalSizeBytes">
+            <summary>
+            The total size of the disk, in bytes.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.TotalSizeGigabytes">
+            <summary>
+            The total size of the disk, in gigabytes.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.AvailableSizeBytes">
+            <summary>
+            The amount of free space on the disk, in bytes.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.DiskInfo.AvailableSizeGigabytes">
+            <summary>
+            The amount of free space on the disk, in gigabytes.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.DiskInfo.#ctor">
+            <summary>
+            Instantiates the object.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.DiskInfo.GetAllDisks">
+            <summary>
+            Retrieve information about all attached disks.
+            </summary>
+            <returns>List of DiskInfo.</returns>
+        </member>
+        <member name="T:KvpbaseSDK.EnumerationFilter">
+            <summary>
+            Filters to apply to container enumeration.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.CreatedBefore">
+            <summary>
+            If not null, match objects created before the specified time (UTC).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.CreatedAfter">
+            <summary>
+            If not null, match objects created after the specified time (UTC).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.UpdatedBefore">
+            <summary>
+            If not null, match objects updated before the specified time (UTC).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.UpdatedAfter">
+            <summary>
+            If not null, match objects updated after the specified time (UTC).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.LastAccessBefore">
+            <summary>
+            If not null, match objects last accessed before the specified time (UTC).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.LastAccessAfter">
+            <summary>
+            If not null, match objects last accessed after the specified time (UTC).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.Prefix">
+            <summary>
+            If not null, match objects with the specified prefix in the key.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.Md5">
+            <summary>
+            If not null, match objects with the specified MD5 hash value.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.ContentType">
+            <summary>
+            If not null, match objects of the specified content type.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.SizeMin">
+            <summary>
+            If not null, match objects of at least the specified size.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.SizeMax">
+            <summary>
+            If not null, match objects that are less than the specified size.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.Tags">
+            <summary>
+            If not null, match objects that contain each of the supplied tags.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.EnumerationFilter.KeyValuePairs">
+            <summary>
+            If not null, match objects that contain each of the supplied key-value pairs.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.EnumerationFilter.#ctor">
+            <summary>
+            Instantiates the object.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.EnumerationFilter.ToString">
+            <summary>
+            Create a human-readable string of the object.
+            </summary>
+            <returns>String.</returns>
+        </member>
+        <member name="T:KvpbaseSDK.ErrorResponse">
+            <summary>
+            Object containing error-related information, used in HTTP API responses.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ErrorResponse.Success">
+            <summary>
+            Indicates success or failure of the operation.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ErrorResponse.Id">
+            <summary>
+            The ID of the error.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ErrorResponse.HttpStatus">
+            <summary>
+            The HTTP status of the error.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ErrorResponse.HttpText">
+            <summary>
+            The generic HTTP text for the error.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ErrorResponse.Text">
+            <summary>
+            The human readable text for the error.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ErrorResponse.Data">
+            <summary>
+            Any additional data associated with the error.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.ErrorResponse.#ctor(System.Int32,System.Int32,System.String,System.Object)">
+            <summary>
+            Instantiates the object.
+            </summary>
+            <param name="id">The ID of the error.</param>
+            <param name="status">The HTTP status of the error.</param>
+            <param name="textAppend">Text to append to the human-readable error text.</param>
+            <param name="data">Data associated with the error.</param>
+        </member>
+        <member name="T:KvpbaseSDK.KvpbaseCommon">
+            <summary>
+            Static methods used by the Kvpbase client.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.ObjectHandlerType">
+            <summary>
+            The type of object handler.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.ObjectMetadata">
+            <summary>
+            Metadata describing an object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.Id">
+            <summary>
+            The ID of the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.GUID">
+            <summary>
+            The GUID of the object, also used as a unique name to store the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.ContainerGUID">
+            <summary>
+            The GUID of the container that contains the object. 
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.ObjectKey">
+            <summary>
+            The object's key.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.ContentType">
+            <summary>
+            The content type of the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.ContentLength">
+            <summary>
+            The content length of the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.Md5">
+            <summary>
+            The MD5 hash of the object's data.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.Tags">
+            <summary>
+            The comma-separated list of tags associated with an object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.CreatedUtc">
+            <summary>
+            The creation timestamp, in UTC.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.LastUpdateUtc">
+            <summary>
+            The time of last update, in UTC.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.ObjectMetadata.LastAccessUtc">
+            <summary>
+            The time of last access, in UTC.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.ObjectMetadata.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.ObjectMetadata.#ctor(System.String,System.String,System.Byte[],System.Collections.Generic.List{System.String})">
+            <summary>
+            Instantiate the object.
+            </summary>
+            <param name="key">The object's key.</param>
+            <param name="contentType">The content type of the object.</param>
+            <param name="data">The object's data.</param>
+            <param name="tags">Tags associated with the object.</param>
+        </member>
+        <member name="M:KvpbaseSDK.ObjectMetadata.#ctor(System.String,System.String,System.Int64,System.Collections.Generic.List{System.String})">
+            <summary>
+            Instantiate the object.
+            </summary>
+            <param name="key">The object's key.</param>
+            <param name="contentType">The content type of the object.</param>
+            <param name="contentLength">The object's length.</param>
+            <param name="tags">Tags associated with the object.</param>
+        </member>
+        <member name="T:KvpbaseSDK.UserMaster">
+            <summary>
+            A Kvpbase user.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.Id">
+            <summary>
+            Row ID in the database.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.GUID">
+            <summary>
+            GUID.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.FirstName">
+            <summary>
+            The first name.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.LastName">
+            <summary>
+            The last name.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.CompanyName">
+            <summary>
+            The company name.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.Email">
+            <summary>
+            Email address.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.HomeDirectory">
+            <summary>
+            The user's home directory.  If null, a directory will be created under the default storage directory.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.Active">
+            <summary>
+            Indicates if the object is active or disabled.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.UserMaster.CreatedUtc">
+            <summary>
+            The timestamp from when the object was created.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.UserMaster.#ctor">
+            <summary>
+            Instantiates the object.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.KvpbaseClient">
+            <summary>
+            Kvpbase object storage client.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseClient.IgnoreCertificateErrors">
+            <summary>
+            Specify whether or not to ignore SSL certificate errors (default is true).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseClient.MaxTransferSize">
+            <summary>
+            Specify the maximum transfer size in bytes (default is 536870912).
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseClient.UploadStreamBufferSize">
+            <summary>
+            Buffer size to use when uploading files for file APIs or using stream, default 1MB.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseClient.DownloadStreamBufferSize">
+            <summary>
+            Buffer size to use when downloading files for file APIs or using stream, default 1MB.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseClient.UserGuid">
+            <summary>
+            Retrieve the user GUID for the client.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseClient.Endpoint">
+            <summary>
+            Retrieve the endpoint for the client.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the Kvpbase client.
+            </summary>
+            <param name="userGuid">The GUID of the user.</param>
+            <param name="email">Email address of the user.</param>
+            <param name="password">The password of the user.</param>
+            <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the Kvpbase client.
+            </summary>
+            <param name="userGuid">The GUID of the user.</param>
+            <param name="apiKey">The API key of the user.</param>
+            <param name="endpointUrl">The Kvpbase server endpoint (e.g. http://api1.kvpbase.com:8001/, or, https://hostname.com:443/).</param>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.VerifyConnectivity(System.Threading.CancellationToken)">
+            <summary>
+            Verify connectivity to Kvpbase.
+            </summary>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if connectivity exists.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ListContainers(System.Threading.CancellationToken)">
+            <summary>
+            List the names of the existing containers.
+            </summary>  
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>List of container names.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.CreateContainer(System.String,System.Boolean,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Create a container.
+            </summary> 
+            <param name="container">Container name.</param>
+            <param name="publicRead">True if available for read by unauthenticated users.</param>
+            <param name="publicWrite">True if available for write by unauthenticated users.</param>
+            <param name="auditLogging">True if audit logging should be enabled.</param>  
+            <param name="token">Cancellation token to cancel the request.</param>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.GetContainerSettings(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieve a container's settings.
+            </summary> 
+            <param name="container">Container name.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>Container settings.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.GetContainerKeyValuePairs(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieve key-value pairs applied to a container.
+            </summary>
+            <param name="container">Container name.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>Container key-value pairs.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.UpdateContainer(KvpbaseSDK.Container,System.Threading.CancellationToken)">
+            <summary>
+            Update a container's settings.
+            </summary>
+            <param name="settings">Settings for the container.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteContainerKeyValuePairs(System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Write key-value pairs to a container.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="keyValuePairs">Key-value pairs.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.EnumerateContainer(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Enumerate container statistics and objects within the container.
+            </summary> 
+            <param name="container">Container name.</param>
+            <param name="startIndex">Begin object enumeration from this position.</param>
+            <param name="maxResults">Maximum number of objects to return.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>Container metadata.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.EnumerateContainer(KvpbaseSDK.EnumerationFilter,System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Enumerate container statistics and objects within the container using a filter.
+            </summary>
+            <param name="filter">Enumeration filter.</param>
+            <param name="container">Container name.</param>
+            <param name="startIndex">Begin object enumeration from this position.</param>
+            <param name="maxResults">Maximum number of objects to return.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
+            <returns>Container metadata.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.DeleteContainer(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete a container.
+            </summary> 
+            <param name="container">Container name.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ContainerExists(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Check if a container exists.
+            </summary> 
+            <param name="container">Container name.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if the container exists.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObject(System.String,System.String,System.Byte[],System.String,System.Threading.CancellationToken)">
+            <summary>
+            Write an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="contentType">The content type for the object.</param>
+            <param name="data">The data to write.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObject(System.String,System.String,System.Int64,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Write an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="contentType">The content type for the object.</param>
+            <param name="contentLength">The length of the data in the stream.</param>
+            <param name="stream">The stream containing the data.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectRange(System.String,System.String,System.Int64,System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Write a range of bytes to an existing object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="startIndex">The byte position at which to write the data.</param>
+            <param name="data">The data to write.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectRange(System.String,System.String,System.Int64,System.Int64,System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Write a range of bytes to an existing object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="startIndex">The byte position at which to write the data.</param>
+            <param name="contentLength">The length of the data in the stream.</param>
+            <param name="stream">The stream containing the data.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectTags(System.String,System.String,System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Write tags to an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="tags">Tags.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.WriteObjectKeyValuePairs(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Write key-value pairs to an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="keyValuePairs">Key-value pairs.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectMetadata(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieve an object's metadata.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>Object metadata.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObject(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Read an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>KvpbaseObject.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectRange(System.String,System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Read a range of bytes from an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="startIndex">The byte position from which to read the data.</param>
+            <param name="count">The number of bytes to read.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
+            <returns>KvpbaseObject.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ReadObjectKeyValuePairs(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieve key-value pairs from an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
+            <returns>Object key-value pairs.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.RenameObject(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Rename an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="originalObjectKey">The original object key.</param>
+            <param name="newObjectKey">The desired object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.DeleteObject(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete an object.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.ObjectExists(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Check if an object exists.
+            </summary>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if the object exists.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.UploadFile(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Upload from a file to an object.
+            </summary>
+            <param name="filename">The filename of the file to upload.</param>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="contentType">The content type.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
+            <returns>Object metadata.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.UploadFromStream(System.IO.Stream,System.Int64,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Upload from a stream to an object.
+            </summary>
+            <param name="stream">The input stream from which to read.</param>
+            <param name="contentLength">Number of bytes to read from the input stream.</param>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="contentType">The content type.</param> 
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>Object metadata.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.DownloadFile(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Download an object to a file.
+            </summary>
+            <param name="filename">The filename of the file to upload.</param>
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseClient.DownloadToStream(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Download an object to a stream.
+            </summary> 
+            <param name="container">Container name.</param>
+            <param name="objectKey">Object key.</param>
+            <param name="token">Cancellation token to cancel the request.</param> 
+            <returns>True if successful.</returns>
+        </member>
+        <member name="T:KvpbaseSDK.KvpbaseException">
+            <summary>
+            Kvpbase exception.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.KvpbaseException.StatusCode">
+            <summary>
+            HTTP status code.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.KvpbaseException.ResponseData">
+            <summary>
+            Response data from Kvpbase.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.KvpbaseException.Type">
+            <summary>
+            The type of exception.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.ExceptionType">
+            <summary>
+            The type of Kvpbase exception.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.Unknown">
+            <summary>
+            Unknown exception type.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.CannotConnect">
+            <summary>
+            Could not connect to the server or could not retrieve a response.
+            </summary> 
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.InternalServerError">
+            <summary>
+            A server-side error was encountered.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.PayloadTooLarge">
+            <summary>
+            Request data too large.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.Conflict">
+            <summary>
+            A conflict exists, for example, attempting to write an object using a key that already exists.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.NotFound">
+            <summary>
+            The requested resource was not found.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.Unauthorized">
+            <summary>
+            You were not authorized to perform the request.
+            </summary>
+        </member>
+        <member name="F:KvpbaseSDK.ExceptionType.BadRequest">
+            <summary>
+            Your request was malformed.
+            </summary>
+        </member>
+        <member name="T:KvpbaseSDK.KvpbaseObject">
+            <summary>
+            An object stored on Kvpbase.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseObject.ContentType">
+            <summary>
+            The content-type of the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseObject.ContentLength">
+            <summary>
+            The number of bytes contained in the object, which also indicates the number of bytes to read from Data.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseObject.Data">
+            <summary>
+            The stream containing the object data.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseObject.#ctor">
+            <summary>
+            Instantiates the object.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseObject.#ctor(System.String,System.Int64,System.IO.Stream)">
+            <summary>
+            Instantiates the object.
+            </summary>
+            <param name="contentType">The content-type of the object.</param>
+            <param name="contentLength">The number of bytes contained in the object.</param>
+            <param name="data">The stream containing the object data.</param>
+        </member>
+        <member name="T:KvpbaseSDK.KvpbaseStream">
+            <summary>
+            Stream interface for an object stored on Kvpbase v3.1 or greater.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.Metadata">
+            <summary>
+            Object metadata.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.#ctor(KvpbaseSDK.KvpbaseClient,System.String,System.String)">
+            <summary>
+            Instantiate the stream.
+            </summary>
+            <param name="client">KvpbaseClient.</param>
+            <param name="container">The container in which the object is stored.</param>
+            <param name="objectKey">The object key.</param>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.CanRead">
+            <summary>
+            Indicates whether or not the stream can be read.  Always true.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.CanSeek">
+            <summary>
+            Indicates whether or not the position in the stream can be modified using seek.  Always true.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.CanTimeout">
+            <summary>
+            Indicates whether or not the stream can timeout.  Always false.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.CanWrite">
+            <summary>
+            Indicates whether or not the stream can be written.  Always true.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.Length">
+            <summary>
+            Indicates the length of the object.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.Position">
+            <summary>
+            Indicates the current position in the stream.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.ReadTimeout">
+            <summary>
+            The read timeout.  Do not use.
+            </summary>
+        </member>
+        <member name="P:KvpbaseSDK.KvpbaseStream.WriteTimeout">
+            <summary>
+            The write timeout.  Do not use.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.BeginRead(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Unsupported async read.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.BeginWrite(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Unsupported async write.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Close">
+            <summary>
+            Close the stream.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.CopyToAsync(System.IO.Stream,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Unsupported method.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.EndRead(System.IAsyncResult)">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.EndWrite(System.IAsyncResult)">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Equals(System.Object)">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Flush">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.FlushAsync(System.Threading.CancellationToken)">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.GetHashCode">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.InitializeLifetimeService">
+            <summary>
+            Unsupported method.
+            </summary>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read from the stream.
+            </summary>
+            <param name="buffer">Buffer into which data should be read.</param>
+            <param name="offset">Offset within the buffer to begin writing read data.</param>
+            <param name="count">Number of bytes to read.</param>
+            <returns>Number of bytes read.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.ReadAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Read asynchronously from the stream.
+            </summary>        
+            <param name="buffer">Buffer into which data should be read.</param>
+            <param name="offset">Offset within the buffer to begin writing read data.</param>
+            <param name="count">Number of bytes to read.</param> 
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Task with int indicating number of bytes read.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.ReadByte">
+            <summary>
+            Read a single byte from the stream.
+            </summary>
+            <returns>The integer representation of the byte.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Seek to a specific position in the stream.
+            </summary>
+            <param name="offset">Offset from the specified origin.</param>
+            <param name="origin">Seek origin, i.e. Begin, Current, or End.</param>
+            <returns>Seek position.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.SetLength(System.Int64)">
+            <summary>
+            Unsupported method.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.ToString">
+            <summary>
+            Unsupported method.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Write data to the stream.
+            </summary>
+            <param name="buffer">The byte array containing data to write.</param>
+            <param name="offset">Offset within the buffer.</param>
+            <param name="count">Number of bytes to write.</param>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.WriteAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Write data asynchronously to the stream.
+            </summary>
+            <param name="buffer">The byte array containing data to write.</param>
+            <param name="offset">Offset within the buffer.</param>
+            <param name="count">Number of bytes to write.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.WriteByte(System.Byte)">
+            <summary>
+            Write a byte to the stream.
+            </summary>
+            <param name="value">The byte to write.</param>
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.CreateWaitHandle">
+            <summary>
+            Unsupported method.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.Dispose(System.Boolean)">
+            <summary>
+            Unsupported method.
+            </summary> 
+        </member>
+        <member name="M:KvpbaseSDK.KvpbaseStream.ObjectInvariant">
+            <summary>
+            Unsupported method.
+            </summary> 
+        </member>
+    </members>
+</doc>
